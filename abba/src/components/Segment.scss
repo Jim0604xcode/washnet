@@ -1,0 +1,21 @@
+ion-segment{
+    border-radius: 10px !important;
+    border: 1px solid var(--ltblue-line-color);
+}
+
+ion-segment-button{
+    --indicator-box-shadow: transparent!important;
+    border-radius: 0px !important;
+    padding: 0px;
+    margin: 0px;
+    --background:var(--seg-unchecked-color);
+    --color:var(--white-text-color);
+    --background-checked:  var(--seg-checked-color)!important;
+    --color-checked: var(--white-text-color);    
+    font-size: 20px;
+    --indicator-color : transparent!important; /* this solution */
+}
+
+.ios ion-segment-button{
+    padding: 10px;
+}

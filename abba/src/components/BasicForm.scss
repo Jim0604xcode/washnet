@@ -1,0 +1,124 @@
+form{
+    padding-bottom:20px;
+    padding:20px;
+    margin-top:20px;
+    background:var(--white-el-color);
+    border-radius:30px;
+}
+form > h1{
+    text-align:center;
+    color:var(--black-text-color);
+    font-family: var(--noto-bold);
+}
+
+form > ion-item{
+    // --border-style: none;
+    --padding-start:0px;
+    --padding-end:0px;
+    --inner-padding-start:10px;
+    --inner-padding-end:0px;
+    margin-top: 20px;
+    --border-color: var(--ltblue-line-color);
+}
+form > ion-item > ion-label{
+    color:var(--black-text-color)!important;
+    font-family: var(--noto-regular)!important;
+    font-size: 20px!important;
+}
+form > ion-item > ion-input.text {
+    --background: #FFFFFF!important;
+    font-family: var(--noto-bold)!important;
+    --color: var(--black-text-color)!important;
+    --placeholder-color: #D7D7D7!important;
+    height: 40px!important;
+}
+
+form > ion-item > ion-input.number {
+    --background: #FFFFFF!important;
+    font-family: var(--noto-bold)!important;
+    --color: var(--black-text-color)!important;
+    --placeholder-color: #D7D7D7!important;
+    height: 40px!important;
+    
+    --padding-start: 10px!important;
+    --padding-end: 10px!important;
+    margin-top: 0px;
+    font-size: 22px;
+    text-align: end;
+}   
+form > ion-item > ion-icon{
+    position: absolute;
+    right: 10px;
+    color: var(--ltblue-el-color);
+    transform: translate(0px, 25px);
+    z-index: 10;
+}  
+form > ion-item.ios > ion-icon{
+    position: absolute;
+    right: 10px;
+    color: var(--ltblue-el-color);
+    transform: translate(0px, 37px);
+    z-index: 10;
+}
+
+// ion-note{
+    // margin-left:20px;
+// }
+
+form > ion-item.customItem{
+    margin-top: 0px;
+    
+}
+
+form > ion-item.customItemTextArea{
+    --background:#DDF6F8;
+    --border-style: none;
+}
+ion-datetime-button{
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    background: #D9D9D9;
+    height: 40px;
+    
+}
+
+ion-datetime-button::part(native){
+    background: transparent!important;
+    padding-inline:0px!important;
+    
+}
+
+form > .addressBox{
+    margin-top:20px;
+    margin-bottom:20px;
+    border-radius:20px;
+    padding:20px 8px;
+    border: 1px solid var(--ltblue-line-color);
+}
+form > .addressBox > h2{
+    text-align:center;
+    color:var(--black-text-color);
+}
+form > .addressBox > ion-item{
+    --border-color: var(--ltblue-line-color);
+}
+form > .addressBox > ion-item > ion-label{
+    color:var(--black-text-color)!important;
+    font-family: var(--noto-regular)!important;
+}
+form > div > ion-button.formBtn{
+    --background: var(--ltblue-el-color);
+    font-family: var(--noto-bold)!important;
+    --color: var(--white-text-color);    
+    font-size: 18px;
+    width: 180px;
+    height: 40px;
+}
+
+form > ion-note, form > .addressBox > ion-note{
+    color:var(--red-text-color);
+}
+form > .addressBox > ion-note{
+    margin-left: 20px;
+}

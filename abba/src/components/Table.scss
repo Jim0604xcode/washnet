@@ -1,0 +1,26 @@
+table{
+    display:block;
+    overflow-x:auto;
+    white-space: nowrap;
+    
+}
+th{
+    border-left: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    
+}
+td,th{
+    padding: 5px 10px;
+}
+thead>tr{
+    border-bottom: 3px solid;
+}
+tr:nth-child(odd):not(thead>tr){
+    background-color: #c9d5e1;
+    color: #111;
+}
+tr:nth-child(even):not(thead>tr){
+    
+    background-color: #233e5a;
+    color: #FFF;
+}
