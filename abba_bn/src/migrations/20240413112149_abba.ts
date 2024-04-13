@@ -47,6 +47,7 @@ export async function up(knex: Knex): Promise<void> {
 
     await knex.schema.createTable("languague",(table)=>{
         table.increments("id");
+        table.enu('type',["page","header","footer","order_form"]).notNullable();
         table.text("cn").notNullable();
         table.text("eng").notNullable();
     })
