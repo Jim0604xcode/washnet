@@ -15,8 +15,8 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("customer_meta",(table)=>{
         table.string("area").notNullable()
         table.string("street").notNullable()
-        table.string("house").notNullable()
-        table.string("room").notNullable()
+        table.string("location").notNullable()
+        // table.string("room").notNullable()
         
         table.text("customer_id").unsigned();
         table.foreign("customer_id").references("users.id");
@@ -30,6 +30,7 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("orders",(table)=>{
         table.increments("id");
         table.enu('order_type',["pw","dc","ws","lw","cs","fw"]).notNullable();
+        table.integer('pc').notNullable();
         table.string("pickup_date_time").notNullable();
         table.string("delivery_date_time").notNullable();
         
