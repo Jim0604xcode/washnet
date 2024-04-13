@@ -1,0 +1,7 @@
+{
+  "name": "abba",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

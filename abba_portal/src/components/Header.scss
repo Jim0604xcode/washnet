@@ -1,0 +1,29 @@
+ion-toolbar{
+    --background: var(--xltblue-el-color);
+    text-align: center;
+}
+ion-title{
+    font-family: var(--noto-bold)!important;
+    --color: var(--white-text-color);    
+    font-size: 18px;
+    
+}
+
+
+ion-button.headerBtnCustomStyle{
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    border:1px solid transparent;
+    border-radius: 20px;
+    height: 40px;
+    width: fit-content;
+    margin: 0px auto;
+    --background: var(--ltblue-el-color);
+    --border-color: var(--ltblue-el-color);
+    font-family: var(--noto-bold)!important;
+    --color: var(--white-text-color);    
+    font-size: 18px;
+    position: absolute;
+    
+}

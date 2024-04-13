@@ -1,0 +1,65 @@
+.card{
+    padding: 10px 10px 30px 0px;
+}
+.card > ion-grid > ion-row > ion-col{
+    text-align: center;
+    padding: 10px;
+}
+
+.card > ion-grid > ion-row > ion-col > .img{
+    margin: 0px auto;
+    width: 80%;
+    height: 100px;
+    // min-height: 120px;
+}
+.card > ion-grid > ion-row > ion-col > h3{
+    min-height: 55px;
+}
+.card > ion-grid > ion-row > ion-col > ion-button{
+    width: 80%;
+}
+.card > ion-grid > ion-row:nth-child(1) > ion-col:nth-child(1) > ion-img{
+    margin-bottom: 20px;
+}
+.card > ion-grid > ion-row:nth-child(1) > ion-col:nth-child(2) > ion-img{
+    transform: scale(1.3);
+    margin-bottom: 20px;
+}
+
+.card > ion-grid > ion-row:nth-child(2) > ion-col:nth-child(1) > ion-img{
+    transform: scale(1.2);
+    margin-top: 20px;
+}
+
+.card > ion-grid > ion-row:nth-child(2) > ion-col:nth-child(2) > ion-img{
+    transform: scale(1.4);
+    margin-top: 20px;
+}
+.card{
+    text-align: center;
+}
+.card > ion-grid > ion-row > ion-col > ion-button{
+    margin: 20px auto 40px auto;
+    --background: transparent;
+    font-family: var(--noto-bold)!important;
+    --color: var(--ltblue-text-color);    
+    font-size: 18px;
+    // --border-width:2px;
+    // --border-color:var(--ltblue-line-color);
+    border-radius: 10px;
+    border: 2px solid var(--ltblue-line-color); 
+    // --border-style:2px;
+}
+
+.card > ion-button {
+    --background: var(--ltblue-el-color);
+    width: 80%;
+    border-radius: 10px;
+    font-family: var(--noto-bold)!important;
+    --color: var(--white-text-color);    
+    font-size: 18px;
+    
+//     --background-hover:red;
+//     --background-focused:green;
+
+}

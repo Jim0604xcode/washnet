@@ -1,0 +1,23 @@
+#searchInput{
+    width: calc(100% - 80px);
+}
+#upIcon,#downIcon,#sortIcon{
+    width: 30px;
+    height: 30px;
+    cursor: grab;
+}
+#searchIcon,#clearIcon{
+    position: absolute;
+    top: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+#searchIcon{
+    right: 60px;
+    
+}
+#clearIcon{
+    right: 20px;
+    
+}
