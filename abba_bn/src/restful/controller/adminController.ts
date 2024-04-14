@@ -4,37 +4,28 @@ import {Request,Response} from 'express'
 import { adminService } from "../service/adminService";
 import { JWT } from "../../jwt";
 import * as yup from "yup";
-import { orderItemsDecode, orderItemsEncode } from "../../helper";
-type Status = "w_pickup" | "w_quote" | "w_clean" | "w_delivery" | "complete"
+
+type Status = "w_pickup" | "w_delivery" | "complete"
+type OrderType = "pw"|"dc"|"ws"|"lw"|"cs"|"fw"
 type Order = {
-    address:string
-    area:string
-    // area_value:string
-    district:string
-    // district_value:string
-    dryCleaning:number
-    leatherWashBag:number
+    orderType:OrderType
+    pc:number
     pickupDateTime:string
-    poundWash:number
+    deliveryDateTime:string
+    tel:string
+    fullAddress:string
     remarks:string
-    station:string
-    // station_value:string
-    totalPic:number
-    washShoes:number
-    orderStatus?:Status
+    status:Status
 }
 export let addOrderSchema = yup.object().shape({
-    address:yup.string().required(),
-    area:yup.string().required(),
-    district: yup.string().required(),
-    dryCleaning: yup.number().positive().required(),
-    leatherWashBag: yup.number().positive().required(),
+    order_type:yup.string().required(),
+    pc:yup.number().required(),
     pickupDateTime: yup.string().required(),
-    poundWash:yup.number().positive().required(),
+    deliveryDateTime: yup.string().required(),
+    tel:yup.string().required(),
+    full_address:yup.string().required(),
     remarks:yup.string().required(),
-    station:yup.string().required(),
-    totalPic:yup.number().positive().required(),
-    washShoes:yup.number().positive().required(),
+    
 });
 export class AdminController implements IAdminController{
     async getUser(req:Request,res:Response){
@@ -67,11 +58,7 @@ export class AdminController implements IAdminController{
     async allOrderData(req:Request,res:Response){
         try {
             let orders = await adminService.getUserAllOrder()
-            orders = orders.map(obj=>{
-                Object.assign(obj,orderItemsDecode(obj.order_items))
-                delete obj.order_items
-                return obj
-            })
+            
             
             res.json({
                 data:orders,
@@ -87,27 +74,16 @@ export class AdminController implements IAdminController{
             let jwt = res.locals.jwt as JWT
             let orderData = req.body as Order
             await addOrderSchema.validate(orderData);
-            let order_items = orderItemsEncode(orderData.poundWash,orderData.dryCleaning,orderData.washShoes,orderData.leatherWashBag,orderData.totalPic)
-            let area_value = orderData.area.split("@")[0]
-            orderData.area = orderData.area.split("@")[1]
-            let district_value = orderData.district.split("@")[0]
-            orderData.district = orderData.district.split("@")[1]
-            let station_value = orderData.station.split("@")[0]
-            orderData.station = orderData.station.split("@")[1]
             await adminService.addOrder({
-                order_items:order_items,
+                order_type:orderData.orderType,
+                pc:orderData.pc,
                 pickup_date_time:orderData.pickupDateTime,
-                customer_id:jwt.usersId,
-                area:orderData.area,
-                area_value:area_value,
-                district:orderData.district,
-                district_value:district_value,
-                station:orderData.station,
-                station_value:station_value,
-                address:orderData.address,
+                delivery_date_time:orderData.deliveryDateTime,               
+                tel:orderData.tel,
+                full_address:orderData.fullAddress,
                 remarks:orderData.remarks,
-                status:"w_pickup"
-
+                status:"w_pickup",
+                customer_id:jwt.usersId,
             })
             res.json({
                 data:null,
@@ -127,35 +103,24 @@ export class AdminController implements IAdminController{
             let orderData = req.body as Order
             let orderId = Number(req.params.id)
             await addOrderSchema.validate(orderData);
-            let order_items = orderItemsEncode(orderData.poundWash,orderData.dryCleaning,orderData.washShoes,orderData.leatherWashBag,orderData.totalPic)
-            let area_value = orderData.area.split("@")[0]
-            orderData.area = orderData.area.split("@")[1]
-            let district_value = orderData.district.split("@")[0]
-            orderData.district = orderData.district.split("@")[1]
-            let station_value = orderData.station.split("@")[0]
-            orderData.station = orderData.station.split("@")[1]
+            
             if(
-                orderData.orderStatus !== "w_pickup" &&
-                orderData.orderStatus !== "w_quote" &&
-                orderData.orderStatus !== "w_clean" &&
-                orderData.orderStatus !== "w_delivery" && 
-                orderData.orderStatus !== "complete"
+                orderData.status !== "w_pickup" &&
+                orderData.status !== "w_delivery" && 
+                orderData.status !== "complete"
             ){
                 throw new Error("Not correct order status")
             }
             await adminService.editOrder({
-                order_items:order_items,
+                order_type:orderData.orderType,
+                pc:orderData.pc,
                 pickup_date_time:orderData.pickupDateTime,
-                // customer_id:jwt.usersId,
-                area:orderData.area,
-                area_value:area_value,
-                district:orderData.district,
-                district_value:district_value,
-                station:orderData.station,
-                station_value:station_value,
-                address:orderData.address,
+                delivery_date_time:orderData.deliveryDateTime,               
+                tel:orderData.tel,
+                full_address:orderData.fullAddress,
                 remarks:orderData.remarks,
-                status:orderData.orderStatus
+                status:orderData.status,
+               
             },orderId)
             res.json({
                 data:null,

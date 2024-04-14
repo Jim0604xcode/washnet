@@ -33,7 +33,7 @@ export async function up(knex: Knex): Promise<void> {
         table.integer('pc').notNullable();
         table.string("pickup_date_time").notNullable();
         table.string("delivery_date_time").notNullable();
-        
+        table.string("tel").notNullable();
         table.string("full_address").notNullable();
         table.string("remarks").nullable();
         table.enu('status',["w_pickup","w_delivery","complete"]).notNullable();
@@ -48,7 +48,7 @@ export async function up(knex: Knex): Promise<void> {
 
     await knex.schema.createTable("languague",(table)=>{
         table.increments("id");
-        table.enu('type',["page","header","footer","order_form"]).notNullable();
+        table.enu('type',["page","header","footer","order_form","portal"]).notNullable();
         table.text("cn").notNullable();
         table.text("eng").notNullable();
     })

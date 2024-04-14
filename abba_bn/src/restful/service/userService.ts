@@ -12,14 +12,14 @@ type RegUser = {
     mobile:string,
     email: string,
     password: string,
+    role:Role
+
     area:string,
-    area_value:string
-    district:string,
-    district_value:string,
-    station:string,
-    station_value:string,
-    address:string,
-    role?:Role
+    street:string,
+    location:string,
+    
+    
+    
 }
 export class UserService {
     constructor(protected knex:Knex) {
@@ -49,7 +49,6 @@ export class UserService {
     }
     async register (userData:RegUser){
         const txn = await this.knex.transaction()
-        userData.role = "customer"
         try{
 
             let [result] = await txn.insert([
@@ -64,12 +63,11 @@ export class UserService {
             await txn.insert([
                 {
                     area:userData.area,
-                    area_value:userData.area_value,
-                    district:userData.district,
-                    district_value:userData.district_value,
-                    station:userData.station,
-                    station_value:userData.station_value,
-                    address:userData.address,
+                    
+                    street:userData.street,
+                    
+                    location:userData.location,
+                    
                     customer_id:userData.id
 
                 }
@@ -101,7 +99,7 @@ export class UserService {
         const txn = await this.knex.transaction()
         try {
             
-            let result = await txn.select("area","district","station","address").from("customer_meta").where("customer_id",userId)
+            let result = await txn.select("area","street","location").from("customer_meta").where("customer_id",userId)
             if(result.length === 0){
                 throw new Error('Not exist this user')
             }

@@ -2,47 +2,47 @@ import express from "express";
 import { errorHandler } from '../../error';
 import * as yup from "yup";
 import { IUserController } from "../routes/routes";
-import { JWT,createJwt } from "../../jwt";
+import { JWT,Role,createJwt } from "../../jwt";
 import { v4 as uuid } from 'uuid';
 import { hashPassword } from "../../bcrypt";
 import { userService } from "../service/userService";
 
 // import { encryptionData } from "../../language/crypt";
 type LoginUser = {
-    mobile_or_email:string
+    mobileOrEmail:string
     password:string
 }
 type RegUser = {
     id:string
-    display_name:string,
+    displayName:string,
     mobile:string,
     email: string,
     password: string,
-    confirm_password?:string,
+    confirmPassword?:string,
+    role:Role,
     area:string,
-    area_value:string
-    district:string,
-    district_value:string,
-    station:string,
-    station_value:string,
-    address:string,
+    
+    street:string,
+    
+    location:string,
+    
+    
 
 }
 
 export let registerUserSchema = yup.object().shape({
     id:yup.string().required(),
-    display_name:yup.string().required(),
+    displayName:yup.string().required(),
     mobile: yup.string().required(),
     email: yup.string().email().required(),
     password: yup.string().min(6, 'must be at least 6 characters long').required(),
-    confirm_password: yup.string().min(6, 'must be at least 6 characters long').required(),
+    confirmPassword: yup.string().min(6, 'must be at least 6 characters long').required(),
     area:yup.string().required(),
-    district:yup.string().required(),
-    station:yup.string().required(),
-    address:yup.string().required(),
+    street:yup.string().required(),
+    location:yup.string().required(),
 });
 export let loginUserSchema = yup.object().shape({
-    mobile_or_email: yup.string().required(),
+    mobileOrEmail: yup.string().required(),
     password: yup.string().min(6, 'must be at least 6 characters long').required(),
 });
 
@@ -52,7 +52,10 @@ export class UserController implements IUserController{
         try {
     
             let userData = req.body as LoginUser
-            let {id,role} = await userService.login(userData)
+            let {id,role} = await userService.login({
+              mobile_or_email:userData.mobileOrEmail,
+              password:userData.password
+            })
             let jwt = await createJwt(id,role)
             res.json({
                 data:{
@@ -75,21 +78,27 @@ export class UserController implements IUserController{
               
             let userData = req.body as RegUser
             
-            if(userData.password !== userData.confirm_password){
+            if(userData.password !== userData.confirmPassword){
                 throw new Error('password not match!')
             }
             userData.id = uuid() as string
             await registerUserSchema.validate(userData);
-            delete userData.confirm_password
+            delete userData.confirmPassword
             userData.password = await hashPassword(userData.password)
             console.log(userData)
-            userData.area_value = userData.area.split("@")[0]
-            userData.area = userData.area.split("@")[1]
-            userData.district_value = userData.district.split("@")[0]
-            userData.district = userData.district.split("@")[1]
-            userData.station_value = userData.station.split("@")[0]
-            userData.station = userData.station.split("@")[1]
-            let {id,role} = await userService.register(userData)
+            
+            userData.role = "customer"
+            let {id,role} = await userService.register({
+              id:userData.id,
+              display_name:userData.displayName,
+              mobile:userData.mobile,
+              email:userData.email,
+              password:userData.password,
+              role:userData.role,
+              area:userData.area,
+              street:userData.street,
+              location:userData.location
+            })
 
             let jwt = await createJwt(id,role)
             

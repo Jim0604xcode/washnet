@@ -32,11 +32,7 @@ export async function seed(knex: Knex): Promise<void> {
     
     await knex("customer_meta").insert([{
       area:'九龍',
-      // area_value:"九龍",
       street:'馬頭圍',
-      // district_value:"九龍城區",
-      // station:'2-3-4',
-      // house:"馬頭圍",
       location:'曦景閣(A座) 17/F 22室',
       customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3"
     }])
@@ -54,10 +50,11 @@ export async function seed(knex: Knex): Promise<void> {
     //   staff_id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF5'
     // }
   ])
-    let ordersData = []
+    const ordersData = []
     ordersData.push({
         order_type:'pw',
         pc:1,
+        tel:"24708888",
         pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
         delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
         full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
@@ -68,6 +65,7 @@ export async function seed(knex: Knex): Promise<void> {
     ordersData.push({
         order_type:'dc',
         pc:1,
+        tel:"24708888",
         pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
         delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
         full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
@@ -78,6 +76,7 @@ export async function seed(knex: Knex): Promise<void> {
     ordersData.push({
       order_type:'ws',
       pc:1,
+      tel:"24708888",
       pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
       delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
       full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
@@ -88,6 +87,7 @@ export async function seed(knex: Knex): Promise<void> {
     ordersData.push({
       order_type:'lw',
       pc:1,
+      tel:"51823008",
       pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
       delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
       full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
@@ -98,6 +98,7 @@ export async function seed(knex: Knex): Promise<void> {
     ordersData.push({
       order_type:'cs',
       pc:1,
+      tel:"51823008",
       pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
       delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
       full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
@@ -107,6 +108,105 @@ export async function seed(knex: Knex): Promise<void> {
     })
     await knex("orders").insert(ordersData)
 
+    const languageData = []
+    languageData.push({
+      type:"portal",
+      cn:JSON.stringify({
+            aos:{
+                  header:"訂單系統",
+                  search:"搜尋",
+                  tableHeader:["訂單編號","訂單狀態","磅洗","乾洗","洗鞋","皮革 / 洗袋","收衣日期及時段","收衣日期及時段","大區","細區","站","地址","備註"],
+                  pagination1:"行",
+                  pagination2:"共",
+                  pagination3:"頁",
+                  resetBtn:"重設",
+                  addBtn:"新增",
+                  closeBtn:"關閉",
+                  modalHeaderAdd:"新增訂單",
+                  modalHeaderEdit:"修改訂單",
+                  modalHeaderFilter:"過濾",
+                },
+                as:{
+                  header:"頁面系統"
+                },
+                ass:{
+                  header:"管理系統",
+                  search:"搜尋",
+                  tableHeader:["用戶編號","名稱","電話","郵件","角色"],
+                  pagination1:"行",
+                  pagination2:"共",
+                  pagination3:"頁",
+                  resetBtn:"重設",
+                  addBtn:"新增",
+                  closeBtn:"關閉",
+                  modalHeaderAdd:"新增用戶",
+                  modalHeaderEdit:"修改用戶",
+                  modalHeaderFilter:"過濾",
+                },
+                ats:{
+                  header:"設定"
+                }, 
+                adminFooterBtn1:"訂單系統",
+                adminFooterBtn2:"頁面系統",
+                adminFooterBtn3:"管理系統",
+                adminFooterBtn4:"設定",
+                adminMenuHeader:"選項"
+      
+      }),
+      eng:JSON.stringify({
+                aos:{
+                  header:"Order System",
+                  search:"Search",
+                  tableHeader:["Order Id","Order Status","Pound Wash","Dry Cleaning","Wash Shoes","Leather Wash Bag","Pickup Date Time","Pickup Date Time","Area","District","Station","Address","Remarks"],
+                  pagination1:" rows ",
+                  pagination2:"in total ",
+                  pagination3:" pages",
+                  resetBtn:"Reset",
+                  addBtn:"Add",
+                  closeBtn:"Close",
+                  modalHeaderAdd:"Add New Order",
+                  modalHeaderEdit:"Edit Order",
+                  modalHeaderFilter:"Filter",
+                },
+                as:{
+                  header:"Page System"
+                },
+                ass:{
+                  header:"Manage System",
+                  search:"Search",
+                  tableHeader:["User ID","Username","Tel","Email","Role"],
+                  pagination1:" rows ",
+                  pagination2:"in total ",
+                  pagination3:" pages",
+                  resetBtn:"Reset",
+                  addBtn:"Add",
+                  closeBtn:"Close",
+                  modalHeaderAdd:"Add New User",
+                  modalHeaderEdit:"Edit User",
+                  modalHeaderFilter:"Filter",
+                },
+                ats:{
+                  header:"Setting"
+                }, 
+                adminFooterBtn1:"Order System",
+                adminFooterBtn2:"Page System",
+                adminFooterBtn3:"Manage System",
+                adminFooterBtn4:"Setting", 
+                adminMenuHeader:"Menu"           
+
+      })
+    })
+    languageData.push({
+      type:"footer",
+      cn:JSON.stringify({
+
+      }),
+      eng:JSON.stringify({
+
+      }),
+    })
+
+    await knex("languague").insert(languageData)
     // await knex("languague").insert([
     //     {
     //         cn:JSON.stringify({
@@ -938,11 +1038,6 @@ export async function seed(knex: Knex): Promise<void> {
     //             // customerFooterBtn3:"設定",
     //             // guestFooterBtn1:"洗衣服務",    
     //             // guestFooterBtn2:"登入 / 註冊",
-    //             adminFooterBtn1:"訂單系統",
-    //             adminFooterBtn2:"頁面系統",
-    //             adminFooterBtn3:"管理系統",
-    //             adminFooterBtn4:"設定",
-    //             adminMenuHeader:"選項"
             
     //         }),
     //         eng:JSON.stringify({
@@ -1734,50 +1829,6 @@ export async function seed(knex: Knex): Promise<void> {
     //               regFormField4:"Password",
     //               regFormField5:"Confirm Password",
     //             },
-    //             aos:{
-    //               header:"Order System",
-    //               search:"Search",
-    //               tableHeader:["Order Id","Order Status","Pound Wash","Dry Cleaning","Wash Shoes","Leather Wash Bag","Pickup Date Time","Pickup Date Time","Area","District","Station","Address","Remarks"],
-    //               pagination1:" rows ",
-    //               pagination2:"in total ",
-    //               pagination3:" pages",
-    //               resetBtn:"Reset",
-    //               addBtn:"Add",
-    //               closeBtn:"Close",
-    //               modalHeaderAdd:"Add New Order",
-    //               modalHeaderEdit:"Edit Order",
-    //               modalHeaderFilter:"Filter",
-    //             },
-    //             as:{
-    //               header:"Page System"
-    //             },
-    //             ass:{
-    //               header:"Manage System",
-    //               search:"Search",
-    //               tableHeader:["User ID","Username","Tel","Email","Role"],
-    //               pagination1:" rows ",
-    //               pagination2:"in total ",
-    //               pagination3:" pages",
-    //               resetBtn:"Reset",
-    //               addBtn:"Add",
-    //               closeBtn:"Close",
-    //               modalHeaderAdd:"Add New User",
-    //               modalHeaderEdit:"Edit User",
-    //               modalHeaderFilter:"Filter",
-    //             },
-    //             ats:{
-    //               header:"Setting"
-    //             }, 
-    //             // customerFooterBtn1:"Laundry Service",
-    //             // customerFooterBtn2:"My Order",
-    //             // customerFooterBtn3:"Setting",
-    //             // guestFooterBtn1:"Laundry Service",    
-    //             // guestFooterBtn2:"Login / Register", 
-    //             adminFooterBtn1:"Order System",
-    //             adminFooterBtn2:"Page System",
-    //             adminFooterBtn3:"Manage System",
-    //             adminFooterBtn4:"Setting", 
-    //             adminMenuHeader:"Menu"           
     //         })
         // }
     // ])

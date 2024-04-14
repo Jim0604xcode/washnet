@@ -1,33 +1,29 @@
 import { Knex } from "knex"
 import { knex } from "../../db"
 type Status = "w_pickup" | "w_quote" | "w_clean" | "w_delivery" | "complete"
+type OrderType = "pw"|"dc"|"ws"|"lw"|"cs"|"fw"
+
 type Order = {
-    order_items:string
-    area:string
-    area_value:string
-    district:string
-    district_value:string
-    station:string
-    station_value:string
-    address:string
+    order_type:OrderType
+    pc:number
     pickup_date_time:string
+    delivery_date_time:string
+    tel:string
+    full_address:string
     remarks:string
     status:Status
     customer_id:string
 }
 type EditOrder = {
-    order_items:string
-    area:string
-    area_value:string
-    district:string
-    district_value:string
-    station:string
-    station_value:string
-    address:string
+    order_type:OrderType
+    pc:number
     pickup_date_time:string
+    delivery_date_time:string
+    tel:string
+    full_address:string
     remarks:string
     status:Status
-    customer_id?:string
+
 }
 class AdminService{
     constructor(protected knex:Knex) {
@@ -36,7 +32,7 @@ class AdminService{
     async getUser(userId:string){
         const txn = await this.knex.transaction()
         try {
-            let [result] = await txn.select("users.display_name as display_name","users.mobile","users.email","customer_meta.area","customer_meta.district","customer_meta.station","customer_meta.address").from("users").join("customer_meta","customer_meta.customer_id","users.id").orderBy("users.created_at","desc")
+            let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.area","customer_meta.street","customer_meta.location").from("users").join("customer_meta","customer_meta.customer_id","users.id").orderBy("users.created_at","desc")
             await txn.commit()
             return result
         } catch (err) {
@@ -58,7 +54,7 @@ class AdminService{
     async getUserAllOrder(){
         const txn = await this.knex.transaction()
         try {
-            let result = await txn.select("id as orderId","pickup_date_time as pickupDateTime","area","area_value","district","district_value","station","station_value","address","remarks","order_items","status as orderStatus").from("orders").orderBy("orders.created_at","desc")
+            let result = await txn.select("id as orderId","order_type as orderType","pc","tel","pickup_date_time as pickupDateTime","delivery_date_time as deliveryDateTime","full_address as fullAddress","remarks","status as orderStatus").from("orders").orderBy("orders.created_at","desc")
             await txn.commit()
             return result
         } catch (err) {
