@@ -62,6 +62,38 @@ export async function cbFetchOrderSystemOrderData(){
   }
 }
 
+export async function cbEditBannerByAdmin(type:string,blocks:{id:string,type:string,data:any[]}) {
+  try {
+    let token = await getValue("token")
+    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/editBanner/${type}`,{
+      headers:{
+        "Content-type":"application/json",
+        'Authorization': `Bearer ${token}`
+      },
+      method:"PUT",
+      body:JSON.stringify(blocks)  
+    })
+    let json = await res.json()
+    console.log(json)
+    if(!json.isErr){
+      sweetAlert.fire({
+      icon: 'success',
+      title: 'Message',
+      text:'Successfully place new order',
+      showConfirmButton: false,
+      timer: 1500
+      })
+    }  
+  } catch (error:any) {
+    sweetAlert.fire({
+      icon: 'info',
+      title: 'Message',
+      text:error.message,
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }  
+}
 export async function cbEditOrderByAdmin(data:PlaceOrderType) {
   try {
     console.log(data)
@@ -166,7 +198,7 @@ export async function handleRegister(data: RegisterFormState,setRoleState:Setter
       setRoleState({role:json.data.role})
       
       
-      history.push('/C-laundryService')
+      history.push('/A-themeSystem')
     }else{
       // await deleteUser()
       throw new Error(json.errMess)
@@ -205,7 +237,7 @@ export async function login(data: LoginFormState,setRoleState:SetterOrUpdater<{
         })
         setValue("token",json.data.token)
         setterRoleState(json.data.role,setRoleState)
-        history.push('/C-laundryService')
+        history.push('/A-themeSystem')
       }else{
         throw new Error(json.errMess)
       }  

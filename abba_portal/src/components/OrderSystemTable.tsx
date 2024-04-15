@@ -1,5 +1,5 @@
-import { IonButton, IonCol, IonContent, IonFabButton, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonNote, IonRow, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
-import { caretUpCircleOutline,caretDownCircleOutline,filterCircleOutline, chevronUp } from "ionicons/icons";
+import { IonButton, IonCol, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonNote, IonRow, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
+import { caretDownCircleOutline } from "ionicons/icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // import { useTable, useFilters, useSortBy } from "react-table";
@@ -17,7 +17,6 @@ import OrderSystemOrderModal from "./OrderSystemOrderModal";
 import { cbEditOrderByAdmin, cbFetchOrderSystemOrderData } from "../service/api";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../service/Recoil";
-import { number } from "yup";
 import { momentUnix } from "../service/moment";
 
 
@@ -47,16 +46,7 @@ function findVal(targetKey:string,obj:Order | any){
     
     const [placeOrder,setPlaceOrder] = useState<PlaceOrderType>(getPlaceOrderFormDefaultValues())
     
-    // const setPlaceOrder = useSetRecoilState(placeOrderState);
-    
-    // useTable(
-    //   {
-    //     data,
-    //     columns 
-    //   },
-    //   useFilters,
-    //   useSortBy,
-    // );  
+      
     
   const tBody = React.useMemo(() => tData, [tData]);
   const tHeader = React.useMemo(() => tColumns.map((obj,idx:number)=>Object.assign(obj,{header:getLanguage.language.aos.tableHeader[idx]})), [tColumns,getLanguage.language]);
@@ -286,7 +276,18 @@ let cbAddData = useCallback((data:any)=>{
         <IonInput id="searchInput" ref={searchInput} onKeyUp={(e)=>keyupSearch(e,searchInput,initTData)} className="text" aria-label="Search" placeholder="Search"></IonInput>
         <IonImg id="searchIcon" src={"assets/icon/icons8-search-50.png"} onClick={()=>search(searchInput,initTData)}></IonImg>
         <IonImg id="clearIcon" src={"assets/icon/icons8-clear-50.png"} onClick={()=>clear(searchInput)}></IonImg>
-      </IonItem>
+    </IonItem>
+    <IonRow>
+      <IonCol size="auto">
+        <IonButton onClick={resetData}>{getLanguage.language.aos.resetBtn}</IonButton>
+      </IonCol>
+      <IonCol size="auto">
+        <IonButton onClick={()=>{
+          setIsOpenModal(true);
+          setModalTitle(getLanguage.language.aos.modalHeaderAdd)
+        }}>{getLanguage.language.aos.addBtn}</IonButton>
+      </IonCol>
+    </IonRow>
     <table>
     
       <thead>
@@ -388,24 +389,21 @@ let cbAddData = useCallback((data:any)=>{
       </tbody>
     </table>
     <IonRow>
-      <IonCol size="auto">
+      
+      <IonCol size="9">
+        
+        <Pagination cbPagination={cbPagination} numOfPage={pageObj.numOfPage} curPage={pageObj.curPage} />
+        
+      </IonCol>
+      <IonCol size="3">
+        <div style={{textAlign:"end"}}>
         <IonNote>{pageObj.numOfRow}{getLanguage.language.aos.pagination1}{getLanguage.language.aos.pagination2}{pageObj.numOfPage}{getLanguage.language.aos.pagination3}</IonNote>
+        </div>
       </IonCol>
     </IonRow>
-    <IonRow>
-      <IonCol size="auto">
-        <IonButton onClick={resetData}>{getLanguage.language.aos.resetBtn}</IonButton>
-      </IonCol>
-      <IonCol size="auto">
-        <IonButton onClick={()=>{
-          setIsOpenModal(true);
-          setModalTitle(getLanguage.language.aos.modalHeaderAdd)
-        }}>{getLanguage.language.aos.addBtn}</IonButton>
-      </IonCol>
-    </IonRow>  
+      
     
     
-    <Pagination cbPagination={cbPagination} numOfPage={pageObj.numOfPage} curPage={pageObj.curPage} />
     
     <OrderSystemTableModal isOpen={isOpen} cbSetIsOpen={cbSetIsOpen} title={modalTitle} cbFilter={cbFilter} accessor={modalKey} initTData={[...initTData]}/>
     <OrderSystemOrderModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New Order" ? cbAddData : cbEditData} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus} />

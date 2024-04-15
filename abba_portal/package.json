@@ -35,6 +35,7 @@
     "@types/yup": "^0.32.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
+    "editorjs-text-color-plugin": "^2.0.4",
     "firebase": "^9.18.0",
     "history": "^4.9.0",
     "ionicons": "^6.0.3",

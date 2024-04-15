@@ -44,13 +44,12 @@ export class AdminRoutes extends Routes{
         super()       
         this.routes.get('/getUser/:userId',isLoggedInAPI,controller.getUser)
         this.routes.get('/allUserData',isLoggedInAPI,controller.allUserData)
-        
+
         this.routes.get('/allOrderData',isLoggedInAPI,controller.allOrderData)
 
         this.routes.post('/addOrder',isLoggedInAPI,controller.addOrder)
         this.routes.put('/editOrder/:id',isLoggedInAPI,controller.editOrder)
-
-        
-        
+        this.routes.put('/editBanner/:id',isLoggedInAPI,controller.editBanner)
+       
     }
 }

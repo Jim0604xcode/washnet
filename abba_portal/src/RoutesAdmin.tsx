@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { languageState } from './service/Recoil';
 import A_orderSystem from './pages/Admin/A_orderSystem';
 import A_themeSystem from './pages/Admin/A_themeSystem';
+import A_themeSystem_editor from './pages/Admin/A_themeSystemEditor';
 import A_staffSystem from './pages/Admin/A_staffSystem';
 import A_setting from './pages/Admin/A_setting';
 import { useState } from 'react';
@@ -23,22 +24,13 @@ const RoutesCustomer: React.FC = () => {
         <Switch>
             
           
-            {/* laundryman */}
-            <Route path="/Lw-clean">
-                <A_orderSystem />
-            </Route>
-            <Route path="/Lc-item">
-                <A_orderSystem />
-            </Route>
-            <Route path="/L-setting">
-                <A_orderSystem />
-            </Route>
+            
 
             {/* Admin */}
             <Route path="/A-orderSystem">
                 <A_orderSystem />
             </Route>
-            <Route path="/A-themeSystem">
+            <Route exact path="/A-themeSystem">
                 <A_themeSystem />
             </Route>
             <Route path="/A-staffSystem">
@@ -48,43 +40,23 @@ const RoutesCustomer: React.FC = () => {
                 <A_setting />
             </Route>
 
-            {/* Delivery */}
-            <Route path="/Dw-collect">
-            <A_orderSystem />
-            </Route>
-            <Route path="/Dw-delivery">
-            <A_orderSystem />
-            </Route>
-            <Route path="/Dc-item">
-            <A_orderSystem />
-            </Route>
-            <Route path="/D-setting">
-            <A_orderSystem />
+            <Route exact path="/A-themeSystem/:id">
+                <A_themeSystem_editor />
             </Route>
 
-            {/* Customer */}
-            <Route path="/C-laundryService">
-            <A_orderSystem />
-            </Route>
-            <Route path="/C-myOrder">
-            <A_orderSystem />
-            </Route>
-            <Route path="/C-setting">
-            <A_orderSystem />
-            </Route>
-
+           
             {/* Guest */}
             <Route path="/G-laundryService">
-            <A_orderSystem />
+            <A_themeSystem />
             </Route>
             <Route path="/G-setting">
-            <A_orderSystem />
+            <A_themeSystem />
             </Route>
 
 
 
             <Route exact path="/">
-                <Redirect to="/A-orderSystem" />
+                <Redirect to="/A-themeSystem" />
             </Route>
           
             <Route exact path="/error404">

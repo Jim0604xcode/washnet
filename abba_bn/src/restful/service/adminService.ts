@@ -93,5 +93,23 @@ class AdminService{
         }
         
     }
+    async editBanner(id:number,block:any){
+        const txn = await this.knex.transaction()
+        console.log(id,block)
+        try{
+            // let [result] = await txn.select("users.id").from("users").join("orders","orders.customer_id","users.id").where("orders.id",orderId)
+            // console.log('admin service 87',result)
+            // orderData = Object.assign(orderData,{customer_id:result.id}) as Order
+            // console.log(orderData)
+            // await txn("orders").update(orderData).where("id",orderId) 
+            
+            await txn.commit()
+            return
+        }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
 }    
+
 export let adminService = new AdminService(knex)

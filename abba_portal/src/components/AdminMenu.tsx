@@ -13,19 +13,22 @@ function AdminMenu() {
       </IonToolbar>
     </IonHeader>
     <IonContent className="ion-padding">
-      <IonItem routerLink="/A-orderSystem">
-        
-        <IonLabel>{getLanguage.language.aos.header}</IonLabel>
-      </IonItem>
-      <IonItem routerLink="/A-themeSystem">
+      <IonItem class='ripple-parent' routerLink="/A-themeSystem">
         
         <IonLabel>{getLanguage.language.as.header}</IonLabel>
       </IonItem>
-      <IonItem routerLink="/A-staffSystem">
+
+      <IonItem class='ripple-parent' routerLink="/A-orderSystem">
+        
+        <IonLabel>{getLanguage.language.aos.header}</IonLabel>
+      </IonItem>
+      
+      <IonItem class='ripple-parent' routerLink="/A-staffSystem">
         
         <IonLabel>{getLanguage.language.ass.header}</IonLabel>
+        
       </IonItem>
-      <IonItem routerLink="/A-setting">
+      <IonItem class='ripple-parent' routerLink="/A-setting">
         
         <IonLabel>{getLanguage.language.ats.header}</IonLabel>
       </IonItem>

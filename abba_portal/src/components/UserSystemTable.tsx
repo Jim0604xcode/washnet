@@ -1,6 +1,6 @@
-import { IonButton, IonCol, IonIcon, IonInput, IonItem, IonLabel, IonNote, IonRow, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonCol, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonNote, IonRow, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
 import { caretUpCircleOutline,caretDownCircleOutline,filterCircleOutline } from "ionicons/icons";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 
 import { columns, page, User } from "../service/UserTableData";
@@ -30,6 +30,8 @@ function findVal(targetKey:string,obj:User | any){
   }
 }  
   const UserSystemTable: React.FC = () => {
+    const searchInput = useRef(null)
+  
     const getLanguage = useRecoilValue(languageState);
     const [initTData, setInitTData] = useState<User[]>([])    
     const [tData,setTData] = useState<User[]>([])
@@ -80,8 +82,17 @@ function findVal(targetKey:string,obj:User | any){
     cbFetchAllUsers()
     
   }
-  let search = (cri:string,data:User[]) => {
+  let clear = (dom:any)=>{
+    dom.current.value = ""
+  }
+  let keyupSearch = (e:any,dom:any,data:User[]) => {
     
+    if(e.key === 'Enter' || e.keyCode === 13){
+      search(dom,data)
+    }
+  }
+  let search = (dom:any,data:User[]) => {
+    let cri:string = dom.current.value
     setTData(tData=>{
       
       let newTData = [...data]
@@ -211,9 +222,23 @@ let cbAddUser = useCallback((data:any)=>{
 
 
     <IonItem fill="outline">
-        <IonLabel position="floating">{getLanguage.language.ass.search}</IonLabel>
-        <IonInput onIonBlur={({target})=>search(target.value as string,initTData)} className="text" clearInput={true} aria-label="Search" placeholder="Search"></IonInput>
-      </IonItem>
+        
+        <IonLabel position="floating">{getLanguage.language.aos.search}</IonLabel>
+        <IonInput id="searchInput" ref={searchInput} onKeyUp={(e)=>keyupSearch(e,searchInput,initTData)} className="text" aria-label="Search" placeholder="Search"></IonInput>
+        <IonImg id="searchIcon" src={"assets/icon/icons8-search-50.png"} onClick={()=>search(searchInput,initTData)}></IonImg>
+        <IonImg id="clearIcon" src={"assets/icon/icons8-clear-50.png"} onClick={()=>clear(searchInput)}></IonImg>
+    </IonItem>
+    <IonRow>
+      <IonCol size="auto">
+        <IonButton onClick={resetData}>{getLanguage.language.ass.resetBtn}</IonButton>
+      </IonCol>
+      <IonCol size="auto">
+        <IonButton onClick={()=>{
+          setIsOpenModal(true);
+          setModalTitle(getLanguage.language.ass.modalHeaderAdd)
+        }}>{getLanguage.language.ass.addBtn}</IonButton>
+      </IonCol>
+    </IonRow>  
     <table>
     
       <thead>
@@ -295,24 +320,20 @@ let cbAddUser = useCallback((data:any)=>{
       </tbody>
     </table>
     <IonRow>
-      <IonCol size="auto">
+
+    <IonCol size="9">
+    <Pagination cbPagination={cbPagination} numOfPage={pageObj.numOfPage} curPage={pageObj.curPage} />
+   
+    </IonCol> 
+      <IonCol size="3">
+      <div style={{textAlign:"end"}}>
         <IonNote>{pageObj.numOfRow}{getLanguage.language.ass.pagination1}{getLanguage.language.ass.pagination2}{pageObj.numOfPage}{getLanguage.language.ass.pagination3}</IonNote>
+      </div>
       </IonCol>
     </IonRow>
-    <IonRow>
-      <IonCol size="auto">
-        <IonButton onClick={resetData}>{getLanguage.language.ass.resetBtn}</IonButton>
-      </IonCol>
-      <IonCol size="auto">
-        <IonButton onClick={()=>{
-          setIsOpenModal(true);
-          setModalTitle(getLanguage.language.ass.modalHeaderAdd)
-        }}>{getLanguage.language.ass.addBtn}</IonButton>
-      </IonCol>
-    </IonRow>  
     
     
-    <Pagination cbPagination={cbPagination} numOfPage={pageObj.numOfPage} curPage={pageObj.curPage} />
+    
     
     <UserSystemTableModal isOpen={isOpen} cbSetIsOpen={cbSetIsOpen} title={modalTitle} cbFilter={cbFilter} accessor={modalKey} initTData={[...initTData]}/>
     <UserSystemUserModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New User" ? cbAddUser : cbEditUser} userId={userId} />

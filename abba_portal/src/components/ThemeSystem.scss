@@ -1,8 +1,10 @@
 #editorContainer{
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     background: #FFF;
     width: 80%;
     margin: 20px auto;
     border-radius: 25px;
     box-shadow: 2px 2px 2px 1px #0003;
+    padding: 0px 10px;
 }

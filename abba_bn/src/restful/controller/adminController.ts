@@ -131,4 +131,23 @@ export class AdminController implements IAdminController{
             errorHandler(err,req,res)
         }
     }
+    async editBanner(req:Request,res:Response){
+        try {
+            let jwt = res.locals.jwt as JWT
+            if(jwt.role !== "admin"){
+                throw new Error("You aren't Admin")
+            }
+            let {blocks} = req.body
+            let id = Number(req.params.id)
+            
+            await adminService.editBanner(id,blocks)
+            res.json({
+                data:null,
+                isErr:false,
+                errMess:null
+            })
+        }catch(err){
+            errorHandler(err,req,res)
+        }
+    }
 }

@@ -1,0 +1,17 @@
+#paginateBar{
+    background-color: var(--xltblue-el-color);
+    width: 100%;
+    padding: 15px 15px;
+    border-radius: 50px;
+    overflow-x: auto;
+    display: flex;
+    /* width */
+    
+    ion-fab-button{
+        --background: var(--ltblue-el-color);
+        // min-width: 70px;
+        min-width: 50px;
+        min-height: 50px;
+        margin-right: 10px;
+    }
+}
