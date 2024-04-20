@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { languageState } from "./service/Recoil";
-import { getCurrentUser, setterLanguage,getterLanguaue } from "./service/api";
+import { getCurrentUser, getterLanguaue, setterLanguage } from "./service/api";
 
 
 const ProtectedRoute: 
@@ -15,7 +15,7 @@ const ProtectedRoute:
         
         
         data = await JSON.parse(data)
-        
+        console.log(data)
         
         await setterLanguage(setLanguageState,data)
     },[])

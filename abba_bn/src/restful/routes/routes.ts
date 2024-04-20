@@ -50,6 +50,6 @@ export class AdminRoutes extends Routes{
         this.routes.post('/addOrder',isLoggedInAPI,controller.addOrder)
         this.routes.put('/editOrder/:id',isLoggedInAPI,controller.editOrder)
         this.routes.put('/editBanner/:id',isLoggedInAPI,controller.editBanner)
-       
+        this.routes.get('/getLanguageData/:require',controller.getLanguageData)
     }
 }

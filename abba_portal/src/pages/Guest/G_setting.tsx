@@ -40,12 +40,12 @@ import Header2 from "../../components/Header2";
     return (
       <>
       <IonMenu side="end" contentId="main-content">
-        <Header2 name={getLanguage.language.cls.header} />
+        <Header2 name={"登入 / 註冊"} />
       </IonMenu> 
         <IonPage id="main-content">
-          <Header name={getLanguage.language.gs.header} />
+          <Header name={"登入 / 註冊"} />
           <IonContent fullscreen className="ion-padding">
-            <Segment label1={getLanguage.language.gs.segmentBtn1} label2={getLanguage.language.gs.segmentBtn2} active={segment.active} cbSet={cbSet} />
+            <Segment label1={"登入"} label2={"註冊"} active={segment.active} cbSet={cbSet} />
             {segment.active === "Login" && <Login />}
             {segment.active === "Register" && <Register cbSubmitForm={cbSubmitForm} isAdmin={false} />}
           </IonContent>

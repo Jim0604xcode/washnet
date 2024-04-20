@@ -32,14 +32,32 @@ class AdminService{
     async getUser(userId:string){
         const txn = await this.knex.transaction()
         try {
-            let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.area","customer_meta.street","customer_meta.location").from("users").join("customer_meta","customer_meta.customer_id","users.id").orderBy("users.created_at","desc")
-            await txn.commit()
-            return result
+        let [row] = await txn.select("role").from("users").where("id",userId);
+            console.log(row)
+            if(row.role==="admin"){
+                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","staff_meta.work_location as fullAddress").from("users")
+                .join("staff_meta","staff_meta.staff_id","users.id")
+                .where("users.id",userId)
+                .orderBy("users.created_at","desc")
+                await txn.commit()
+                
+                return result
+            }
+            if(row.role==="customer"){
+                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.full_address as fullAddress").from("users")
+                .join("customer_meta","customer_meta.customer_id","users.id")
+                .where("users.id",userId)
+                .orderBy("users.created_at","desc")
+                await txn.commit()
+                
+                return result
+            }
         } catch (err) {
             await txn.rollback();
             throw new Error(`${err.message}`)
         }
     }
+    
     async getUserAllUser(){
         const txn = await this.knex.transaction()
         try {
@@ -106,6 +124,25 @@ class AdminService{
             await txn.commit()
             return
         }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async getLan(reqLan:`cn`|`eng`){
+        const txn = await this.knex.transaction()
+        try {
+            
+            if(reqLan === "cn"){
+                let result = await txn.select("cn").from("languague_portal")
+                await txn.commit()
+                return result[0].cn
+            }else if(reqLan === "eng"){
+                let result = await txn.select("eng").from("languague_portal")
+                await txn.commit()
+                return result[0].eng
+            }
+            
+        } catch (err) {
             await txn.rollback();
             throw new Error(`${err.message}`)
         }

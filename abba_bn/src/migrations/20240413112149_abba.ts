@@ -13,10 +13,8 @@ export async function up(knex: Knex): Promise<void> {
         table.timestamp("updated_at")
     })
     await knex.schema.createTable("customer_meta",(table)=>{
-        table.string("area").notNullable()
-        table.string("street").notNullable()
-        table.string("location").notNullable()
-        // table.string("room").notNullable()
+        table.string("full_address").notNullable();
+        
         
         table.text("customer_id").unsigned();
         table.foreign("customer_id").references("users.id");
@@ -52,10 +50,16 @@ export async function up(knex: Knex): Promise<void> {
         table.text("cn").notNullable();
         table.text("eng").notNullable();
     })
+    await knex.schema.createTable("languague_portal",(table)=>{
+        table.increments("id");
+        table.text("cn").notNullable();
+        table.text("eng").notNullable();
+    })
 }
 
 
 export async function down(knex: Knex): Promise<void> {
+    await knex.schema.dropTable("languague_portal")
     await knex.schema.dropTable("languague")
     await knex.schema.dropTable("orders")
     await knex.schema.dropTable("staff_meta")

@@ -26,7 +26,7 @@ import "./Header.scss";
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-          <IonButton className="headerBtnCustomStyle" onClick={changeLan}>{getLanguage.language.cls.switchLan}</IonButton>
+          {/* <IonButton className="headerBtnCustomStyle" onClick={changeLan}>{getLanguage.language.cls.switchLan}</IonButton> */}
         </IonContent>
       </>
     );

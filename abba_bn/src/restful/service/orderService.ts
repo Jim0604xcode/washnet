@@ -55,7 +55,7 @@ class OrderService{
                 throw new Error('Not exist this order')
             }
             console.log(userRow)
-            let result = await txn.select("area","district","station","address").from("customer_meta").where("customer_id",userRow[0].customer_id)
+            let result = await txn.select("full_address as fullAddress").from("customer_meta").where("customer_id",userRow[0].customer_id)
             if(result.length === 0){
                 throw new Error('Not exist this user')
             }

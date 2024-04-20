@@ -15,22 +15,25 @@ type Order = {
     tel:string
     fullAddress:string
     remarks:string
-    status:Status
+    orderStatus:Status
 }
 export let addOrderSchema = yup.object().shape({
-    order_type:yup.string().required(),
+    orderType:yup.string().required(),
     pc:yup.number().required(),
     pickupDateTime: yup.string().required(),
     deliveryDateTime: yup.string().required(),
     tel:yup.string().required(),
-    full_address:yup.string().required(),
+    fullAddress:yup.string().required(),
     remarks:yup.string().required(),
     
 });
 export class AdminController implements IAdminController{
     async getUser(req:Request,res:Response){
         try {
+       
             let userId = req.params.userId
+          
+            
             let user = await adminService.getUser(userId)
             
             res.json({
@@ -105,9 +108,9 @@ export class AdminController implements IAdminController{
             await addOrderSchema.validate(orderData);
             
             if(
-                orderData.status !== "w_pickup" &&
-                orderData.status !== "w_delivery" && 
-                orderData.status !== "complete"
+                orderData.orderStatus !== "w_pickup" &&
+                orderData.orderStatus !== "w_delivery" && 
+                orderData.orderStatus !== "complete"
             ){
                 throw new Error("Not correct order status")
             }
@@ -119,7 +122,7 @@ export class AdminController implements IAdminController{
                 tel:orderData.tel,
                 full_address:orderData.fullAddress,
                 remarks:orderData.remarks,
-                status:orderData.status,
+                status:orderData.orderStatus,
                
             },orderId)
             res.json({
@@ -150,4 +153,22 @@ export class AdminController implements IAdminController{
             errorHandler(err,req,res)
         }
     }
+    async getLanguageData(req:Request,res:Response){
+        try {
+        
+        let require = req.params.require as "cn" | "eng"
+        
+        
+          let languageData = await adminService.getLan(require)
+          
+          res.json({
+            data:languageData,
+            isErr:false,
+            errMess:null
+          })
+           
+        }catch(err){
+          errorHandler(err,req,res)
+        }
+      }
 }

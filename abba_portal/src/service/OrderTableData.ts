@@ -4,18 +4,17 @@ import { momentUnix } from "./moment";
 
 export interface Order {
   orderId: number;
-  orderStatus:"w_pickup"|"w_quote"|"w_clean"|"w_delivery"|"complete";
-  poundWash: number;
-  dryCleaning: number;
-  washShoes: number;
-  leatherWashBag: number;
+  orderType:string;
+  pc:number;
   pickupDateTime: string;
   pickupDateTimeUnix: number;
-  area_value: string;
-  district_value: string;
-  station_value: string;
-  address: string;
+  deliveryDateTime:string;
+  deliveryDateTimeUnix: number;
+  tel:string;
+  
+  fullAddress: string;
   remarks: string;
+  orderStatus:"w_pickup"|"w_delivery"|"complete";
 }
 type ColumnDefinitionType<T, K extends keyof T> = {
   key: K;
@@ -33,33 +32,17 @@ export const data: Order[] = [
 
   {
     orderId: 1,
-    orderStatus:"w_pickup",
-    poundWash: 1,
-    dryCleaning: 0,
-    washShoes: 0,
-    leatherWashBag: 0,
+    orderType:"",
+    pc: 0,
     pickupDateTime: "Monday, May 1st 2023, 8:03:57 pm",
     pickupDateTimeUnix:momentUnix("Monday, May 1st 2023, 8:03:57 pm"),
-    area_value: "港島",
-    district_value: "灣仔區",
-    station_value: "銅鑼灣",
-    address: "address",
+    deliveryDateTime: "Monday, May 1st 2023, 8:03:57 pm",
+    deliveryDateTimeUnix:momentUnix("Monday, May 1st 2023, 8:03:57 pm"),
+    tel:"51823007",
+    fullAddress: "address",
     remarks: "rem",
-  },
-  {
-    orderId: 2,
     orderStatus:"w_pickup",
-    poundWash: 2,
-    dryCleaning: 0,
-    washShoes: 0,
-    leatherWashBag: 0,
-    pickupDateTime: "Monday, May 1st 2023, 8:03:57 pm",
-    pickupDateTimeUnix:momentUnix("Monday, May 1st 2023, 8:03:57 pm"),
-    area_value: "港島",
-    district_value: "灣仔區",
-    station_value: "銅鑼灣",
-    address: "address",
-    remarks: "rem",
+    
   },
   
 
@@ -75,6 +58,14 @@ export const columns: ColumnDefinitionType<Order, keyof Order>[] = [
     sort: null,
   },
   {
+    key: 'orderType',
+    header: '訂單種類',
+    width: 150,
+    accessor: "orderType",
+    canFilter: true,
+    sort: null,
+  },
+  {
     key: 'orderStatus',
     header: '訂單Status',
     width: 150,
@@ -83,35 +74,10 @@ export const columns: ColumnDefinitionType<Order, keyof Order>[] = [
     sort: null,
   },
   {
-    key: 'poundWash',
-    header: '磅洗',
+    key: 'pc',
+    header: 'Pc',
     width: 150,
-    accessor: "poundWash",
-    canFilter: true,
-    sort: null,
-
-  },
-  {
-    key: 'dryCleaning',
-    header: '乾洗',
-    width: 150,
-    accessor: "dryCleaning",
-    canFilter: true,
-    sort: null,
-  },
-  {
-    key: 'washShoes',
-    header: '洗鞋',
-    width: 150,
-    accessor: "washShoes",
-    canFilter: false,
-    sort: null,
-  },
-  {
-    key: 'leatherWashBag',
-    header: '皮革 / 洗袋',
-    width: 150,
-    accessor: "leatherWashBag",
+    accessor: "pc",
     canFilter: true,
     sort: null,
   },
@@ -132,34 +98,27 @@ export const columns: ColumnDefinitionType<Order, keyof Order>[] = [
     sort: null,
   },
   {
-    key: 'area_value',
-    header: '大區',
+    key: 'deliveryDateTime',
+    header: '送衣日期及時段',
     width: 150,
-    accessor: "area",
+    accessor: "deliveryDateTimeUnix",
     canFilter: true,
     sort: null,
   },
   {
-    key: 'district_value',
-    header: '細區',
+    key: 'deliveryDateTimeUnix',
+    header: '送衣日期及時段',
     width: 150,
-    accessor: "district",
-    canFilter: true,
+    accessor: "deliveryDateTimeUnix",
+    canFilter: false,
     sort: null,
   },
+  
   {
-    key: 'station_value',
-    header: '站',
-    width: 150,
-    accessor: "station",
-    canFilter: true,
-    sort: null,
-  },
-  {
-    key: 'address',
+    key: 'fullAddress',
     header: '地址',
     width: 150,
-    accessor: "address",
+    accessor: "fullAddress",
     canFilter: true,
     sort: null,
   },

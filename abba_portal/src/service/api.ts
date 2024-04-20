@@ -303,25 +303,13 @@ export async function getCurrentUser(cbRoleFunc:(currentRole:string)=>void){
     
         
 }
+
 export async function getterLanguaue(reqLan:`cn`|`eng`){
   try {
-    // let token = await getValue("token")
-    
-    // if(token){
-    //     let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/user/getLanguageDataAuth/${reqLan}`,{
-    //       headers:{
-    //         'Authorization': `Bearer ${token}`
-    //       }
-    //     })
-    //     let json = await res.json()
-    //     return json.data        
-        
-    // }else{
-        let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/user/getLanguageData/${reqLan}`)
+        let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/getLanguageData/${reqLan}`)
         let json = await res.json()
         console.log(json)
         return json.data
-    // }
   } catch (error:any) {
     console.log(error.message)
   }

@@ -202,10 +202,10 @@ let openEditOrderForm = (oid:number,index:number) => {
   setOrderId(oid)
   let orderStatus = tData[index].orderStatus
   setOrderStatus(orderStatus)
+  
   setIsOpenModal(true);
-  
+
   setModalTitle(getLanguage.language.aos.modalHeaderEdit)
-  
   
   setPlaceOrder(placeOrder=>{
     let newPlaceOrder = {...placeOrder}
@@ -215,7 +215,8 @@ let openEditOrderForm = (oid:number,index:number) => {
     return newPlaceOrder
   })
 
-
+  
+  
 }
 let cbEditData = useCallback((data:PlaceOrderType|any)=>{
   // admin edit order status 1
@@ -227,21 +228,14 @@ let cbEditData = useCallback((data:PlaceOrderType|any)=>{
     newTData = newTData.map(obj=>obj.orderId === data.orderId 
     ? 
     Object.assign(obj,{
-      address:data.address,
-      area:data.area.split('@')[1],
-      area_value:data.area.split('@')[0],
-      district:data.district.split('@')[1],
-      district_value:data.district.split('@')[0],
-      dryCleaning:data.dryCleaning,
-      leatherWashBag:data.leatherWashBag,
+      fullAddress:data.fullAddress,
+      deliveryDateTime:data.deliveryDateTime,
+      deliveryDateTimeUnix:momentUnix(data.deliveryDateTime),
       pickupDateTime:data.pickupDateTime,
       pickupDateTimeUnix:momentUnix(data.pickupDateTime),
-      poundWash:data.poundWash,
       remarks:data.remarks,
-      station:data.station.split('@')[1],
-      station_value:data.station.split('@')[0],
-      totalPic:data.totalPic,
-      washShoes:data.washShoes
+      pc:data.pc,
+      
     })
     :
     obj
@@ -296,7 +290,7 @@ let cbAddData = useCallback((data:any)=>{
             Row
           </th> */}
           {tHeader.map((column, index) =>
-          column.key !== "pickupDateTimeUnix" && 
+          column.key !== "pickupDateTimeUnix" && column.key !== "deliveryDateTimeUnix" && 
           <th style={{textAlign:"center"}} key={index}>
             {column.header}
             <div style={{display:"flex",justifyContent:"center"}}>
@@ -329,7 +323,7 @@ let cbAddData = useCallback((data:any)=>{
           return <tr key={id}>
             {tHeader.map((column, index) => 
             <>
-              {column.key !== "pickupDateTimeUnix" ? index === 0
+              {column.key !== "pickupDateTimeUnix" && column.key !== "deliveryDateTimeUnix" ? index === 0
               ? 
               <td key={id+index}>{findVal("orderId",obj)} <IonIcon onClick={()=>openEditOrderForm(obj.orderId,id)} aria-hidden="true" icon={caretDownCircleOutline} /></td>
               :
@@ -406,7 +400,7 @@ let cbAddData = useCallback((data:any)=>{
     
     
     <OrderSystemTableModal isOpen={isOpen} cbSetIsOpen={cbSetIsOpen} title={modalTitle} cbFilter={cbFilter} accessor={modalKey} initTData={[...initTData]}/>
-    <OrderSystemOrderModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New Order" ? cbAddData : cbEditData} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus} />
+    <OrderSystemOrderModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New Order" || modalTitle === "新增訂單" ? cbAddData : cbEditData} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus} />
     
   </>
 

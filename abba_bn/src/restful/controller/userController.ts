@@ -20,12 +20,12 @@ type RegUser = {
     password: string,
     confirmPassword?:string,
     role:Role,
-    area:string,
+    // area:string,
     
-    street:string,
+    // street:string,
     
-    location:string,
-    
+    // location:string,
+    fullAddress:string
     
 
 }
@@ -37,9 +37,8 @@ export let registerUserSchema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(6, 'must be at least 6 characters long').required(),
     confirmPassword: yup.string().min(6, 'must be at least 6 characters long').required(),
-    area:yup.string().required(),
-    street:yup.string().required(),
-    location:yup.string().required(),
+    fullAddress:yup.string().required(),
+    
 });
 export let loginUserSchema = yup.object().shape({
     mobileOrEmail: yup.string().required(),
@@ -56,6 +55,7 @@ export class UserController implements IUserController{
               mobile_or_email:userData.mobileOrEmail,
               password:userData.password
             })
+            console.log(id,role)
             let jwt = await createJwt(id,role)
             res.json({
                 data:{
@@ -95,9 +95,8 @@ export class UserController implements IUserController{
               email:userData.email,
               password:userData.password,
               role:userData.role,
-              area:userData.area,
-              street:userData.street,
-              location:userData.location
+              full_address:userData.fullAddress,
+           
             })
 
             let jwt = await createJwt(id,role)

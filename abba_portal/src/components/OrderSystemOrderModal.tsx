@@ -7,6 +7,7 @@ import { languageState } from "../service/Recoil";
 
 const OrderSystemOrderModal: React.FC<{isOpen:boolean,cbSetIsOpen:(boo:boolean)=>void,title:string,cbSubmitForm:(placeOrder:any)=>void,placeOrder:PlaceOrderType,orderId:number,orderStatus:string}> = ({isOpen,cbSetIsOpen,title,cbSubmitForm,placeOrder,orderId,orderStatus}) => {
   const getLanguage = useRecoilValue(languageState);
+  console.log(placeOrder)
   
   return (
     <>
@@ -20,6 +21,7 @@ const OrderSystemOrderModal: React.FC<{isOpen:boolean,cbSetIsOpen:(boo:boolean)=
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
+            
             <PlaceOrder status={title === "Add New Order" || title === "新增訂單" ? 2 : 1} cbSubmitForm={cbSubmitForm} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus}/>
           </IonContent>
         </IonModal>

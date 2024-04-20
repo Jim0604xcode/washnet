@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { eyeOffOutline,eyeOutline } from 'ionicons/icons';
 import { IonButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonNote } from "@ionic/react";
@@ -32,9 +32,9 @@ const Login: React.FC = () => {
       <h1>{getLanguage.language.gs.loginFormTitle}</h1>
       <IonItem fill="outline">
         <IonLabel position="floating">{getLanguage.language.gs.loginFormField1}</IonLabel>
-        <IonInput className="text" clearInput={true} {...register("mobile_or_email")} aria-label="Mobile or Email" placeholder={getLanguage.language.gs.loginFormField1}></IonInput>
+        <IonInput className="text" clearInput={true} {...register("mobileOrEmail")} aria-label="Mobile or Email" placeholder={getLanguage.language.gs.loginFormField1}></IonInput>
       </IonItem>
-      <IonNote>{errors.mobile_or_email?.message}</IonNote>
+      <IonNote>{errors.mobileOrEmail?.message}</IonNote>
       
       <IonItem fill="outline">
         <IonLabel position="floating">{getLanguage.language.gs.loginFormField2}</IonLabel>
