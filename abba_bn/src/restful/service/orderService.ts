@@ -33,7 +33,7 @@ class OrderService{
         
     }
     
-    async getUserAllOrder(userId:string,role:string):Promise<{order_items:string}[]>{
+    async getUserAllOrder(userId:string,role:string){
         const txn = await this.knex.transaction()
         try {
             
@@ -47,7 +47,7 @@ class OrderService{
         }
     }
     
-    async getPickUpAddress(orderId:number){
+    async getPickUpAddress(orderId:number):Promise<{fullAddress:string}>{
         const txn = await this.knex.transaction()
         try {
             let userRow = await txn.select("customer_id").from("orders").where("id",orderId)
@@ -66,10 +66,10 @@ class OrderService{
             throw new Error(`${err.message}`)
         }
     }
-    async getMobile(userId:string){
+    async getMobile(userId:string):Promise<{tel:string}>{
         const txn = await this.knex.transaction()
         try {
-            let result = await txn.select("mobile").from("users").where("id",userId)
+            let result = await txn.select("mobile as tel").from("users").where("id",userId)
             if(result.length === 0){
                 throw new Error('Not exist this user')
             }            

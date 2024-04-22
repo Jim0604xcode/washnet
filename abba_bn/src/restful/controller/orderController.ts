@@ -16,15 +16,15 @@ type Order = {
     tel:string
     fullAddress:string
     remarks:string
-    status:Status
+    orderStatus:Status
 }
 export let addOrderSchema = yup.object().shape({
-    order_type:yup.string().required(),
+    orderType:yup.string().required(),
     pc:yup.number().required(),
     pickupDateTime: yup.string().required(),
     deliveryDateTime: yup.string().required(),
     tel:yup.string().required(),
-    full_address:yup.string().required(),
+    fullAddress:yup.string().required(),
     remarks:yup.string().required(),
 });
 export class OrderController implements IOrderController{
@@ -74,16 +74,13 @@ export class OrderController implements IOrderController{
     async getPickUpAddressAndMobile(req:express.Request,res:express.Response){
         try{
             let orderId = Number(req.params.id)
-            let {area,district,station,address} = await orderService.getPickUpAddress(orderId)
+            let {fullAddress} = await orderService.getPickUpAddress(orderId)
             let jwt = res.locals.jwt as JWT
-            let {mobile} = await orderService.getMobile(jwt.usersId)  
+            let {tel} = await orderService.getMobile(jwt.usersId)  
             res.json({
               data:{
-                area:area,
-                district:district,
-                station:station,
-                address:address,
-                tel:mobile
+                fullAddress:fullAddress,
+                tel:tel
               },
               isErr:false,
               errMess:null
