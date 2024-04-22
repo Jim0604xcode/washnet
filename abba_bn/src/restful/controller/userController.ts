@@ -13,21 +13,14 @@ type LoginUser = {
     password:string
 }
 type RegUser = {
-    id:string
+    id?:string
     displayName:string,
     mobile:string,
     email: string,
     password: string,
     confirmPassword?:string,
-    role:Role,
-    // area:string,
-    
-    // street:string,
-    
-    // location:string,
+    role?:Role,
     fullAddress:string
-    
-
 }
 
 export let registerUserSchema = yup.object().shape({
@@ -132,17 +125,18 @@ export class UserController implements IUserController{
           }
     }
     
-    async getPickUpAddress(req:express.Request,res:express.Response){
+    async getPickUpAddressAndMobile(req:express.Request,res:express.Response){
       try {
           let jwt = res.locals.jwt as JWT
           
-          let {area,district,station,address} = await userService.getPickUpAddress(jwt.usersId)
+          let {fullAddress} = await userService.getPickUpAddress(jwt.usersId)
+          
+          let {tel} = await userService.getMobile(jwt.usersId)
+          
           res.json({
               data:{
-                area:area,
-                district:district,
-                station:station,
-                address:address
+                fullAddress:fullAddress,
+                tel:tel,
               },
               isErr:false,
               errMess:null

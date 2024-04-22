@@ -44,11 +44,11 @@ export class OrderController implements IOrderController{
                 status:"w_pickup",
                 customer_id:jwt.usersId,
             })
-            res.json({
-                data:null,
-                isErr:false,
-                errMess:null
-            })
+                res.json({
+                    data:null,
+                    isErr:false,
+                    errMess:null
+                })
         }catch(err){
             errorHandler(err,req,res)
         }

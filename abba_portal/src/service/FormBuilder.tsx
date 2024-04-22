@@ -59,9 +59,6 @@ export const getRegisterFormDefaultValues = () => {
         email: "",
         password: "",
         confirmPassword:"",
-        // area:"",
-        // street:"",
-        // location:"",
         fullAddress:""
       }
 }

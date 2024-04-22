@@ -13,10 +13,6 @@ type RegUser = {
     email: string,
     password: string,
     role:Role
-
-    // area:string,
-    // street:string,
-    // location:string,
     full_address:string
     
     
@@ -93,7 +89,7 @@ export class UserService {
         }
         
     }
-    async getPickUpAddress(userId:string){
+    async getPickUpAddress(userId:string):Promise<{fullAddress:string}>{
         const txn = await this.knex.transaction()
         try {
             
@@ -108,6 +104,21 @@ export class UserService {
             throw new Error(`${err.message}`)
         }
         
+    }
+    async getMobile(userId:string):Promise<{tel:string}>{
+        const txn = await this.knex.transaction()
+        try {
+            let result = await txn.select("mobile as tel").from("users").where("id",userId)
+            if(result.length === 0){
+                throw new Error('Not exist this user')
+            }            
+            await txn.commit()
+            return result[0]
+
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
     }
     async getLan(reqLan:`cn`|`eng`){
         const txn = await this.knex.transaction()

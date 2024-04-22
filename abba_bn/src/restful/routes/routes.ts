@@ -18,7 +18,7 @@ export class UserRoutes extends Routes{
         this.routes.post('/login',controller.login)
         this.routes.post('/register',controller.register)
         this.routes.get('/getCurrentUser',isLoggedInAPI,controller.getCurrentUser)
-        this.routes.get('/getPickUpAddress',isLoggedInAPI,controller.getPickUpAddress)
+        this.routes.get('/getPickUpAddressAndMobile',isLoggedInAPI,controller.getPickUpAddressAndMobile)
         this.routes.get('/getLanguageData/:require',controller.getLanguageDataGuest)
         
     }
