@@ -9,19 +9,57 @@ import React, { useState } from "react";
 import { Button, TextInput } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import Collapsible from "react-native-collapsible";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DatePickerModal } from 'react-native-paper-dates';
 import { zhTW, registerTranslation } from 'react-native-paper-dates'
 registerTranslation('zh-TW', zhTW)
 
+type OrderType = "pw"|"dc"|"ws"|"lw"|"cs"|"fw"
+type Order = {
+  orderType:OrderType
+  pc:number
+  pickupDateTime:string
+  deliveryDateTime:string
+  tel:string
+  building:string
+  street:string
+  district:string
+  fullAddress:string
+  remarks:string
+}
+
+
 type OrderFormProps = {
   colorScheme: ColorSchemeName;
 };
 
 const OrderForm: React.FC<OrderFormProps> = ({ colorScheme }) => {
-const { control, handleSubmit } = useForm();
+  const [formValue,setFormValue] = useState<Order>({
+    orderType:"pw",
+    pc:0,
+    pickupDateTime:"",
+    deliveryDateTime:"",
+    tel:"",
+    building:"",
+    street:"",
+    district:"",
+    fullAddress:"",
+    remarks:""
+  })
+const { register,control, handleSubmit} = useForm({
+  defaultValues: formValue,
+  values:formValue
+});
+
+// const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormState>({
+//   resolver: getRegisterFormYupResolver(),
+//   defaultValues: formValue,
+//   values:formValue
+// });
+
+
   const [isCollapsed1, setIsCollapsed1] = useState(true);
   const [isCollapsed2, setIsCollapsed2] = useState(true);
   const [isCollapsed3, setIsCollapsed3] = useState(true);
@@ -32,11 +70,19 @@ const { control, handleSubmit } = useForm();
     setPickupOpen(false);
   }, [setPickupOpen]);
 
+
   const onConfirmPickup = React.useCallback(
     (params: { date: any }) => {
         setPickupOpen(false);
         setPickupDate(params.date);
         setIsCollapsed2(true);
+        setFormValue(formValue=>{
+          let newFormValue = {...formValue}
+          newFormValue.pickupDateTime = params.date
+          
+          return newFormValue
+        })
+
         console.log(params.date);
     },
     [setPickupOpen, setPickupDate]
@@ -54,9 +100,26 @@ const { control, handleSubmit } = useForm();
         setDeliveryDate(params.date);
         setIsCollapsed3(true);
         console.log(params.date);
+        setFormValue(formValue=>{
+          let newFormValue = {...formValue}
+          newFormValue.deliveryDateTime = params.date
+          
+          return newFormValue
+        })
     },
     [setDeliveryOpen, setDeliveryDate]
   );
+
+    
+    
+  const onSubmit = async () => {
+    setFormValue(formValue=>{
+      let newFormValue = {...formValue}
+      newFormValue.fullAddress = newFormValue.district + newFormValue.street + newFormValue.building
+      return newFormValue
+    })
+    console.log(formValue)
+  }
 
   return (
     <View style={styles.formBox}>
@@ -93,17 +156,20 @@ const { control, handleSubmit } = useForm();
             </View>
           )}
         </Pressable>
-        <Controller
-          control={control}
-          name="building"
-          render={({ field: { onChange, onBlur, value } }) => (
+        <View>
             <TextInput
               mode="outlined"
               label="大廈"
               placeholder="大廈名稱"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+              {...register("building")}  
+              onChangeText={(v:string)=>{
+                setFormValue(formValue=>{
+                  let newFormValue = {...formValue}
+                  newFormValue.building = v
+                  
+                  return newFormValue
+                })
+              }}
               style={[
                 styles.input,
                 {
@@ -114,19 +180,21 @@ const { control, handleSubmit } = useForm();
               ]}
               activeOutlineColor={Colors[colorScheme ?? "light"].tint}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="street"
-          render={({ field: { onChange, onBlur, value } }) => (
+        </View>
+        <View>
             <TextInput
               mode="outlined"
               label="街道"
               placeholder="街道名稱"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+              {...register("street")}
+              onChangeText={(v:string)=>{
+                setFormValue(formValue=>{
+                  let newFormValue = {...formValue}
+                  newFormValue.street = v
+                  
+                  return newFormValue
+                })
+              }}
               style={[
                 styles.input,
                 {
@@ -137,19 +205,21 @@ const { control, handleSubmit } = useForm();
               ]}
               activeOutlineColor={Colors[colorScheme ?? "light"].tint}
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="district"
-          render={({ field: { onChange, onBlur, value } }) => (
+        </View>
+        <View>
             <TextInput
               mode="outlined"
               label="地區"
               placeholder="地區名稱"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+              {...register("district")}
+              onChangeText={(v:string)=>{
+                setFormValue(formValue=>{
+                  let newFormValue = {...formValue}
+                  newFormValue.district = v
+                  
+                  return newFormValue
+                })
+              }}
               style={[
                 styles.input,
                 {
@@ -160,9 +230,9 @@ const { control, handleSubmit } = useForm();
               ]}
               activeOutlineColor={Colors[colorScheme ?? "light"].tint}
             />
-          )}
-        />
+        </View>
       </Collapsible>
+
       <Collapsible
         collapsed={isCollapsed2}
         collapsedHeight={pickupDate === undefined ? 80 : 120 }
@@ -206,16 +276,14 @@ const { control, handleSubmit } = useForm();
                 {pickupDate.toLocaleDateString('zh-TW')}
             </Text>
         : null }
-        <Controller
-          control={control}
-          name="pickupTime"
-          render={({ field: { onChange, onBlur, value } }) => (
+        
             <SafeAreaProvider>
-                <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                <View {...register("pickupDateTime")} style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
                     <DatePickerModal
                         locale="zh-TW"
                         mode="single"
                         visible={pickupOpen}
+                        
                         onDismiss={onDismissPickup}
                         date={pickupDate}
                         onConfirm={onConfirmPickup}
@@ -223,9 +291,7 @@ const { control, handleSubmit } = useForm();
                     />
                 </View>
           </SafeAreaProvider>
-          )}
-        />
-
+        
 
       </Collapsible>
       <Collapsible
@@ -269,12 +335,8 @@ const { control, handleSubmit } = useForm();
                 {deliveryDate.toLocaleDateString('zh-TW')}
             </Text>
         : null }
-        <Controller
-          control={control}
-          name="deliveryTime"
-          render={({ field: { onChange, onBlur, value } }) => (
             <SafeAreaProvider>
-            <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+            <View {...register("deliveryDateTime")} style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
                 <DatePickerModal
                     locale="zh-TW"
                     mode="single"
@@ -286,9 +348,7 @@ const { control, handleSubmit } = useForm();
                 />
                 </View>
         </SafeAreaProvider>
-          )}
-        />
-
+        
         
       </Collapsible>
       <Button
@@ -299,7 +359,7 @@ const { control, handleSubmit } = useForm();
           color: Colors[colorScheme ?? "light"].background,
           fontSize: 16,
         }}
-        onPress={() => console.log(control._formValues)}
+        onPress={onSubmit}
       >
         確認訂單
       </Button>
