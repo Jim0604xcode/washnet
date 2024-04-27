@@ -156,12 +156,12 @@ const { register,control, handleSubmit} = useForm({
             </View>
           )}
         </Pressable>
-        <View>
+        <View {...register("building")}>
             <TextInput
               mode="outlined"
               label="大廈"
               placeholder="大廈名稱"
-              {...register("building")}  
+              
               onChangeText={(v:string)=>{
                 setFormValue(formValue=>{
                   let newFormValue = {...formValue}
@@ -170,6 +170,7 @@ const { register,control, handleSubmit} = useForm({
                   return newFormValue
                 })
               }}
+              value={formValue.building}
               style={[
                 styles.input,
                 {
@@ -195,6 +196,7 @@ const { register,control, handleSubmit} = useForm({
                   return newFormValue
                 })
               }}
+              value={formValue.street}
               style={[
                 styles.input,
                 {
@@ -220,6 +222,7 @@ const { register,control, handleSubmit} = useForm({
                   return newFormValue
                 })
               }}
+              value={formValue.district}
               style={[
                 styles.input,
                 {
