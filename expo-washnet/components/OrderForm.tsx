@@ -156,12 +156,12 @@ const { register,control, handleSubmit} = useForm({
             </View>
           )}
         </Pressable>
-        <View {...register("building")}>
+        <View>
             <TextInput
               mode="outlined"
               label="大廈"
               placeholder="大廈名稱"
-              
+              {...register("building")}  
               onChangeText={(v:string)=>{
                 setFormValue(formValue=>{
                   let newFormValue = {...formValue}
