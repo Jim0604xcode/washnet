@@ -14,9 +14,12 @@ type Order = {
     pickupDateTime:string
     deliveryDateTime:string
     tel:string
-    fullAddress:string
+    district:string
+    street:string
+    building:string
     remarks:string
     orderStatus:Status
+
 }
 export let addOrderSchema = yup.object().shape({
     orderType:yup.string().required(),
@@ -24,7 +27,9 @@ export let addOrderSchema = yup.object().shape({
     pickupDateTime: yup.string().required(),
     deliveryDateTime: yup.string().required(),
     tel:yup.string().required(),
-    fullAddress:yup.string().required(),
+    district:yup.string().required(),
+    street:yup.string().required(),
+    building:yup.string().required(),
     remarks:yup.string().required(),
 });
 export class OrderController implements IOrderController{
@@ -39,7 +44,7 @@ export class OrderController implements IOrderController{
                 pickup_date_time:orderData.pickupDateTime,
                 delivery_date_time:orderData.deliveryDateTime,               
                 tel:orderData.tel,
-                full_address:orderData.fullAddress,
+                full_address:orderData.district + '|_|' + orderData.street + '|_|' + orderData.building,
                 remarks:orderData.remarks,
                 status:"w_pickup",
                 customer_id:jwt.usersId,
@@ -60,7 +65,11 @@ export class OrderController implements IOrderController{
             let jwt = res.locals.jwt as JWT
             
             let orders = await orderService.getUserAllOrder(jwt.usersId,jwt.role)
-            
+            orders = orders.map(obj=>Object.assign(obj,{
+                district:obj.fullAddress.split('|_|')[0],
+                street:obj.fullAddress.split('|_|')[1],
+                building:obj.fullAddress.split('|_|')[2]
+            }))
             res.json({
                 data:orders,
                 isErr:false,
@@ -70,7 +79,7 @@ export class OrderController implements IOrderController{
             errorHandler(err,req,res)
         }
     }
-       
+    
     async getPickUpAddressAndMobile(req:express.Request,res:express.Response){
         try{
             let orderId = Number(req.params.id)
@@ -79,7 +88,9 @@ export class OrderController implements IOrderController{
             let {tel} = await orderService.getMobile(jwt.usersId)  
             res.json({
               data:{
-                fullAddress:fullAddress,
+                district:fullAddress.split('|_|')[0],
+                street:fullAddress.split('|_|')[1],
+                building:fullAddress.split('|_|')[2],
                 tel:tel
               },
               isErr:false,

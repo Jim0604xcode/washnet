@@ -1,40 +1,41 @@
 import { IonMenu, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel } from '@ionic/react'
-import React from 'react'
 import { useRecoilValue } from 'recoil';
 import { languageState } from '../service/Recoil';
+import { useState } from 'react';
 
-function AdminMenu() {
+const AdminMenu: React.FC<{active:number}> = ({active}) => {
     const getLanguage = useRecoilValue(languageState);
+    // const [active,setActive] = useState<number|null>(null)
   return (
     <IonMenu contentId="main">
     <IonHeader>
-      <IonToolbar color="tertiary">
+      <IonToolbar id="adminMenu">
         <IonTitle>{getLanguage.language.adminMenuHeader}</IonTitle>
       </IonToolbar>
     </IonHeader>
     <IonContent className="ion-padding">
-      <IonItem class='ripple-parent' routerLink="/A-themeSystem">
+      <IonItem className={active===0 ? "ripple-parent active" : "ripple-parent"} routerLink="/A-themeSystem">
         
         <IonLabel>{getLanguage.language.as.header}</IonLabel>
       </IonItem>
 
-      <IonItem class='ripple-parent' routerLink="/A-orderSystem">
+      <IonItem className={active===1 ? "ripple-parent active" : "ripple-parent"} routerLink="/A-orderSystem">
         
         <IonLabel>{getLanguage.language.aos.header}</IonLabel>
       </IonItem>
       
-      <IonItem class='ripple-parent' routerLink="/A-staffSystem">
+      <IonItem className={active===2 ? "ripple-parent active" : "ripple-parent"} routerLink="/A-staffSystem">
         
         <IonLabel>{getLanguage.language.ass.header}</IonLabel>
         
       </IonItem>
-      <IonItem class='ripple-parent' routerLink="/A-setting">
+      <IonItem className={active===3 ? "ripple-parent active" : "ripple-parent"} routerLink="/A-setting">
         
         <IonLabel>{getLanguage.language.ats.header}</IonLabel>
       </IonItem>
     </IonContent>
   </IonMenu>
-  )
+  );
 }
 
-export default AdminMenu
+export default AdminMenu;

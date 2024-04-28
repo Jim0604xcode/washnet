@@ -8,11 +8,12 @@ import "./BasicForm.scss";
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { languageState, roleState } from "../service/Recoil";
+import { getValue } from "../service/LocalStorage";
 
 
 type RoleList = {
   name:string
-  key:"admin"|"laundryman"|"delivery"|"customer"
+  key:"admin"|"customer"
 }
 
 const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:boolean}> = ({cbSubmitForm,isAdmin}) => {
@@ -32,7 +33,26 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
   const onSubmit = async (data: RegisterFormState) => {
     console.log(data)
     
-    cbSubmitForm(data)
+    try {
+      let token = await getValue("token")
+      let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/addUser`,{
+        headers:{
+          "Content-type":"application/json",
+          'Authorization': `Bearer ${token}`
+        },
+        method:"POST",
+        body:JSON.stringify(data)  
+      })
+      let json = await res.json()
+      
+      
+      
+      if(!json.isErr){
+        cbSubmitForm(Object.assign(data,{userId:json.data.userId}))    
+      }  
+    } catch (error) {
+      alert('error')
+    }
   };
   
   return (
@@ -148,13 +168,13 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
         
         <IonItem fill="outline">
           <IonLabel position="floating">{"地址"}</IonLabel>
-          <IonInput className="text" clearInput={true} {...register("fullAddress")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          <IonInput className="text" clearInput={true} {...register("district")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
             setFormValue(formValue=>{
               let newFormValue = {...formValue}
             
-              newFormValue.fullAddress = e.target.value as string
+              newFormValue.district = e.target.value as string
             
               return newFormValue
             })
@@ -162,7 +182,44 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
           </IonInput>
         </IonItem>
         
-        <IonNote>{errors.fullAddress?.message}</IonNote>   
+        <IonNote>{errors.district?.message}</IonNote>   
+
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("street")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.street = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.street?.message}</IonNote>   
+
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("building")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.building = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.building?.message}</IonNote>
+           
         </div>
       
 

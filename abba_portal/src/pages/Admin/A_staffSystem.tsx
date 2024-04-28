@@ -17,7 +17,7 @@ import UserSystemTable from "../../components/UserSystemTable";
         <IonContent fullscreen className="ion-padding">
 
           <IonSplitPane when="md" contentId="main">
-            <AdminMenu />
+            <AdminMenu active={2} />
 
             <div className="ion-page" id="main">
             <Header name={getLanguage.language.ass.header} />

@@ -20,7 +20,9 @@ type RegUser = {
     password: string,
     confirmPassword?:string,
     role?:Role,
-    fullAddress:string
+    district:string
+    street:string
+    building:string
 }
 
 export let registerUserSchema = yup.object().shape({
@@ -30,7 +32,9 @@ export let registerUserSchema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(6, 'must be at least 6 characters long').required(),
     confirmPassword: yup.string().min(6, 'must be at least 6 characters long').required(),
-    fullAddress:yup.string().required(),
+    district:yup.string().required(),
+    street:yup.string().required(),
+    building:yup.string().required(),
     
 });
 export let loginUserSchema = yup.object().shape({
@@ -88,7 +92,7 @@ export class UserController implements IUserController{
               email:userData.email,
               password:userData.password,
               role:userData.role,
-              full_address:userData.fullAddress,
+              full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building,
            
             })
 
@@ -135,7 +139,9 @@ export class UserController implements IUserController{
           
           res.json({
               data:{
-                fullAddress:fullAddress,
+                district:fullAddress.split('|_|')[0],
+                street:fullAddress.split('|_|')[1],
+                building:fullAddress.split('|_|')[2],
                 tel:tel,
               },
               isErr:false,
@@ -146,33 +152,7 @@ export class UserController implements IUserController{
           errorHandler(err,req,res)
         }
     }
-    // async getLanguageDataAuth(req:express.Request,res:express.Response){
-      // try {
-      // let jwt = res.locals.jwt as JWT
-      // let require = req.params.require as "cn" | "eng"
-      // console.log(jwt)
-      // if(jwt.role === "customer"){
-      //   let languageData = await userService.getLan(require)
-      //   console.log(languageData)
-      //   res.json({
-      //     data:languageData,
-      //     isErr:false,
-      //     errMess:null
-      //   })
-      // }else{
-        // let languageData = await userService.getLan(require)
-        
-    //     res.json({
-    //       data:languageData,
-    //       isErr:false,
-    //       errMess:null
-    //     })
-    //   }
-    //   }catch(err){
-    //     errorHandler(err,req,res)
-    //   }
-    // }
-
+    
     async getLanguageDataGuest(req:express.Request,res:express.Response){
       try {
       

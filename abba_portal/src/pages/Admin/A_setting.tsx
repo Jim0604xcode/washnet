@@ -26,7 +26,7 @@ import Header from "../../components/Header";
       <IonContent fullscreen className="ion-padding">
           
       <IonSplitPane when="md" contentId="main">
-            <AdminMenu />
+            <AdminMenu active={3} />
             <div className="ion-page" id="main">
               <Header name={getLanguage.language.ats.header} />
               <div style={{display:"flex",justifyContent:"center"}}>

@@ -51,7 +51,7 @@ const A_themeSystem_editor: React.FC = () => {
                 <IonContent fullscreen className="ion-padding">
 
                     <IonSplitPane when="md" contentId="main">
-                        <AdminMenu />
+                        <AdminMenu active={0} />
 
                         <div className="ion-page" id="main">
                             <Header name={getLanguage.language.as.header} />

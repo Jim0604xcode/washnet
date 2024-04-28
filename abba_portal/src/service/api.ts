@@ -121,43 +121,43 @@ export async function cbEditBannerByAdmin(editorType:string,blocks:any) {
     })
   }  
 }
-export async function cbEditOrderByAdmin(data:PlaceOrderType) {
-  try {
-    console.log(data)
-    let token = await getValue("token")
-    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/editOrder/${data.orderId}`,{
-      headers:{
-        "Content-type":"application/json",
-        'Authorization': `Bearer ${token}`
-      },
-      method:"PUT",
-      body:JSON.stringify(data)  
-    })
-    let json = await res.json()
-    console.log(json)
-    if(!json.isErr){
-      sweetAlert.fire({
-      icon: 'success',
-      title: 'Message',
-      text:'Successfully place new order',
-      showConfirmButton: false,
-      timer: 1500
-      })
+// export async function cbEditOrderByAdmin(data:PlaceOrderType) {
+//   try {
+//     console.log(data)
+//     let token = await getValue("token")
+//     let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/editOrder/${data.orderId}`,{
+//       headers:{
+//         "Content-type":"application/json",
+//         'Authorization': `Bearer ${token}`
+//       },
+//       method:"PUT",
+//       body:JSON.stringify(data)  
+//     })
+//     let json = await res.json()
+//     console.log(json)
+//     if(!json.isErr){
+//       sweetAlert.fire({
+//       icon: 'success',
+//       title: 'Message',
+//       text:'Successfully place new order',
+//       showConfirmButton: false,
+//       timer: 1500
+//       })
       
-    }else{
-      throw new Error(json.errMess)
-    }  
-  } catch (error:any) {
-    sweetAlert.fire({
-      icon: 'info',
-      title: 'Message',
-      text:error.message,
-      showConfirmButton: false,
-      timer: 1500
-    })
-  }
+//     }else{
+//       throw new Error(json.errMess)
+//     }  
+//   } catch (error:any) {
+//     sweetAlert.fire({
+//       icon: 'info',
+//       title: 'Message',
+//       text:error.message,
+//       showConfirmButton: false,
+//       timer: 1500
+//     })
+//   }
   
-} 
+// } 
 export async function cbAddOrder(data:PlaceOrderType) {
   try {
     let token = await getValue("token")

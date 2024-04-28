@@ -100,7 +100,7 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
 
     // }
     // await handleRegister(data,setRoleState,history)
-    // cbSubmitForm(data)
+    cbSubmitForm(data)
   };
   
   return (

@@ -47,6 +47,11 @@ const A_themeSystem: React.FC = () => {
         title:"家居用品",
         key:"fw"
       },
+      {
+        id:7,
+        title:"主頁推廣",
+        key:"pm"
+      },
     ]
     
     
@@ -58,7 +63,7 @@ const A_themeSystem: React.FC = () => {
         <IonContent fullscreen className="ion-padding">
 
           <IonSplitPane when="md" contentId="main">
-            <AdminMenu />
+            <AdminMenu active={0} />
             <div id="main">
             
             <Header name={getLanguage.language.as.header} />

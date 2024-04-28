@@ -16,7 +16,7 @@ import { useState } from 'react';
 
 const RoutesCustomer: React.FC = () => {
   const getLanguage = useRecoilValue(languageState);
-  const [active,setActive] = useState<number>(0)
+  const [active,setActive] = useState<number|null>(null)
   return (
     <IonTabs>
         

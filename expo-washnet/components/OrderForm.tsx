@@ -26,7 +26,7 @@ type Order = {
   building:string
   street:string
   district:string
-  fullAddress:string
+  // fullAddress:string
   remarks:string
 }
 
@@ -45,7 +45,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ colorScheme }) => {
     building:"",
     street:"",
     district:"",
-    fullAddress:"",
+    // fullAddress:"",
     remarks:""
   })
 const { register,control, handleSubmit} = useForm({
@@ -113,11 +113,11 @@ const { register,control, handleSubmit} = useForm({
     
     
   const onSubmit = async () => {
-    setFormValue(formValue=>{
-      let newFormValue = {...formValue}
-      newFormValue.fullAddress = newFormValue.district + newFormValue.street + newFormValue.building
-      return newFormValue
-    })
+    // setFormValue(formValue=>{
+    //   let newFormValue = {...formValue}
+    //   newFormValue.fullAddress = newFormValue.district + '|' + newFormValue.street + '|' + newFormValue.building
+    //   return newFormValue
+    // })
     console.log(formValue)
   }
 

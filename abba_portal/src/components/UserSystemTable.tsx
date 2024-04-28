@@ -212,18 +212,18 @@ let openEditUserForm = (userId:string,index:number) => {
 let cbEditUser = useCallback((data:any)=>{
   // admin edit user status 1
   console.log('user system table',data)
-  // setTData(tData=>{
-  //   let newTData = [...tData]
-
-  //   return newTData
-  // })
+  setTData(tData=>{
+    let newTData = [...tData]
+    newTData = newTData.map(obj=>obj.userId === data.userId ? Object.assign(obj,data): obj)
+    return newTData
+  })
 },[])    
 let cbAddUser = useCallback((data:any)=>{
   // admin open user status 2
   console.log('user system table',data)
   setTData(tData=>{
     let newTData = [...tData]
-
+    newTData.push(data)
     return newTData
   })
 },[])    
@@ -356,7 +356,7 @@ let cbAddUser = useCallback((data:any)=>{
     
     
     <UserSystemTableModal isOpen={isOpen} cbSetIsOpen={cbSetIsOpen} title={modalTitle} cbFilter={cbFilter} accessor={modalKey} initTData={[...initTData]}/>
-    <UserSystemUserModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenRegForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New User" ? cbAddUser : cbEditUser} userId={userId} />
+    <UserSystemUserModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenRegForm} title={modalTitle} cbSubmitForm={modalTitle === "新增用戶" ? cbAddUser : cbEditUser} userId={userId} />
     
   </>
 

@@ -33,7 +33,7 @@ export class OrderRoutes extends Routes{
         
         this.routes.get('/getUserAllOrder',isLoggedInAPI,controller.getUserAllOrder)
         
-        this.routes.get('/getPickUpAddressAndMobile/:id',isLoggedInAPI,controller.getPickUpAddressAndMobile)
+        this.routes.get('/getOrderPickUpAddressAndMobile/:id',isLoggedInAPI,controller.getPickUpAddressAndMobile)
     }
 }
 export interface IAdminController {
@@ -46,12 +46,14 @@ export class AdminRoutes extends Routes{
         this.routes.get('/allUserData',isLoggedInAPI,controller.allUserData)
 
         this.routes.get('/allOrderData',isLoggedInAPI,controller.allOrderData)
-
+        this.routes.post('/addUser',isLoggedInAPI,controller.addUser)
         this.routes.post('/addOrder',isLoggedInAPI,controller.addOrder)
         this.routes.put('/editOrder/:id',isLoggedInAPI,controller.editOrder)
         this.routes.get('/getEditor/:editorType',isLoggedInAPI,controller.getEditor)
         this.routes.put('/editEditor/:editorType',isLoggedInAPI,controller.editEditor)
         this.routes.get('/getLanguageData/:require',controller.getLanguageData)
+
+        this.routes.put('/editUser/:userId',isLoggedInAPI,controller.editUser)
 
     }
 }

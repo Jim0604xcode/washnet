@@ -322,9 +322,13 @@ ion-content {
 .custom-ripple{
   color:var(--ltblue-el-color);
 }
+
 .ripple-parent:hover{
   background-color: var(--xltblue-el-color);
   --background: var(--xltblue-el-color);
+}
+.ripple-parent:hover ion-label{
+  color: var(--white-el-color);
 }
 
 
@@ -375,6 +379,13 @@ ion-tab-button{
 ion-tab-button:hover{
   color: var(--white-text-color);
 }
-.active{
+ion-tab-button.active{
   color: var(--white-text-color);
+}
+ion-item.active{
+  color: var(--ltblue-text-color);
+}
+
+ion-toolbar#adminMenu{
+  --background: var(--xltblue-el-color);
 }

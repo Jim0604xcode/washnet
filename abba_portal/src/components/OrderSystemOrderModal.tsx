@@ -22,7 +22,7 @@ const OrderSystemOrderModal: React.FC<{isOpen:boolean,cbSetIsOpen:(boo:boolean)=
           </IonHeader>
           <IonContent className="ion-padding">
             
-            <PlaceOrder status={title === "Add New Order" || title === "新增訂單" ? 2 : 1} cbSubmitForm={cbSubmitForm} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus}/>
+            <PlaceOrder status={1} cbSubmitForm={cbSubmitForm} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus}/>
           </IonContent>
         </IonModal>
     </>
