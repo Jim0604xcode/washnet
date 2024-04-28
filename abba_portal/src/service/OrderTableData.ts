@@ -143,5 +143,5 @@ export const page: Page = {
   numOfRow: 0,
   curPage: 1,
   numOfPage: 0,
-  rowPerPage: 10
+  rowPerPage: 5
 }

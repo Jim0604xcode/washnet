@@ -2,6 +2,7 @@ import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
+    await knex("editor").del();
     await knex("languague_portal").del();
     await knex("languague").del();
     await knex("orders").del();
@@ -96,6 +97,358 @@ export async function seed(knex: Knex): Promise<void> {
     })
     ordersData.push({
       order_type:'cs',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
+      pc:1,
+      tel:"51823008",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'pw',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+        order_type:'dc',
+        pc:1,
+        tel:"24708888",
+        pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+        delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+        full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+        remarks:'remark2',
+        status:'w_pickup',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'ws',
+      pc:1,
+      tel:"24708888",
+      pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
+      delivery_date_time:'Sunday, May 28th 2023, 6:39:45 pm',
+      full_address:'九龍馬頭圍曦景閣(A座) 17/F 22室',
+      remarks:'remark2',
+      status:'w_pickup',
+      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3",
+    })
+    ordersData.push({
+      order_type:'lw',
       pc:1,
       tel:"51823008",
       pickup_date_time:'Friday, May 26th 2023, 6:39:45 pm',
@@ -412,4 +765,164 @@ export async function seed(knex: Knex): Promise<void> {
             })
         }
     ])
+
+    const editorData = []
+    
+    editorData.push(
+        {
+        editor_type:"pw",
+        blocks:JSON.stringify([
+                {
+                    type: 'header',
+                    data: {
+                        text: '磅洗',
+                        level: 2,
+                    },
+                },
+
+                {
+                    type: 'list',
+                    data: {
+                        style: 'unordered',
+                        items: [
+                            '自選時間上門收衫送衫',
+                            '只需兩天送達',
+                            '另設加急服務',
+                        ],
+                    },
+                },
+            ]),
+        }
+    )
+    editorData.push(
+        {
+        editor_type:"dc",
+        blocks:JSON.stringify([
+                {
+                    type: 'header',
+                    data: {
+                        text: '乾洗',
+                        level: 2,
+                    },
+                },
+
+                {
+                    type: 'list',
+                    data: {
+                        style: 'unordered',
+                        items: [
+                            '自選時間上門收衫送衫',
+                            '只需兩天送達',
+                            '另設加急服務',
+                        ],
+                    },
+                },
+            ]),
+        }
+    )
+    editorData.push(
+        {
+        editor_type:"ws",
+        blocks:JSON.stringify([
+                {
+                    type: 'header',
+                    data: {
+                        text: '洗鞋',
+                        level: 2,
+                    },
+                },
+
+                {
+                    type: 'list',
+                    data: {
+                        style: 'unordered',
+                        items: [
+                            '自選時間上門收衫送衫',
+                            '只需兩天送達',
+                            '另設加急服務',
+                        ],
+                    },
+                },
+            ]),
+        }
+    )
+    editorData.push(
+        {
+        editor_type:"lw",
+        blocks:JSON.stringify([
+                {
+                    type: 'header',
+                    data: {
+                        text: '洗袋',
+                        level: 2,
+                    },
+                },
+
+                {
+                    type: 'list',
+                    data: {
+                        style: 'unordered',
+                        items: [
+                            '自選時間上門收衫送衫',
+                            '只需兩天送達',
+                            '另設加急服務',
+                        ],
+                    },
+                },
+            ]),
+        }
+    )
+    editorData.push(
+        {
+        editor_type:"cs",
+        blocks:JSON.stringify([
+                {
+                    type: 'header',
+                    data: {
+                        text: '改衣',
+                        level: 2,
+                    },
+                },
+
+                {
+                    type: 'list',
+                    data: {
+                        style: 'unordered',
+                        items: [
+                            '自選時間上門收衫送衫',
+                            '只需兩天送達',
+                            '另設加急服務',
+                        ],
+                    },
+                },
+            ]),
+        }
+    )
+    editorData.push(
+        {
+        editor_type:"fw",
+        blocks:JSON.stringify([
+                {
+                    type: 'header',
+                    data: {
+                        text: '家居用品',
+                        level: 2,
+                    },
+                },
+
+                {
+                    type: 'list',
+                    data: {
+                        style: 'unordered',
+                        items: [
+                            '自選時間上門收衫送衫',
+                            '只需兩天送達',
+                            '另設加急服務',
+                        ],
+                    },
+                },
+            ]),
+        }
+    )
+    await knex("editor").insert(editorData);
 };

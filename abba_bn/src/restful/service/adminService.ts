@@ -1,5 +1,6 @@
 import { Knex } from "knex"
 import { knex } from "../../db"
+
 type Status = "w_pickup" | "w_quote" | "w_clean" | "w_delivery" | "complete"
 type OrderType = "pw"|"dc"|"ws"|"lw"|"cs"|"fw"
 
@@ -111,15 +112,27 @@ class AdminService{
         }
         
     }
-    async editBanner(id:number,block:any){
+
+    async getEditor(editorType:string):Promise<{editorType:string,blocks:string}>{
         const txn = await this.knex.transaction()
-        console.log(id,block)
+
         try{
-            // let [result] = await txn.select("users.id").from("users").join("orders","orders.customer_id","users.id").where("orders.id",orderId)
-            // console.log('admin service 87',result)
-            // orderData = Object.assign(orderData,{customer_id:result.id}) as Order
-            // console.log(orderData)
-            // await txn("orders").update(orderData).where("id",orderId) 
+            
+            let [result] = await txn.select("editor_type as editorType","blocks").from("editor").where("editor_type",editorType)
+            await txn.commit()
+            return result
+        }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async editEditor(editorType:string,blocks:any){
+        const txn = await this.knex.transaction()
+
+        console.log(editorType,blocks)
+        try{
+            
+            await txn("editor").update('blocks', JSON.stringify(blocks)).where("editor_type",editorType) 
             
             await txn.commit()
             return

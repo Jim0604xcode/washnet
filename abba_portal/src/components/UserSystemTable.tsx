@@ -54,11 +54,15 @@ function findVal(targetKey:string,obj:User | any){
     console.log(results)
     setInitTData(results)
     setTData(results)
-    setPageObj({
-      numOfRow: results.length,
-      curPage: 1,
-      numOfPage: Math.ceil(results.length / 10),
-      rowPerPage: 10
+    setPageObj(pageObj=>{
+      let newPageObj = {...pageObj}
+      newPageObj = {
+        numOfRow:results.length,
+        curPage:1,
+        numOfPage:Math.ceil(results.length/newPageObj.rowPerPage),
+        rowPerPage:newPageObj.rowPerPage
+      }
+      return newPageObj
     })
   },[]) 
 
@@ -75,7 +79,21 @@ function findVal(targetKey:string,obj:User | any){
     })
   },[])
     
-    
+  let keyupRowPerPage = useCallback((e:any)=>{
+    if(e.key === 'Enter' || e.keyCode === 13){
+      cbRowPerPage(e.target.value)
+    }
+  },[])
+  let cbRowPerPage = useCallback((cur:string)=>{
+    setPageObj(pageObj=>{
+      let newPageObj = {...pageObj}
+      newPageObj.rowPerPage = parseInt(cur)
+      console.log(newPageObj)
+      newPageObj.numOfPage = Math.ceil(newPageObj.numOfRow/parseInt(cur))
+      
+      return newPageObj
+    })
+  },[]) 
   
   let resetData = () => {
     
@@ -103,8 +121,8 @@ function findVal(targetKey:string,obj:User | any){
         newPageObj = {
           numOfRow:newTData.length,
           curPage:1,
-          numOfPage:Math.ceil(newTData.length/10),
-          rowPerPage:10
+          numOfPage:Math.ceil(newTData.length/newPageObj.rowPerPage),
+          rowPerPage:newPageObj.rowPerPage
         }
         return newPageObj
       })
@@ -114,7 +132,7 @@ function findVal(targetKey:string,obj:User | any){
   
   let cbSetIsOpenRegForm = useCallback((boo:boolean)=>{
     setIsOpenModal(boo)
-  },[])
+},[])
   let cbFilter = useCallback((criArr:string[]|number[],accessor:string,data:User[])=>{
     
     setTData(tData=>{
@@ -132,8 +150,8 @@ function findVal(targetKey:string,obj:User | any){
         newPageObj = {
           numOfRow:newTData.length,
           curPage:1,
-          numOfPage:Math.ceil(newTData.length/10),
-          rowPerPage:10
+          numOfPage:Math.ceil(newTData.length/newPageObj.rowPerPage),
+          rowPerPage:newPageObj.rowPerPage
         }
         return newPageObj
       })
@@ -183,9 +201,7 @@ function findVal(targetKey:string,obj:User | any){
   }
 
 
-let cbSetIsOpenAddForm = useCallback((boo:boolean)=>{
-    setIsOpenModal(boo)
-},[])
+
 
 let openEditUserForm = (userId:string,index:number) => {
   setIsOpenModal(true);
@@ -329,6 +345,10 @@ let cbAddUser = useCallback((data:any)=>{
       <div style={{textAlign:"end"}}>
         <IonNote>{pageObj.numOfRow}{getLanguage.language.ass.pagination1}{getLanguage.language.ass.pagination2}{pageObj.numOfPage}{getLanguage.language.ass.pagination3}</IonNote>
       </div>
+      <IonItem>
+        <IonLabel>每頁行數</IonLabel>
+        <IonInput onKeyUp={(e)=>keyupRowPerPage(e)} onIonBlur={(e)=>cbRowPerPage(e.target.value as string)} style={{textAlign:"end"}} aria-label="Success input" color="success" value={pageObj.rowPerPage.toString()}></IonInput>
+        </IonItem>
       </IonCol>
     </IonRow>
     
@@ -336,7 +356,7 @@ let cbAddUser = useCallback((data:any)=>{
     
     
     <UserSystemTableModal isOpen={isOpen} cbSetIsOpen={cbSetIsOpen} title={modalTitle} cbFilter={cbFilter} accessor={modalKey} initTData={[...initTData]}/>
-    <UserSystemUserModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New User" ? cbAddUser : cbEditUser} userId={userId} />
+    <UserSystemUserModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenRegForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New User" ? cbAddUser : cbEditUser} userId={userId} />
     
   </>
 

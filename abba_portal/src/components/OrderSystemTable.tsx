@@ -58,11 +58,16 @@ function findVal(targetKey:string,obj:Order | any){
     console.log(results)
     setInitTData(results)
     setTData(results)
-    setPageObj({
-      numOfRow: results.length,
-      curPage: 1,
-      numOfPage: Math.ceil(results.length / 10),
-      rowPerPage: 10
+    
+    setPageObj(pageObj=>{
+      let newPageObj = {...pageObj}
+      newPageObj = {
+        numOfRow:results.length,
+        curPage:1,
+        numOfPage:Math.ceil(results.length/newPageObj.rowPerPage),
+        rowPerPage:newPageObj.rowPerPage
+      }
+      return newPageObj
     })
   },[]) 
 
@@ -78,7 +83,21 @@ function findVal(targetKey:string,obj:Order | any){
       return newPageObj
     })
   },[])
-    
+  let keyupRowPerPage = useCallback((e:any)=>{
+    if(e.key === 'Enter' || e.keyCode === 13){
+      cbRowPerPage(e.target.value)
+    }
+  },[])
+  let cbRowPerPage = useCallback((cur:string)=>{
+    setPageObj(pageObj=>{
+      let newPageObj = {...pageObj}
+      newPageObj.rowPerPage = parseInt(cur)
+      console.log(newPageObj)
+      newPageObj.numOfPage = Math.ceil(newPageObj.numOfRow/parseInt(cur))
+      
+      return newPageObj
+    })
+  },[])  
     
   
   let resetData = () => {
@@ -108,8 +127,8 @@ function findVal(targetKey:string,obj:Order | any){
           newPageObj = {
             numOfRow:newTData.length,
             curPage:1,
-            numOfPage:Math.ceil(newTData.length/10),
-            rowPerPage:10
+            numOfPage:Math.ceil(newTData.length/newPageObj.rowPerPage),
+            rowPerPage:newPageObj.rowPerPage
           }
           return newPageObj
         })
@@ -139,8 +158,8 @@ function findVal(targetKey:string,obj:Order | any){
         newPageObj = {
           numOfRow:newTData.length,
           curPage:1,
-          numOfPage:Math.ceil(newTData.length/10),
-          rowPerPage:10
+          numOfPage:Math.ceil(newTData.length/newPageObj.rowPerPage),
+          rowPerPage:newPageObj.rowPerPage
         }
         return newPageObj
       })
@@ -393,6 +412,10 @@ let cbAddData = useCallback((data:any)=>{
         <div style={{textAlign:"end"}}>
         <IonNote>{pageObj.numOfRow}{getLanguage.language.aos.pagination1}{getLanguage.language.aos.pagination2}{pageObj.numOfPage}{getLanguage.language.aos.pagination3}</IonNote>
         </div>
+        <IonItem>
+        <IonLabel>每頁行數</IonLabel>
+        <IonInput onKeyUp={(e)=>keyupRowPerPage(e)} onIonBlur={(e)=>cbRowPerPage(e.target.value as string)} style={{textAlign:"end"}} aria-label="Success input" color="success" value={pageObj.rowPerPage.toString()}></IonInput>
+        </IonItem>
       </IonCol>
     </IonRow>
       
