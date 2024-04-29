@@ -4,9 +4,10 @@ import Colors from '@/constants/Colors'
 import { View } from '@/components/Themed';
 import Carousel from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
-import CarouselSlide from '@/components/CarouselSlide';
-import Pagination from '@/components/Pagination';
-import OrderForm from '@/components/OrderForm';
+import CarouselSlide from '@/components/Carousel/CarouselSlide';
+import Pagination from '@/components/Carousel/Pagination';
+import OrderForm from '@/components/OrderForm/OrderForm';
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const carouselData = [
   {
@@ -22,14 +23,14 @@ const carouselData = [
     info: '○ 只需兩個工作天即可送回乾淨衣服',
     info2: '○ 特快洗衫只需一個工作天',
     info3: '○ （星期六、日及公眾假期前夕不適用）',
-    info4: '○ 最低消費$160，不足10磅以10磅計算'
+    info4: '○ 最低消費$160，不足10磅以10磅計算',
   },
   {
     subtitle: '磅洗類別',
     info: '○ 普通衣物不包厚毛巾、浴袍、毛毯、被子等',
     info2: '○ 以上厚重布料需額外處理並收取附加費',
     info3: '○ 窗簾、梳化袋、毛公仔 等請選擇其他清洗',
-    info4: '○ 歡迎與我們聯絡了解詳情'
+    info4: '○ 歡迎與我們聯絡了解詳情',
   }
 ]
 
@@ -42,10 +43,9 @@ export default function LaundryScreen() {
     <ScrollView contentContainerStyle={{
         alignItems: 'center',
         justifyContent: 'flex-start',
-        flex: 1,
         gap: 20,
         backgroundColor: Colors[colorScheme ?? 'light'].background,
-        overflow: 'scroll'
+        overflow: 'scroll',
       }}
     >
       <View style={styles.carouselBox}>
@@ -64,7 +64,7 @@ export default function LaundryScreen() {
             },
           }}
           scrollAnimationDuration={1000}
-           onProgressChange={(_, absoluteProgress) =>
+          onProgressChange={(_, absoluteProgress) =>
             (progressValue.value = absoluteProgress)
           }
           renderItem={({ index }) => (
@@ -75,7 +75,6 @@ export default function LaundryScreen() {
           carouselData={carouselData}
           progressValue={progressValue}
           colorScheme={colorScheme}
-
         />
       </View>
       <OrderForm colorScheme={colorScheme} />

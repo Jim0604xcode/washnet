@@ -1,6 +1,6 @@
-import Colors from '@/constants/Colors';
 import React from 'react';
 import { ColorSchemeName, View } from 'react-native';
+import Colors from '@/constants/Colors';
 import Animated, { SharedValue, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
 
 type PaginationDotProps = {
