@@ -4,10 +4,9 @@ import Colors from '@/constants/Colors'
 import { View } from '@/components/Themed';
 import Carousel from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
-import CarouselSlide from '@/components/Carousel/CarouselSlide';
-import Pagination from '@/components/Carousel/Pagination';
-import OrderForm from '@/components/OrderForm/OrderForm';
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import CarouselSlide from '@/components/carousel/CarouselSlide';
+import Pagination from '@/components/carousel/Pagination';
+import OrderForm from '@/components/orderForm/OrderForm';
 
 const carouselData = [
   {
