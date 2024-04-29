@@ -18,8 +18,6 @@ type Order = {
     street:string
     building:string
     remarks:string
-    orderStatus:Status
-
 }
 export let addOrderSchema = yup.object().shape({
     orderType:yup.string().required(),
@@ -37,6 +35,7 @@ export class OrderController implements IOrderController{
         try {
             let jwt = res.locals.jwt as JWT
             let orderData = req.body as Order
+            let orderStatus:Status = "w_pickup"
             await addOrderSchema.validate(orderData);
             await orderService.addOrder({
                 order_type:orderData.orderType,
@@ -46,7 +45,7 @@ export class OrderController implements IOrderController{
                 tel:orderData.tel,
                 full_address:orderData.district + '|_|' + orderData.street + '|_|' + orderData.building,
                 remarks:orderData.remarks,
-                status:"w_pickup",
+                status:orderStatus,
                 customer_id:jwt.usersId,
             })
                 res.json({

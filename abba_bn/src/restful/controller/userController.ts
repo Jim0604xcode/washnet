@@ -13,20 +13,18 @@ type LoginUser = {
     password:string
 }
 type RegUser = {
-    id?:string
     displayName:string,
     mobile:string,
     email: string,
     password: string,
     confirmPassword?:string,
-    role?:Role,
     district:string
     street:string
     building:string
 }
 
 export let registerUserSchema = yup.object().shape({
-    id:yup.string().required(),
+    
     displayName:yup.string().required(),
     mobile: yup.string().required(),
     email: yup.string().email().required(),
@@ -78,20 +76,21 @@ export class UserController implements IUserController{
             if(userData.password !== userData.confirmPassword){
                 throw new Error('password not match!')
             }
-            userData.id = uuid() as string
+            const userId:string = uuid()
             await registerUserSchema.validate(userData);
             delete userData.confirmPassword
             userData.password = await hashPassword(userData.password)
             console.log(userData)
             
-            userData.role = "customer"
+            
+            const userRole:Role = "customer" 
             let {id,role} = await userService.register({
-              id:userData.id,
+              id:userId,
               display_name:userData.displayName,
               mobile:userData.mobile,
               email:userData.email,
               password:userData.password,
-              role:userData.role,
+              role:userRole,
               full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building,
            
             })
