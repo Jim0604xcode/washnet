@@ -9,7 +9,7 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
 const tabData = [
-  { name: 'Laundry', 
+  { name: 'laundry', 
     title: '磅洗',
     icon: (color: string) => (
       <MaterialCommunityIcons
@@ -20,7 +20,7 @@ const tabData = [
       />
     ),
   },
-  { name: 'DryCleaning', 
+  { name: 'dryCleaning', 
     title: '乾洗',
     icon: (color: string) => (
       <MaterialIcons
@@ -31,7 +31,7 @@ const tabData = [
       />
     ),
   },
-  { name: 'Alteration', 
+  { name: 'alteration', 
     title: '改衣',
     icon: (color: string) => (
       <MaterialCommunityIcons
@@ -42,7 +42,7 @@ const tabData = [
       />
     ),
   },
-  { name: 'OtherCleaning', 
+  { name: 'otherCleaning', 
     title: '其他清洗',
     icon: (color: string) => (
       <MaterialIcons
@@ -93,7 +93,8 @@ export default function TabLayout() {
           padding: 0,
           marginBottom: -18,
         },
-      }}>
+      }}
+    >
       {tabData.map((tab) => (
         <Tabs.Screen
           key={tab.name}

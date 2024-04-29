@@ -30,7 +30,7 @@ export default {
     neutral: neutral,
     error: error,
     onPrimary: p10,
-    surace: surface,
+    surface: surface,
     surfaceContainer: surfaceContainer,
     surfaceContainerLow: surfaceContainerLow,
     text: onSurface,

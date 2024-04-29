@@ -1,10 +1,9 @@
-import Colors from '@/constants/Colors';
 import React from 'react';
 import { ColorSchemeName, View } from 'react-native';
+import Colors from '@/constants/Colors';
 import Animated, { SharedValue, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
 
-
-interface PaginationDotProps {
+type PaginationDotProps = {
   index: number;
   backgroundColor: string;
   length: number;

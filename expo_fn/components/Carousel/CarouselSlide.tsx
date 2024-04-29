@@ -1,6 +1,6 @@
 import Colors from "@/constants/Colors";
 import React from "react";
-import { Image, Text, View, StyleSheet, ColorSchemeName } from "react-native";
+import { Image, Text, View, StyleSheet, ColorSchemeName, ImageBackground } from "react-native";
 
 type CarouselSlideProps = {
   data: {
@@ -21,7 +21,7 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
 }) => {
   return (
     <View style={styles.slide}>
-      <View style={styles.allTexts}>
+      <View style={styles.textBox}>
         {/* Conditionally rendering title or subtitle */}
         {data.title ? (
           <Text
@@ -63,7 +63,9 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
           {data.info4}
         </Text>
       </View>
-      {data.image ? <Image source={data.image} style={styles.img} /> : null}
+      {data.title && data.image ?
+        <Image source={data.image} style={styles.img} /> 
+        : null}
     </View>
   );
 };
@@ -73,12 +75,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 10,
+    paddingBottom:10,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "flex-start",
   },
-  allTexts: {
+  textBox: {
     gap: 4,
   },
   title: {

@@ -3,12 +3,13 @@ import React, { Suspense } from "react";
 import { Image, Pressable, StyleSheet, Text, View, useColorScheme } from "react-native";
 import Colors from "@/constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Button } from 'react-native-paper';
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const index = () => {
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <Suspense fallback={<ActivityIndicator animating={true} size={'large'} color={Colors.light.secondary}/>}>
             <Image 
                 source={require('@/assets/images/logo-p99.png')}
@@ -27,37 +28,37 @@ const index = () => {
                 洗衫... 其實唔難👍
             </Text>
         </View>
-        <Link href="/Laundry" asChild>
-            <Pressable >
-            {({ pressed }) => (
-                <View style={styles.button}>
-                    <FontAwesome
-                      name="arrow-right"
-                      size={16}
-                      color={'#FFF'}
-                      style={{ opacity: pressed ? 0.5 : 1 }}
-                    />
-                    <Text style={styles.buttonLabel}>
-                        登入
-                    </Text>
-                </View>
-                  )}
-            </Pressable>
+        <Link href="/laundry" asChild>
+            <Button 
+                style={styles.button}
+                mode="contained"
+                buttonColor={Colors.light.text}
+                icon={()=><FontAwesome
+                    name="arrow-right"
+                    size={16}
+                    color={Colors.light.surface}
+                />}
+                textColor={Colors.light.surface}
+                labelStyle={
+                    {fontSize: 16}
+                }
+            >
+                登入
+            </Button>
         </Link>
-    </View>
+    </SafeAreaView>
     )
-
-
 }
 
 const styles = StyleSheet.create(
     {
         container: {
             flex: 1,
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: Colors.light.primary,
             gap: 60,
+            padding: 20,
         },
         logo: {
             width: 150,
@@ -70,7 +71,6 @@ const styles = StyleSheet.create(
             display: 'flex',
             justifyContent: 'center',
             width: '100%',
-            paddingHorizontal: 20,
         },
         text: {
             color: Colors.light.text,
@@ -83,17 +83,7 @@ const styles = StyleSheet.create(
             fontWeight: "bold",
         },
         button: {
-            backgroundColor: Colors.light.tabIconSelected,
-            paddingHorizontal: 54,
-            paddingVertical: 18,
-            borderRadius: 50,
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 10,
-        },
-        buttonLabel: {
-            color: '#FFF',
-            fontSize: 18,
+            width: '100%',
         },
     }
 )

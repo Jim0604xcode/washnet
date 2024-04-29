@@ -5,8 +5,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
-
 import { useColorScheme } from '@/components/useColorScheme';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,12 +51,14 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <PaperProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="drawer" options={{ presentation: 'modal', headerTitle: '用戶設定'}} />
-          <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
-        </Stack>
+        <SafeAreaProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="drawer" options={{ presentation: 'modal', headerTitle: '用戶設定'}} />
+            <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
+          </Stack>
+        </SafeAreaProvider>
       </PaperProvider>
     </ThemeProvider>
   );
