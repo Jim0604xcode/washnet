@@ -10,8 +10,8 @@ import { DatePickerModal } from "react-native-paper-dates";
 import { zhTW, registerTranslation } from "react-native-paper-dates";
 import { Order } from "@/models";
 import { Text } from "@/components/Themed";
-import AddressButton from "@/components/OrderForm/AddressButton";
-import PickupButton from "./PickupButton";
+import AddressButton from "@/components/orderForm/AddressButton";
+import PickupButton from "@/components/orderForm/PickupButton";
 registerTranslation("zh-TW", zhTW);
 
 type OrderFormProps = {

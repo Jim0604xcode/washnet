@@ -91,7 +91,6 @@ const handlePress2 = useDebounce(() => {
             lightColor={ Colors.light.outline }
             darkColor={ Colors.light.outline }
           >
-            {formValue.pickupDateTime !== "" ? formValue.pickupDateTime : null}
           </Text>
         </TouchableOpacity>
       </Animated.View>
