@@ -1,5 +1,6 @@
 import { Knex } from "knex"
 import { knex } from "../../db"
+import { Role } from "../../jwt"
 type Status = "w_pickup" | "w_quote" | "w_clean" | "w_delivery" | "complete"
 type OrderType = "pw"|"dc"|"ws"|"lw"|"cs"|"fw"
 
@@ -25,15 +26,66 @@ type EditOrder = {
     status:Status
 
 }
+type RegUser = {
+    id:string
+    display_name:string,
+    mobile:string,
+    email: string,
+    password: string,
+    role:Role
+    full_address:string
+    
+    
+}
+
 class AdminService{
     constructor(protected knex:Knex) {
      
     }
-    async getUser(userId:string){
+    async addUser(userData:RegUser){
+        const txn = await this.knex.transaction()
+        try{
+
+            await txn.insert([
+                {
+                    id:userData.id,
+                    display_name:userData.display_name,
+                    mobile:userData.mobile,
+                    email:userData.email,
+                    password:userData.password,
+                    role:userData.role
+                }]).into("users").returning(["id","role"])
+            
+                if(userData.role==="admin"){
+                    await txn.insert([
+                        {
+                            work_location:userData.full_address,
+                            staff_id:userData.id
+                        }
+                    ]).into("staff_meta")
+                }
+                if(userData.role==="customer"){
+                    await txn.insert([
+                        {
+                            full_address:userData.full_address,
+                            customer_id:userData.id
+                        }
+                    ]).into("customer_meta")
+                }
+                
+            await txn.commit()
+            return
+        }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }    
+    }
+    async getUser(userId:string):Promise<{role:string,displayName:string,mobile:string,email:string,fullAddress:string}|any>{
         const txn = await this.knex.transaction()
         try {
         let [row] = await txn.select("role").from("users").where("id",userId);
             console.log(row)
+            
             if(row.role==="admin"){
                 let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","staff_meta.work_location as fullAddress").from("users")
                 .join("staff_meta","staff_meta.staff_id","users.id")
@@ -111,19 +163,45 @@ class AdminService{
         }
         
     }
-    async editBanner(id:number,block:any){
+
+    async getEditor(editorType:string):Promise<{editorType:string,blocks:string}>{
         const txn = await this.knex.transaction()
-        console.log(id,block)
+
         try{
-            // let [result] = await txn.select("users.id").from("users").join("orders","orders.customer_id","users.id").where("orders.id",orderId)
-            // console.log('admin service 87',result)
-            // orderData = Object.assign(orderData,{customer_id:result.id}) as Order
-            // console.log(orderData)
-            // await txn("orders").update(orderData).where("id",orderId) 
+            
+            let [result] = await txn.select("editor_type as editorType","blocks").from("editor").where("editor_type",editorType)
+            await txn.commit()
+            return result
+        }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async editEditor(editorType:string,blocks:any){
+        const txn = await this.knex.transaction()
+
+        console.log(editorType,blocks)
+        try{
+            
+            await txn("editor").update('blocks', JSON.stringify(blocks)).where("editor_type",editorType) 
             
             await txn.commit()
             return
         }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async editUser({userId,display_name,mobile,email,full_address}:{userId:string,display_name:string,mobile:string,email:string,full_address:string}){
+        const txn = await this.knex.transaction()
+        try {
+            
+            await txn("users").update({"display_name":display_name,"mobile":mobile,"email":email}).where("id",userId) 
+            await txn("customer_meta").update({"full_address":full_address}).where("customer_id",userId)
+            await txn.commit()
+            return 
+            
+        } catch (err) {
             await txn.rollback();
             throw new Error(`${err.message}`)
         }

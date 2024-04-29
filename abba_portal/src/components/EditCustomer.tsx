@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { IonButton, IonIcon, IonInput, IonItem, IonLabel, IonNote} from "@ionic/react";
+import { IonButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonNote} from "@ionic/react";
 import { getEditRegisterFormDefaultValues, getEditRegisterFormYupResolver, EditRegisterFormState } from "../service/FormBuilder";
 import "./BasicForm.scss";
 
@@ -40,10 +40,9 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
         newFormValue.displayName = json.data.displayName
         newFormValue.mobile = json.data.mobile
         newFormValue.email = json.data.email
-        // newFormValue.area = json.data.area
-        // newFormValue.street = json.data.district
-        // newFormValue.location = json.data.station
-        newFormValue.fullAddress = json.data.fullAddress
+        newFormValue.building = json.data.building
+        newFormValue.street = json.data.street
+        newFormValue.district = json.data.district
         return newFormValue
       })
       
@@ -79,13 +78,41 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
     //   station:"堅尼地城@1-1-1"
 
     // }
-    // await handleRegister(data,setRoleState,history)
-    // cbSubmitForm(data)
+    try {
+      let token = await getValue("token")
+      let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/editUser/${userId}`,{
+        headers:{
+          "Content-type":"application/json",
+          'Authorization': `Bearer ${token}`
+        },
+        method:"PUT",
+        body:JSON.stringify(data)  
+      })
+      let json = await res.json()
+      
+      
+      
+      if(!json.isErr){
+        
+        cbSubmitForm(Object.assign(data,{userId:userId}))  
+      }  
+    } catch (error) {
+      alert('error')
+    }
+    
+
+
+    
   };
   
   return (
     
     <form style={{paddingBottom:"20px",padding:"20px",marginTop:"20px",background:"#FFF",borderRadius:"30px"}} onSubmit={handleSubmit(onSubmit)}>
+      <IonImg src="assets/icon/logo-ltblue.png"></IonImg>
+      
+      
+      
+      
       <h1 style={{textAlign:"center",color:"#FFC13B"}}>{getLanguage.language.gs.regFormTitle}</h1>
       <IonItem fill="outline">
         <IonLabel position="floating">{getLanguage.language.gs.regFormField1}</IonLabel>
@@ -138,13 +165,13 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
         
         <IonItem fill="outline">
           <IonLabel position="floating">{"地址"}</IonLabel>
-          <IonInput className="text" clearInput={true} {...register("fullAddress")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          <IonInput className="text" clearInput={true} {...register("district")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
             setFormValue(formValue=>{
               let newFormValue = {...formValue}
             
-              newFormValue.fullAddress = e.target.value as string
+              newFormValue.district = e.target.value as string
             
               return newFormValue
             })
@@ -152,7 +179,43 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
           </IonInput>
         </IonItem>
         
-        <IonNote>{errors.fullAddress?.message}</IonNote>   
+        <IonNote>{errors.district?.message}</IonNote>   
+
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("street")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.street = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.street?.message}</IonNote>   
+
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("building")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.building = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.building?.message}</IonNote>    
         </div>
       
 

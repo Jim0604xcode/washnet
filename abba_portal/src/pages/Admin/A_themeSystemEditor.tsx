@@ -1,5 +1,5 @@
 import { IonPage, IonContent, IonSplitPane, IonCol, IonGrid, IonRow, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonImg, IonItem, IonRippleEffect } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AdminMenu from "../../components/AdminMenu";
 
 import { useRecoilValue } from "recoil";
@@ -16,199 +16,24 @@ import EditorChecklist from '@editorjs/checklist'
 import ColorPlugin from 'editorjs-text-color-plugin'
 
 import { useParams } from 'react-router-dom';
-import { cbEditBannerByAdmin } from "../../service/api";
+import { cbEditBannerByAdmin, cbGetBannerByAdmin } from "../../service/api";
 
 
 const A_themeSystem_editor: React.FC = () => {
-
+    
     const getLanguage = useRecoilValue(languageState);
     const { id }: { id: string } = useParams();
     const [data, setData] = useState<any>(null);
     let editor: any = null
+    
+    const cbGetEditorData = useCallback(async (editorType:string)=>{
+        const results = await cbGetBannerByAdmin(editorType)
+        console.log(results)
+        setData(results)
+    },[])
 
     useEffect(() => {
-        if (id === "1") {
-            setData(
-                {
-                    time: new Date().getTime(),
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: '磅洗',
-                                level: 2,
-                            },
-                        },
-
-                        {
-                            type: 'list',
-                            data: {
-                                style: 'unordered',
-                                items: [
-                                    '自選時間上門收衫送衫',
-                                    '只需兩天送達',
-                                    '另設加急服務',
-                                ],
-                            },
-                        },
-
-                    ],
-                    version: '2.15.0',
-                }
-            )
-        }
-        if (id === "2") {
-            setData(
-                {
-                    time: new Date().getTime(),
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: '乾洗',
-                                level: 2,
-                            },
-                        },
-
-                        {
-                            type: 'list',
-                            data: {
-                                style: 'unordered',
-                                items: [
-                                    '自選時間上門收衫送衫',
-                                    '只需兩天送達',
-                                    '另設加急服務',
-                                ],
-                            },
-                        },
-
-                    ],
-                    version: '2.15.0',
-                }
-            )
-        }
-
-        if (id === "3") {
-            setData(
-                {
-                    time: new Date().getTime(),
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: '洗鞋',
-                                level: 2,
-                            },
-                        },
-
-                        {
-                            type: 'list',
-                            data: {
-                                style: 'unordered',
-                                items: [
-                                    '自選時間上門收衫送衫',
-                                    '只需兩天送達',
-                                    '另設加急服務',
-                                ],
-                            },
-                        },
-
-                    ],
-                    version: '2.15.0',
-                }
-            )
-        }
-
-        if (id === "4") {
-            setData(
-                {
-                    time: new Date().getTime(),
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: '洗袋',
-                                level: 2,
-                            },
-                        },
-
-                        {
-                            type: 'list',
-                            data: {
-                                style: 'unordered',
-                                items: [
-                                    '自選時間上門收衫送衫',
-                                    '只需兩天送達',
-                                    '另設加急服務',
-                                ],
-                            },
-                        },
-
-                    ],
-                    version: '2.15.0',
-                }
-            )
-        }
-        if (id === "5") {
-            setData(
-                {
-                    time: new Date().getTime(),
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: '改衣',
-                                level: 2,
-                            },
-                        },
-
-                        {
-                            type: 'list',
-                            data: {
-                                style: 'unordered',
-                                items: [
-                                    '自選時間上門收衫送衫',
-                                    '只需兩天送達',
-                                    '另設加急服務',
-                                ],
-                            },
-                        },
-
-                    ],
-                    version: '2.15.0',
-                }
-            )
-        }
-        if (id === "6") {
-            setData(
-                {
-                    time: new Date().getTime(),
-                    blocks: [
-                        {
-                            type: 'header',
-                            data: {
-                                text: '家居用品',
-                                level: 2,
-                            },
-                        },
-
-                        {
-                            type: 'list',
-                            data: {
-                                style: 'unordered',
-                                items: [
-                                    '自選時間上門收衫送衫',
-                                    '只需兩天送達',
-                                    '另設加急服務',
-                                ],
-                            },
-                        },
-
-                    ],
-                    version: '2.15.0',
-                }
-            )
-        }
+            cbGetEditorData(id)
     }, [])
 
     // const editor = null
@@ -218,7 +43,6 @@ const A_themeSystem_editor: React.FC = () => {
         const outputData = await editor.save()
         console.log('Banner data: ', outputData)
         await cbEditBannerByAdmin(id,outputData)
-        
     }
 
     return (
@@ -226,10 +50,10 @@ const A_themeSystem_editor: React.FC = () => {
             <IonPage>
                 <IonContent fullscreen className="ion-padding">
 
-                    <IonSplitPane when="md" contentId="main_wrapper">
-                        <AdminMenu />
+                    <IonSplitPane when="md" contentId="main">
+                        <AdminMenu active={0} />
 
-                        <div className="ion-page" id="main_wrapper">
+                        <div className="ion-page" id="main">
                             <Header name={getLanguage.language.as.header} />
 
                             <div id="editorContainer">
@@ -239,7 +63,15 @@ const A_themeSystem_editor: React.FC = () => {
                                         editorInstance={editorInstance => {
                                             editor = editorInstance
                                         }}
-                                        data={data} tools={{
+                                        onReady={()=>{    
+                                            editor.isReady.then(() => {
+                                                if (data) {
+                                                    editor.render(data.data);
+                                                }
+                                              });
+                                        }}
+                                        data={data} 
+                                        tools={{
                                             Color: {
                                                 class: ColorPlugin,
                                                 config: {

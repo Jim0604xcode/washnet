@@ -14,7 +14,7 @@ import "../components/OrderSystem.scss"
 
 import { PlaceOrderType, getPlaceOrderFormDefaultValues } from "../service/FormBuilder";
 import OrderSystemOrderModal from "./OrderSystemOrderModal";
-import { cbEditOrderByAdmin, cbFetchOrderSystemOrderData } from "../service/api";
+import { cbFetchOrderSystemOrderData } from "../service/api";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../service/Recoil";
 import { momentUnix } from "../service/moment";
@@ -54,15 +54,20 @@ function findVal(targetKey:string,obj:Order | any){
   const cbFetchAllOrders = useCallback(async ()=>{
     let results = await cbFetchOrderSystemOrderData()
     
-    results = results.map((obj:Order)=>Object.assign(obj,{pickupDateTimeUnix:momentUnix(obj.pickupDateTime)}))
+    results = results.map((obj:Order)=>Object.assign(obj,{pickupDateTimeUnix:momentUnix(obj.pickupDateTime),fullAddress:obj.fullAddress.replaceAll("|_|","")}))
     console.log(results)
     setInitTData(results)
     setTData(results)
-    setPageObj({
-      numOfRow: results.length,
-      curPage: 1,
-      numOfPage: Math.ceil(results.length / 10),
-      rowPerPage: 10
+    
+    setPageObj(pageObj=>{
+      let newPageObj = {...pageObj}
+      newPageObj = {
+        numOfRow:results.length,
+        curPage:1,
+        numOfPage:Math.ceil(results.length/newPageObj.rowPerPage),
+        rowPerPage:newPageObj.rowPerPage
+      }
+      return newPageObj
     })
   },[]) 
 
@@ -78,7 +83,21 @@ function findVal(targetKey:string,obj:Order | any){
       return newPageObj
     })
   },[])
-    
+  let keyupRowPerPage = useCallback((e:any)=>{
+    if(e.key === 'Enter' || e.keyCode === 13){
+      cbRowPerPage(e.target.value)
+    }
+  },[])
+  let cbRowPerPage = useCallback((cur:string)=>{
+    setPageObj(pageObj=>{
+      let newPageObj = {...pageObj}
+      newPageObj.rowPerPage = parseInt(cur)
+      console.log(newPageObj)
+      newPageObj.numOfPage = Math.ceil(newPageObj.numOfRow/parseInt(cur))
+      
+      return newPageObj
+    })
+  },[])  
     
   
   let resetData = () => {
@@ -108,8 +127,8 @@ function findVal(targetKey:string,obj:Order | any){
           newPageObj = {
             numOfRow:newTData.length,
             curPage:1,
-            numOfPage:Math.ceil(newTData.length/10),
-            rowPerPage:10
+            numOfPage:Math.ceil(newTData.length/newPageObj.rowPerPage),
+            rowPerPage:newPageObj.rowPerPage
           }
           return newPageObj
         })
@@ -139,8 +158,8 @@ function findVal(targetKey:string,obj:Order | any){
         newPageObj = {
           numOfRow:newTData.length,
           curPage:1,
-          numOfPage:Math.ceil(newTData.length/10),
-          rowPerPage:10
+          numOfPage:Math.ceil(newTData.length/newPageObj.rowPerPage),
+          rowPerPage:newPageObj.rowPerPage
         }
         return newPageObj
       })
@@ -242,17 +261,7 @@ let cbEditData = useCallback((data:PlaceOrderType|any)=>{
     )
     return newTData
   })
-  cbEditOrderByAdmin(data);
   setIsOpenModal(false);
-},[])    
-let cbAddData = useCallback((data:any)=>{
-  // admin open order status 2
-  console.log('order system table',data)
-  setTData(tData=>{
-    let newTData = [...tData]
-
-    return newTData
-  })
 },[])    
 
    return (
@@ -275,12 +284,12 @@ let cbAddData = useCallback((data:any)=>{
       <IonCol size="auto">
         <IonButton onClick={resetData}>{getLanguage.language.aos.resetBtn}</IonButton>
       </IonCol>
-      <IonCol size="auto">
+      {/* <IonCol size="auto">
         <IonButton onClick={()=>{
           setIsOpenModal(true);
           setModalTitle(getLanguage.language.aos.modalHeaderAdd)
         }}>{getLanguage.language.aos.addBtn}</IonButton>
-      </IonCol>
+      </IonCol> */}
     </IonRow>
     <table>
     
@@ -393,6 +402,10 @@ let cbAddData = useCallback((data:any)=>{
         <div style={{textAlign:"end"}}>
         <IonNote>{pageObj.numOfRow}{getLanguage.language.aos.pagination1}{getLanguage.language.aos.pagination2}{pageObj.numOfPage}{getLanguage.language.aos.pagination3}</IonNote>
         </div>
+        <IonItem>
+        <IonLabel>每頁行數</IonLabel>
+        <IonInput onKeyUp={(e)=>keyupRowPerPage(e)} onIonBlur={(e)=>cbRowPerPage(e.target.value as string)} style={{textAlign:"end"}} aria-label="Success input" color="success" value={pageObj.rowPerPage.toString()}></IonInput>
+        </IonItem>
       </IonCol>
     </IonRow>
       
@@ -400,7 +413,7 @@ let cbAddData = useCallback((data:any)=>{
     
     
     <OrderSystemTableModal isOpen={isOpen} cbSetIsOpen={cbSetIsOpen} title={modalTitle} cbFilter={cbFilter} accessor={modalKey} initTData={[...initTData]}/>
-    <OrderSystemOrderModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={modalTitle === "Add New Order" || modalTitle === "新增訂單" ? cbAddData : cbEditData} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus} />
+    <OrderSystemOrderModal isOpen={isOpenModal} cbSetIsOpen={cbSetIsOpenAddForm} title={modalTitle} cbSubmitForm={cbEditData} placeOrder={placeOrder} orderId={orderId} orderStatus={orderStatus} />
     
   </>
 

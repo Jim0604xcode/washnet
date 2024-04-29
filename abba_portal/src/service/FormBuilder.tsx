@@ -32,20 +32,20 @@ const RegisterFormSchema = yup.object({
   email: yup.string().email().required('電郵是必填'),
   password: yup.string().min(6, '至少6隻字').required(),
   confirmPassword: yup.string().min(6, '至少6隻字').required(),
-  // area:yup.string().required('大區是必填'),
-  // street:yup.string().required('細區是必填'),
-  // location:yup.string().required('站是必填'),
-  fullAddress:yup.string().required('必填'),
+  district:yup.string().required('地址是必填'),
+  street:yup.string().required('地址是必填'),
+  building:yup.string().required('地址是必填'),
 });
 
 const EditRegisterFormSchema = yup.object({
+  
   displayName:yup.string().required('用戶名是必填'),
   mobile: yup.string().required('手機號碼是必填'),
   email: yup.string().email().required('電郵是必填'),
-  // area:yup.string().required('大區是必填'),
-  // street:yup.string().required('細區是必填'),
-  // location:yup.string().required('站是必填'),
-  fullAddress:yup.string().required('必填'),
+  district:yup.string().required('地址是必填'),
+  street:yup.string().required('地址是必填'),
+  building:yup.string().required('地址是必填'),
+  
 });
 
 export type RegisterFormState = yup.InferType<typeof RegisterFormSchema>;
@@ -59,7 +59,9 @@ export const getRegisterFormDefaultValues = () => {
         email: "",
         password: "",
         confirmPassword:"",
-        fullAddress:""
+        building:"",
+        street:"",
+        district:"",
       }
 }
 
@@ -70,10 +72,9 @@ export const getEditRegisterFormDefaultValues = () => {
     email: "",
     password: "",
     confirmPassword:"",
-    // area:"",
-    // street:"",
-    // location:"",
-    fullAddress:"",
+    building:"",
+    street:"",
+    district:"",
     }
 }
 
@@ -96,7 +97,9 @@ const PlaceOrderFormSchema = yup.object({
   pickupDateTime: yup.string().min(6,"收貨日期時間是必填"),
   deliveryDateTime: yup.string().min(6,"收貨日期時間是必填"),
   tel:yup.string().required("必填"),
-  fullAddress:yup.string().required('地址是必填'),
+  district:yup.string().required('地址是必填'),
+  street:yup.string().required('地址是必填'),
+  building:yup.string().required('地址是必填'),
   remarks:yup.string().required('備註是必填'),
 });
 
@@ -111,7 +114,9 @@ export type PlaceOrderType = {
   deliveryDateTime:string,
   pickupDateTime:string,
   tel:string,
-  fullAddress:string,
+  district:string
+  street:string
+  building:string
   remarks:string,
   orderType:string
 };
@@ -122,7 +127,9 @@ export const getPlaceOrderFormDefaultValues = () => {
     deliveryDateTime:formatter(new Date().toISOString()),
     pickupDateTime:formatter(new Date().toISOString()),
     tel:"",
-    fullAddress:"",
+    building:"",
+    street:"",
+    district:"",
     remarks:"",
     orderType:""
   }

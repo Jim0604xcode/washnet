@@ -1,6 +1,6 @@
 
 import React, {useCallback, useEffect, useMemo, useState } from "react";
-
+import sweetAlert from 'sweetalert2'
 import { useForm } from "react-hook-form";
 
 
@@ -15,7 +15,7 @@ import { formatter } from "../service/moment";
 
 
 import { getValue } from "../service/LocalStorage";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { languageState } from "../service/Recoil";
 
 
@@ -28,7 +28,9 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
     pickupDateTime:placeOrder.pickupDateTime,
     deliveryDateTime:placeOrder.deliveryDateTime,
     tel:placeOrder.tel,
-    fullAddress:placeOrder.fullAddress,
+    building:"",
+    street:"",
+    district:"",
     remarks:placeOrder.remarks,
     orderType:placeOrder.orderType
     })
@@ -54,34 +56,18 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       
       setFormValue(formValue=>{
         let newFormValue = {...formValue}
-        newFormValue.fullAddress = json.data.fullAddress
+        newFormValue.building = json.data.building
+        newFormValue.street = json.data.street
+        newFormValue.district = json.data.district
         return newFormValue
       })
       
     }
   },[])
-  let cbFetchOrderItems = useCallback(async ()=>{
-    let token = await getValue("token")
-    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/order/getOrderItems/${orderId}`,{
-      headers:{
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    let json = await res.json()
-    console.log(json)
-    if(!json.isErr){
-      setFormValue(formValue=>{
-        let newFormValue = {...formValue}
-        
-        newFormValue.pc = json.data.pc
-        return newFormValue
-      })
-      
-    }
-  },[])
+  
   let cbFetchOrderPickUpAddress = useCallback(async ()=>{
     let token = await getValue("token")
-    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/order/getOrderPickUpAddress/${orderId}`,{
+    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/order/getOrderPickUpAddressAndMobile/${orderId}`,{
       headers:{
         'Authorization': `Bearer ${token}`
       },
@@ -94,8 +80,9 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       
       setFormValue(formValue=>{
         let newFormValue = {...formValue}
-        
-        newFormValue.fullAddress = json.data.fullAddress
+        newFormValue.building = json.data.building
+        newFormValue.street = json.data.street
+        newFormValue.district = json.data.district
         return newFormValue
       })
       
@@ -108,7 +95,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       cbFetchUserPickUpAddress()
     }else if(status === 1){
       // admin edit order
-      cbFetchOrderItems()
+      
       cbFetchOrderPickUpAddress()
       
     }else if(status === 2){
@@ -128,27 +115,99 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
 
   const onSubmit = async (data: PlaceOrderFormState) => {
     
-    console.log(data)
     
-    // {
-    //   address:"add",
-    //   area:"港島@1",
-    //   district:""中西區@1-1"",
-    //   dryCleaning:2,
-    //   leatherWashBag:4,
-    //   pickupDateTime:"Tuesday, October 3rd 2023, 10:15:00 pm",
-    //   poundWash:1,
-    //   remarks:"rem",
-    //   station:"堅尼地城@1-1-1",
-    //   totalPic:10,
-    //   washShoes:3
-    // }
+    
     if(status===1){
       // admin edit order
-      data = Object.assign(data,{orderId:orderId,orderStatus:orderStatus})
-      console.log(data)
+      try {
+        console.log(data)
+        
+        let token = await getValue("token")
+        let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/editOrder/${orderId}`,{
+          headers:{
+            "Content-type":"application/json",
+            'Authorization': `Bearer ${token}`
+          },
+          method:"PUT",
+          body:JSON.stringify(Object.assign(data,{orderStatus:orderStatus}))  
+        })
+        let json = await res.json()
+        console.log(json)
+        if(!json.isErr){
+          sweetAlert.fire({
+          icon: 'success',
+          title: 'Message',
+          text:'Successfully place new order',
+          showConfirmButton: false,
+          timer: 1500
+          })
+          data = Object.assign(data,{orderId:orderId,orderStatus:orderStatus})
+          console.log(data)
+
+
+          cbSubmitForm(data)
+        }else{
+          throw new Error(json.errMess)
+        }  
+      } catch (error:any) {
+        sweetAlert.fire({
+          icon: 'info',
+          title: 'Message',
+          text:error.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+
+
+
+      
     }
-    cbSubmitForm(data)
+    // else if(status === 2){
+    //   // admin open order
+
+    //   try {
+    //     console.log(data)
+        
+    //     let token = await getValue("token")
+    //     let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/addOrder`,{
+    //       headers:{
+    //         "Content-type":"application/json",
+    //         'Authorization': `Bearer ${token}`
+    //       },
+    //       method:"POST",
+    //       body:JSON.stringify(Object.assign(data,{orderType:"pw"}))  
+    //     })
+    //     let json = await res.json()
+    //     console.log(json)
+    //     if(!json.isErr){
+    //       sweetAlert.fire({
+    //       icon: 'success',
+    //       title: 'Message',
+    //       text:'Successfully place new order',
+    //       showConfirmButton: false,
+    //       timer: 1500
+    //       })
+    //       data = Object.assign(data,{orderId:orderId,orderStatus:orderStatus})
+    //       console.log(data)
+
+
+    //       cbSubmitForm(data)
+    //     }else{
+    //       throw new Error(json.errMess)
+    //     }  
+    //   } catch (error:any) {
+    //     sweetAlert.fire({
+    //       icon: 'info',
+    //       title: 'Message',
+    //       text:error.message,
+    //       showConfirmButton: false,
+    //       timer: 1500
+    //     })
+    //   }
+
+    // }
+    
     
     
   };
@@ -176,7 +235,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       
         <IonItem>
           <IonLabel>{getLanguage.language.cls.itemTotal}</IonLabel>
-          <IonInput {...register("pc")} className="number" type="number" placeholder="0px" disabled></IonInput>        
+          <IonInput {...register("pc")} className="number" type="number" placeholder="0px"></IonInput>        
         </IonItem>  
       
       <IonNote>{errors.pc?.message}</IonNote>
@@ -232,13 +291,13 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
         
         <IonItem fill="outline">
           <IonLabel position="floating">{"地址"}</IonLabel>
-          <IonInput className="text" clearInput={true} {...register("fullAddress")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          <IonInput className="text" clearInput={true} {...register("district")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
             setFormValue(formValue=>{
               let newFormValue = {...formValue}
             
-              newFormValue.fullAddress = e.target.value as string
+              newFormValue.district = e.target.value as string
             
               return newFormValue
             })
@@ -246,7 +305,60 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
           </IonInput>
         </IonItem>
         
-        <IonNote>{errors.fullAddress?.message}</IonNote>   
+        <IonNote>{errors.district?.message}</IonNote>   
+
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("street")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.street = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.street?.message}</IonNote>   
+
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("building")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.building = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.building?.message}</IonNote>   
+        <IonItem fill="outline">
+          <IonLabel position="floating">{"電話"}</IonLabel>
+          <IonInput className="text" clearInput={true} {...register("tel")} aria-label="tel" placeholder={"電話"} onIonBlur={(e)=>{
+          
+         
+            setFormValue(formValue=>{
+              let newFormValue = {...formValue}
+            
+              newFormValue.tel = e.target.value as string
+            
+              return newFormValue
+            })
+          }}>
+          </IonInput>
+        </IonItem>
+        
+        <IonNote>{errors.tel?.message}</IonNote>   
         </div>
       
       

@@ -3,9 +3,10 @@ import { env_config } from './env';
 import { createServer } from "http";
 import cors from "cors"
 import { UserController } from "./restful/controller/userController";
-import { AdminRoutes, OrderRoutes, UserRoutes } from "./restful/routes/routes";
+import { AdminRoutes, OrderRoutes, ThemeRoutes, UserRoutes } from "./restful/routes/routes";
 import { OrderController } from "./restful/controller/orderController";
 import { AdminController } from "./restful/controller/adminController";
+import { ThemeController } from "./restful/controller/themeController";
 
 const app = express();
 app.use(cors({
@@ -26,6 +27,9 @@ app.use('/order',orderRoute.routes)
 const adminController = new AdminController()
 const adminRoute = new AdminRoutes(adminController)
 app.use('/admin',adminRoute.routes)
+const themeController = new ThemeController()
+const themeRoute = new ThemeRoutes(themeController)
+app.use('/theme',themeRoute.routes)
 
 httpServer.listen(env_config.PORT, () => {
     console.log(`Listening at http://localhost:${env_config.PORT}/`);

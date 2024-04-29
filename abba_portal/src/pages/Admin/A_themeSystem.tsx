@@ -19,27 +19,38 @@ const A_themeSystem: React.FC = () => {
     const orders = [
       {
         id:1,
-        title:"磅洗"
+        title:"磅洗",
+        key:"pw"
       },
       {
         id:2,
-        title:"乾洗"
+        title:"乾洗",
+        key:"dc"
       },
       {
         id:3,
-        title:"洗鞋"
+        title:"洗鞋",
+        key:"ws"
       },
       {
         id:4,
-        title:"洗袋"
+        title:"洗袋",
+        key:"lw"
       },
       {
         id:5,
-        title:"改衣"
+        title:"改衣",
+        key:"cs"
       },
       {
         id:6,
-        title:"家居用品"
+        title:"家居用品",
+        key:"fw"
+      },
+      {
+        id:7,
+        title:"主頁推廣",
+        key:"pm"
       },
     ]
     
@@ -52,7 +63,7 @@ const A_themeSystem: React.FC = () => {
         <IonContent fullscreen className="ion-padding">
 
           <IonSplitPane when="md" contentId="main">
-            <AdminMenu />
+            <AdminMenu active={0} />
             <div id="main">
             
             <Header name={getLanguage.language.as.header} />
@@ -68,7 +79,7 @@ const A_themeSystem: React.FC = () => {
               {/* <IonCard key={obj.id} className="ion-activatable ripple-parent"> */}
                 
                 {/* <IonCardHeader> */}
-                  <div onClick={()=>{history.push('/A-themeSystem/'+obj.id)}} style={{padding:"15px 10px"}}>
+                  <div onClick={()=>{history.push('/A-themeSystem/'+obj.key)}} style={{padding:"15px 10px"}}>
                     <IonImg style={{width:"100%",height:"200px",userSelect:"none"}} src="assets/icon/wash_fold_img.svg"></IonImg>
                     <label style={{fontSize:"25px",fontFamily: "var(--noto-bold)"}}>{obj.title}</label>
                     <IonRippleEffect className="custom-ripple"></IonRippleEffect>

@@ -55,10 +55,18 @@ export async function up(knex: Knex): Promise<void> {
         table.text("cn").notNullable();
         table.text("eng").notNullable();
     })
+    await knex.schema.createTable("editor",(table)=>{
+        table.increments("id");
+        table.string('editor_type').notNullable();
+        table.text("blocks").notNullable();
+        table.timestamp("created_at").defaultTo(knex.fn.now())
+        table.timestamp("updated_at")
+    })
 }
 
 
 export async function down(knex: Knex): Promise<void> {
+    await knex.schema.dropTable("editor")
     await knex.schema.dropTable("languague_portal")
     await knex.schema.dropTable("languague")
     await knex.schema.dropTable("orders")
