@@ -3,6 +3,7 @@ import { isLoggedInAPI } from "../../guard";
 import { UserController } from "../controller/userController";
 import { OrderController } from "../controller/orderController";
 import { AdminController } from "../controller/adminController";
+import { ThemeController } from "../controller/themeController";
 
 class Routes {
     routes:express.Router = express.Router()
@@ -55,5 +56,16 @@ export class AdminRoutes extends Routes{
 
         this.routes.put('/editUser/:userId',isLoggedInAPI,controller.editUser)
 
+    }
+}
+
+export interface IThemeController {
+    getEditor(req:express.Request,res:express.Response):Promise<void>
+    
+}
+export class ThemeRoutes extends Routes{
+    constructor(controller:ThemeController){
+        super()       
+        this.routes.get('/getEditor/:editorType',controller.getEditor)
     }
 }
