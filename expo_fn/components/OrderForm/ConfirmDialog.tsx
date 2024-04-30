@@ -95,41 +95,29 @@ const ConfirmDialog = ({
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
-          ]}>
-            <Text style={[
-              styles.dialogInfoLabel,
-              { color: Colors[colorScheme ?? "light"].text }
-            ]}>電話：</Text>
+            ]}>
+            <Text style={styles.dialogInfoLabel}>電話：</Text>
             {formValue.tel}
           </Text>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
           ]}>
-            <Text style={[
-              styles.dialogInfoLabel,
-              { color: Colors[colorScheme ?? "light"].text }
-            ]}>地址：</Text>
+            <Text style={styles.dialogInfoLabel}>地址：</Text>
             {formValue.fullAddress}
           </Text>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
           ]}>
-            <Text style={[
-              styles.dialogInfoLabel,
-              { color: Colors[colorScheme ?? "light"].text }
-            ]}>收衫時間：</Text>
+            <Text style={styles.dialogInfoLabel}>收衫時間：</Text>
             {formValue.pickupDateTime}
           </Text>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
           ]}>
-            <Text style={[
-              styles.dialogInfoLabel,
-              { color: Colors[colorScheme ?? "light"].text }
-            ]}>送衫時間：</Text>
+            <Text style={styles.dialogInfoLabel}>送衫時間：</Text>
             {formValue.deliveryDateTime}
           </Text>
           <TextInput
