@@ -91,7 +91,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
       const combinedDateTime = dayjs(deliveryDate)
         .hour(dayjs(currentTime).hour())
         .minute(dayjs(currentTime).minute())
-        .format('YYYY-MM-DD, h:mm A');
+        .format('YYYY-MM-DD h:mm A');
 
       setFormValue(prev => ({ ...prev, deliveryDateTime: combinedDateTime }));
     }

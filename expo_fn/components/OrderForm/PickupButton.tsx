@@ -90,7 +90,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       const combinedDateTime = dayjs(pickupDate)
         .hour(dayjs(currentTime).hour())
         .minute(dayjs(currentTime).minute())
-        .format('YYYY-MM-DD, h:mm A');
+        .format('YYYY-MM-DD h:mm A');
 
       setFormValue(prev => ({ ...prev, pickupDateTime: combinedDateTime }));
     }
