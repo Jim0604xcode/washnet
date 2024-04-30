@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColorSchemeName, StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
 import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from "@/constants/Colors";
@@ -117,10 +117,7 @@ const handlePress1 = useDebounce(() => {
               setFormValue((formValue) => {
                 let newFormValue = { ...formValue };
                 newFormValue.district = v;
-                newFormValue.fullAddress =
-                  newFormValue.district + " " +
-                  newFormValue.street + " " +
-                  newFormValue.building;
+                newFormValue.fullAddress = `${v} ${formValue.street} ${formValue.building}`;
                 return newFormValue;
               });
             }}
@@ -144,10 +141,7 @@ const handlePress1 = useDebounce(() => {
               setFormValue((formValue) => {
                 let newFormValue = { ...formValue };
                 newFormValue.street = v;
-                newFormValue.fullAddress =
-                  newFormValue.district + " " +
-                  newFormValue.street + " " +
-                  newFormValue.building;
+                newFormValue.fullAddress = `${formValue.district} ${v} ${formValue.building}`;
                 return newFormValue;
               });
             }}
@@ -171,10 +165,7 @@ const handlePress1 = useDebounce(() => {
               setFormValue((formValue) => {
                 const newFormValue = { ...formValue };
                 newFormValue.building = v;
-                newFormValue.fullAddress =
-                  newFormValue.district + " " +
-                  newFormValue.street + " " +
-                  newFormValue.building;
+                newFormValue.fullAddress = `${formValue.district} ${formValue.street} ${v}`;
                 return newFormValue;
               });
             }}

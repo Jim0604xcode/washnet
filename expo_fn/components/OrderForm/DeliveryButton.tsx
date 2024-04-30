@@ -65,10 +65,10 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
       setIsOpen2(false);
     }
   }, 100);
-
-  const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
-  const [deliveryTime, setDeliveryTime] = useState<Date>(new Date());
   const dayAfterTomorrow = dayjs().add(2, 'days').toDate();
+  const [deliveryDate, setDeliveryDate] = useState<Date>(dayAfterTomorrow);
+  const [deliveryTime, setDeliveryTime] = useState<Date>(dayAfterTomorrow);
+
 
   const setDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || deliveryDate;
@@ -78,7 +78,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
       const combinedDateTime = dayjs(currentDate)
         .hour(dayjs(deliveryTime).hour())
         .minute(dayjs(deliveryTime).minute())
-        .format('YYYY-MM-DD, h:mm A');
+        .format('YYYY-MM-DD h:mm A');
       setFormValue(prev => ({ ...prev, deliveryDateTime: combinedDateTime }));
     }
   };

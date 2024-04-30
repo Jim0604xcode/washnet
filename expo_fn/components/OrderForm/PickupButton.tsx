@@ -65,10 +65,9 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       setIsOpen3(false);
     }
   }, 100);
-
-  const [pickupDate, setPickupDate] = useState<Date>(new Date());
-  const [pickupTime, setPickupTime] = useState<Date>(new Date());
   const tomorrow = dayjs().add(1, 'days').toDate();
+  const [pickupDate, setPickupDate] = useState<Date>(tomorrow);
+  const [pickupTime, setPickupTime] = useState<Date>(tomorrow);
 
   const setDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || pickupDate;
@@ -78,7 +77,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       const combinedDateTime = dayjs(currentDate)
         .hour(dayjs(pickupTime).hour())
         .minute(dayjs(pickupTime).minute())
-        .format('YYYY-MM-DD, h:mm A');
+        .format('YYYY-MM-DD h:mm A');
       setFormValue(prev => ({ ...prev, pickupDateTime: combinedDateTime }));
     }
   };
@@ -103,7 +102,6 @@ const PickupButton: React.FC<PickupButtonProps> = ({
     },
     [setFormValue],
   );
-  
   
   return (
     <Animated.View
