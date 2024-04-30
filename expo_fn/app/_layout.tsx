@@ -7,6 +7,9 @@ import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { useColorScheme } from '@/components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { zhTW, registerTranslation } from 'react-native-paper-dates'
+
+registerTranslation('zh-TW', zhTW);
 
 export {
   // Catch any errors thrown by the Layout component.

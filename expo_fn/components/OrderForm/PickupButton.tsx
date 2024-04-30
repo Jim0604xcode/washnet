@@ -1,136 +1,227 @@
-import React from 'react';
-import { ColorSchemeName, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
 import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from "@/constants/Colors";
-import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { withSpring } from 'react-native-reanimated';
 import { useDebounce } from "@/utils/useDebounce";
 import { UseFormRegister } from 'react-hook-form';
-import { Order } from '@/models';
+import { FormButtonControls, FormInputFlags, Order } from '@/models';
+import dayjs from 'dayjs';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { IconButton } from 'react-native-paper';
 
 type PickupButtonProps = {
-    colorScheme: ColorSchemeName;
-    isCollapsed2: boolean;
-    setIsCollapsed1: React.Dispatch<React.SetStateAction<boolean>>
-    setIsCollapsed2: React.Dispatch<React.SetStateAction<boolean>>
-    setIsCollapsed3: React.Dispatch<React.SetStateAction<boolean>>
+    formBtnCtrls: FormButtonControls;
+    formInputFlags: FormInputFlags;
     register:  UseFormRegister<Order>
     formValue: Order
     setFormValue: React.Dispatch<React.SetStateAction<Order>>
 };
 
 const PickupButton: React.FC<PickupButtonProps> = ({
-    colorScheme,
-    isCollapsed2,
-    setIsCollapsed1,
-    setIsCollapsed2,
-    setIsCollapsed3,
+    formBtnCtrls,
+    formInputFlags,
     register,
     formValue,
     setFormValue
-}) => { 
-const height2 = useSharedValue(80);
-const handlePress2 = useDebounce(() => {
-    if (isCollapsed2) {
-      formValue.pickupDateTime !== "" ? (
-        height2.value = withSpring(350, {damping: 15})
-      ) : (
-        height2.value = withSpring(350, {damping: 15})
-      )
-    } else {
-        formValue.pickupDateTime !== "" ? (
-        height2.value = withSpring(100, {damping: 15})
-      ) : (
-        height2.value = withSpring(80, {damping: 15})
-      )
-    };
-    setIsCollapsed1(true);
-    setIsCollapsed2(!isCollapsed2);
-    setIsCollapsed3(true);
+}) => {
+  const colorScheme = useColorScheme(); 
+  const {
+    height1,
+    height2,
+    height3,
+    isOpen1,
+    isOpen2,
+    isOpen3,
+    setIsOpen1,
+    setIsOpen2,
+    setIsOpen3,
+  } = formBtnCtrls;
+
+  const { hasAddress, hasPickupDateTime, hasDeliveryDateTime } = formInputFlags;
+
+  const handlePress2 = useDebounce(() => {
+    if (isOpen2 === false) {
+      height2.value = withSpring(175, { damping: 15 });
+    } else if (isOpen2 === true) {
+      hasPickupDateTime ? 
+        (height2.value = withSpring(100, { damping: 15 }))
+      : (height2.value = withSpring(80, { damping: 15 }));
+    }
+    setIsOpen2(!isOpen2);
+
+    if (isOpen1 === true) {
+      hasAddress ? 
+      (height1.value = withSpring(100, { damping: 14 }))
+    : (height1.value = withSpring(80, { damping: 14 }));
+      setIsOpen1(false);
+    }
+
+    if (isOpen3 === true) {
+      hasDeliveryDateTime ?
+      (height3.value = withSpring(100, { damping: 14 }))
+    : (height3.value = withSpring(80, { damping: 14 }));
+      setIsOpen3(false);
+    }
   }, 100);
+
+  const [pickupDate, setPickupDate] = useState<Date>(new Date());
+  const [pickupTime, setPickupTime] = useState<Date>(new Date());
+  const tomorrow = dayjs().add(1, 'days').toDate();
+
+  const setDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    const currentDate = selectedDate || pickupDate;
+    setPickupDate(currentDate); // Update the date state
+    if (event.type === "set") {
+      // Combine date and time if needed here, or just set the date
+      const combinedDateTime = dayjs(currentDate)
+        .hour(dayjs(pickupTime).hour())
+        .minute(dayjs(pickupTime).minute())
+        .format('YYYY-MM-DD, h:mm A');
+      setFormValue(prev => ({ ...prev, pickupDateTime: combinedDateTime }));
+    }
+  };
+
+  const setTime = (event: DateTimePickerEvent, selectedTime?: Date) => {
+    const currentTime = selectedTime || pickupTime;
+    setPickupTime(currentTime); // Update the time state
+    if (event.type === "set") {
+      // Assume date is already set and only time is updated
+      const combinedDateTime = dayjs(pickupDate)
+        .hour(dayjs(currentTime).hour())
+        .minute(dayjs(currentTime).minute())
+        .format('YYYY-MM-DD, h:mm A');
+
+      setFormValue(prev => ({ ...prev, pickupDateTime: combinedDateTime }));
+    }
+  };
+
+  const clearDateTime = useCallback(
+    () => {
+      setFormValue(prev => ({ ...prev, pickupDateTime: "" }));
+    },
+    [setFormValue],
+  );
+  
+  
   return (
     <Animated.View
         style={[
           styles.surface,
           { height: height2,
             backgroundColor:
-            formValue.pickupDateTime !== "" ? Colors[colorScheme ?? "light"].tertiary
+            hasPickupDateTime ? Colors[colorScheme ?? "light"].tertiary
               : Colors[colorScheme ?? "light"].surfaceContainer,
           },
         ]}>
-        <TouchableOpacity style={styles.expandBtn}
+        <TouchableOpacity style={styles.openBtn}
           onPress={ handlePress2 }
-        >
+          >
           <View style={styles.btnTitle}>
             <FontAwesome
               name="clock-o"
               size={28}
-              color={ formValue.pickupDateTime !== "" ? Colors.light.text
-                : Colors[colorScheme ?? "light"].text
-              }
+              color={Colors[colorScheme ?? "light"].text}
             />
             <Text
               style={[
                 styles.btnText,
-                { color: formValue.pickupDateTime !== "" ? Colors.light.text
-                  : Colors[colorScheme ?? "light"].text
-                },
+                { color: Colors[colorScheme ?? "light"].text },
               ]}
             >
               第二步：上門收衫時間
             </Text>
             <FontAwesome
-              name={isCollapsed2 ? "chevron-down" : "chevron-up"}
+              name={isOpen2 ? "chevron-up" : "chevron-down"}
               size={16}
-              color={ formValue.pickupDateTime !== "" ? Colors.light.text
-                : Colors[colorScheme ?? "light"].text
-              }
+              color={Colors[colorScheme ?? "light"].text}
             />
           </View>
           <Text style={ styles.info }
             lightColor={ Colors.light.outline }
-            darkColor={ Colors.light.outline }
+            darkColor={ Colors.dark.outline }
           >
+            {hasPickupDateTime ? formValue.pickupDateTime : null}
           </Text>
         </TouchableOpacity>
-      </Animated.View>
-  )
-}
 
-export default PickupButton
+      <View style={[styles.dateTimeInput, {opacity: isOpen2 ? 1 : 0}]}
+        {...register("pickupDateTime", {required: true})}
+      >
+        <RNDateTimePicker
+          mode="date"
+          disabled={!isOpen2}
+          value={pickupDate}
+          onChange={setDate}
+          minimumDate={tomorrow}
+          accentColor={Colors[colorScheme?? 'light'].tint}
+          textColor={Colors[colorScheme?? 'light'].text}
+          positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
+          neutralButton={{label: '重設', textColor: Colors[colorScheme?? 'light'].outline}}
+          negativeButton={{label: '取消', textColor: Colors[colorScheme?? 'light'].outline}}
+          locale='zh'
+        />
+        <RNDateTimePicker
+          mode="time"
+          value={pickupTime}
+          disabled={!isOpen2}
+          onChange={setTime}
+          accentColor={Colors[colorScheme?? 'light'].tint}
+          textColor={Colors[colorScheme?? 'light'].text}
+          positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
+          neutralButton={{label: '重設', textColor: Colors[colorScheme?? 'light'].outline}}
+          negativeButton={{label: '取消', textColor: Colors[colorScheme?? 'light'].outline}}
+          minuteInterval={5}
+        />
+        <IconButton 
+          icon={'close'} 
+          iconColor={Colors[colorScheme?? 'light'].outline}
+          onPress={
+            clearDateTime
+          }
+        />
+      </View>
+    </Animated.View>
+  )
+};
+
+export default PickupButton;
 
 const styles = StyleSheet.create({
-    surface: {
-        flex: 1,
-        maxHeight: 350,
-        borderRadius: 14,
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        alignItems: "center",
-        justifyContent: "flex-start",
-      },
-    expandBtn: {
+  surface: {
+    flex: 1,
+    maxHeight: 500,
+    borderRadius: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    },
+  openBtn: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: 80,
+  },
+  btnTitle: {
+    width: "100%",
+    height: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     },
-    btnTitle: {
-        width: "100%",
-        height: 40,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-    btnText: {
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    inputBox: {
-        width: "100%",
-        gap: 20,
-    },
-    info: {
-        fontSize: 16,
-    },
+  btnText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  info: {
+    fontSize: 16,
+  },
+  dateTimeInput: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  }
 })

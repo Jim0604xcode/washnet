@@ -23,25 +23,14 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
     <View style={styles.slide}>
       <View style={styles.textBox}>
         {/* Conditionally rendering title or subtitle */}
-        {data.title ? (
-          <Text
-            style={[
-              styles.title,
-              { color: Colors[colorScheme ?? "light"].tint },
-            ]}
-          >
-            {data.title}
-          </Text>
-        ) : (
-          <Text
-            style={[
-              styles.subtitle,
-              { color: Colors[colorScheme ?? "light"].tint },
-            ]}
-          >
-            {data.subtitle}
-          </Text>
-        )}
+        <Text
+          style={[
+            ( data.title ) ? ( styles.title ) : ( styles.subtitle ),
+            { color: Colors[colorScheme ?? "light"].tint },
+          ]}
+        >
+          {( data.title ) ? ( data.title ) : ( data.subtitle )}
+        </Text>
         <Text
           style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
         >
@@ -63,9 +52,11 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
           {data.info4}
         </Text>
       </View>
-      {data.title && data.image ?
-        <Image source={data.image} style={styles.img} /> 
-        : null}
+      {/* Conditionally rendering title or subtitle */}
+      {( data.image ) ? (
+        <Image source={data.image} style={styles.img} />
+        ) : ( null )
+      }
     </View>
   );
 };

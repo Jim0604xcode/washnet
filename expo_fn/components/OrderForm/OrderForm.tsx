@@ -1,209 +1,233 @@
-import React, { useCallback, useState } from "react";
-import {ColorSchemeName, StyleSheet, View, Pressable, TouchableOpacity} from "react-native";
-import { Button } from "react-native-paper";
+import React, { useMemo, useState } from "react";
+import { StyleSheet, View, useColorScheme} from "react-native";
+import { Button, Dialog, IconButton, Portal, TextInput } from "react-native-paper";
 import Colors from "@/constants/Colors";
-import Collapsible from "react-native-collapsible";
-import { useForm } from "react-hook-form";
-import { FontAwesome } from "@expo/vector-icons";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { DatePickerModal } from "react-native-paper-dates";
-import { zhTW, registerTranslation } from "react-native-paper-dates";
-import { Order } from "@/models";
 import { Text } from "@/components/Themed";
+import { useForm } from "react-hook-form";
+import { Order, FormButtonControls, FormInputFlags } from "@/models";
 import AddressButton from "@/components/orderForm/AddressButton";
 import PickupButton from "@/components/orderForm/PickupButton";
-registerTranslation("zh-TW", zhTW);
+import { useSharedValue } from "react-native-reanimated";
+import DeliveryButton from "./DeliveryButton";
 
-type OrderFormProps = {
-  colorScheme: ColorSchemeName;
-};
+const OrderForm: React.FC = () => {
+  const colorScheme = useColorScheme();
 
-const OrderForm: React.FC<OrderFormProps> = ({ colorScheme }) => {
   const [formValue, setFormValue] = useState<Order>({
     orderType: "pw",
     pc: 0,
     pickupDateTime: "",
     deliveryDateTime: "",
-    tel: "",
+    tel: "65432109",
     building: "",
     street: "",
     district: "",
     fullAddress: "",
     remarks: "",
   });
-
   const { register, control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: formValue,
     values: formValue,
   });
 
-  const [isCollapsed1, setIsCollapsed1] = useState(true);
-  const [isCollapsed2, setIsCollapsed2] = useState(true);
-  const [isCollapsed3, setIsCollapsed3] = useState(true);
+  const height1 = useSharedValue(80);
+  const height2 = useSharedValue(80);
+  const height3 = useSharedValue(80);
+  const [isOpen1, setIsOpen1] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
+  const [isOpen3, setIsOpen3] = useState(false);
+  const formBtnCtrls: FormButtonControls = useMemo(() => ({
+    height1,
+    height2,
+    height3,
+    isOpen1,
+    isOpen2,
+    isOpen3,
+    setIsOpen1,
+    setIsOpen2,
+    setIsOpen3,
+}), [height1, height2, height3, isOpen1, isOpen2, isOpen3]);
 
-  const [pickupDate, setPickupDate] = useState<Date | undefined>(undefined);
-  const [pickupOpen, setPickupOpen] = useState(false);
-  const pickupDatetimeIsFilled: boolean =
-  (formValue.pickupDateTime !== "") &&
-  (formValue.pickupDateTime !== undefined);
+  const formInputFlags: FormInputFlags = useMemo(() => {
+    const hasAddress: boolean =
+      (formValue.building !== "") &&
+      (formValue.street !== "") &&
+      (formValue.district !== "");
 
-  const onDismissPickup = useCallback(() => {
-    setPickupDate(undefined);
-    setFormValue((formValue) => {
-      const newFormValue = { ...formValue };
-      newFormValue.pickupDateTime = ""
-      return newFormValue;
-    });
-    setPickupOpen(false);
-  }, [setPickupOpen]);
+    const hasPickupDateTime: boolean =
+      (formValue.pickupDateTime !== "") &&
+      (formValue.pickupDateTime !== undefined);
 
-  const onConfirmPickup = useCallback(
-    (params: { date: any }) => {
-      setPickupOpen(false);
-      setPickupDate(params.date);
-      setIsCollapsed2(true);
-      setFormValue((formValue) => {
-        const newFormValue = { ...formValue };
-        newFormValue.pickupDateTime = params.date;
-        return newFormValue;
-      });
-      console.log(params.date);
-    },
-    [setPickupOpen, setPickupDate]
-  );
+    const hasDeliveryDateTime: boolean =
+      (formValue.deliveryDateTime !== "") &&
+      (formValue.deliveryDateTime !== undefined);
+    return {
+      hasAddress,
+      hasPickupDateTime,
+      hasDeliveryDateTime,
+    };
+  },[
+      formValue.building,
+      formValue.street,
+      formValue.district,
+      formValue.pickupDateTime,
+      formValue.deliveryDateTime
+    ]);
 
-  const [deliveryDate, setDeliveryDate] = useState<Date | undefined>(undefined);
-  const [deliveryOpen, setDeliveryOpen] = useState(false);
-  const addressIsFilled: boolean =
-    (formValue.building !== "") &&
-    (formValue.street !== "") &&
-    (formValue.district !== "");
 
-  const onDismissDelivery = useCallback(() => {
-    setDeliveryOpen(false);
-  }, [setDeliveryOpen]);
 
-  const onConfirmDelivery = useCallback(
-    (params: { date: any }) => {
-      setDeliveryOpen(false);
-      setDeliveryDate(params.date);
-      setIsCollapsed3(true);
-      console.log(params.date);
-      setFormValue((formValue) => {
-        const newFormValue = { ...formValue };
-        newFormValue.deliveryDateTime = params.date;
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-        return newFormValue;
-      });
-    },
-    [setDeliveryOpen, setDeliveryDate]
-  );
 
-  const onSubmit = async () => {
+  const showDialog = () => setDialogOpen(true);
+
+  const hideDialog = () => {
+    setDialogOpen(false)
     console.log(formValue);
+  };
+
+  const [remarks, setRemarks] = useState(formValue.remarks);
+  const handleRemarksChange = (newRemarks: string) => {
+    setRemarks(newRemarks);
+  };
+  const handleRemarksBlur = () => {
+    setFormValue(prevState => ({
+      ...prevState,
+      remarks: remarks
+    }));
   };
 
   return (
     <View style={styles.formBox}>
       <AddressButton
-        colorScheme={colorScheme}
-        isCollapsed1={isCollapsed1}
-        setIsCollapsed1={setIsCollapsed1}
-        setIsCollapsed2={setIsCollapsed2}
-        setIsCollapsed3={setIsCollapsed3}
-        addressIsFilled={addressIsFilled}
+        formBtnCtrls={formBtnCtrls}
+        formInputFlags={formInputFlags}
         register={register}
         formValue={formValue}
         setFormValue={setFormValue}
       />
       <PickupButton
-        colorScheme={colorScheme}
-        isCollapsed2={isCollapsed2}
-        setIsCollapsed1={setIsCollapsed1}
-        setIsCollapsed2={setIsCollapsed2}
-        setIsCollapsed3={setIsCollapsed3}
+        formBtnCtrls={formBtnCtrls}
+        formInputFlags={formInputFlags}
         register={register}
         formValue={formValue}
         setFormValue={setFormValue}
       />
-      <Collapsible
-        collapsed={isCollapsed3}
-        collapsedHeight={deliveryDate === undefined ? 80 : 120}
-        enablePointerEvents={true}
-        style={[
-          styles.surface,
-          { backgroundColor: Colors[colorScheme ?? "light"].surfaceContainer },
-        ]}
-        align="top"
-      >
-        <Pressable
-          onPress={() => {
-            setIsCollapsed3(!isCollapsed3);
-            setDeliveryOpen(true);
-          }}
-        >
-          {({ pressed }) => (
-            <View style={styles.btnTitle}>
-              <FontAwesome
-                name="truck"
-                size={28}
-                color={Colors[colorScheme ?? "light"].text}
-                style={{ opacity: pressed ? 0.5 : 1 }}
-              />
-              <Text
-                style={[
-                  styles.btnText,
-                  {
-                    color: Colors[colorScheme ?? "light"].text,
-                    opacity: pressed ? 0.5 : 1,
-                  },
-                ]}
-              >
-                第三步：送回衣服時間
-              </Text>
-              <FontAwesome
-                name={isCollapsed3 ? "chevron-down" : "chevron-up"}
-                size={16}
-                color={Colors[colorScheme ?? "light"].text}
-                style={{ opacity: pressed ? 0.5 : 1 }}
-              />
-            </View>
-          )}
-        </Pressable>
-        {deliveryDate !== undefined ? (
-          <Text style={styles.info}>
-            {deliveryDate.toLocaleDateString("zh-TW")}
-          </Text>
-        ) : null}
-        <SafeAreaProvider>
-          <View
-            {...register("deliveryDateTime")}
-            style={{ justifyContent: "center", flex: 1, alignItems: "center" }}
-          >
-            <DatePickerModal
-              locale="zh-TW"
-              mode="single"
-              visible={deliveryOpen}
-              onDismiss={onDismissDelivery}
-              date={deliveryDate}
-              onConfirm={onConfirmDelivery}
-              presentationStyle="pageSheet"
-            />
-          </View>
-        </SafeAreaProvider>
-      </Collapsible>
+      <DeliveryButton
+        formBtnCtrls={formBtnCtrls}
+        formInputFlags={formInputFlags}
+        register={register}
+        formValue={formValue}
+        setFormValue={setFormValue}
+      />
       <Button
         icon="send"
         mode="contained"
-        buttonColor={Colors[colorScheme ?? "light"].text}
+        buttonColor={
+          formInputFlags.hasAddress && 
+          formInputFlags.hasPickupDateTime &&
+          formInputFlags.hasDeliveryDateTime ?
+          Colors[colorScheme ?? "light"].tint :
+          Colors[colorScheme ?? "light"].text
+        }
         labelStyle={{
           color: Colors[colorScheme ?? "light"].background,
           fontSize: 16,
+          fontWeight: "bold",
         }}
-        onPress={onSubmit}
+        onPress={showDialog}
       >
         確認訂單
       </Button>
+      <Portal>
+        <Dialog visible={dialogOpen} onDismiss={hideDialog}
+          style={[
+            styles.dialogBox,
+            {backgroundColor: Colors[colorScheme?? 'light'].surfaceContainer}
+          ]}>
+          <Dialog.Title style={[
+            styles.dialogTitle,
+            {color: Colors[colorScheme?? 'light'].tint}]}>
+            請確認訂單
+          </Dialog.Title>
+          <Dialog.Content
+            style={styles.dialogContent}
+            >
+            <Text style={styles.dialogInfo}>
+              <Text style={styles.dialogInfoLabel}>電話：</Text>
+              {formValue.tel}
+            </Text>
+            <Text style={styles.dialogInfo}>
+              <Text style={styles.dialogInfoLabel}>地址：</Text>
+              {formValue.fullAddress}
+            </Text>
+            <Text style={styles.dialogInfo}>
+              <Text style={styles.dialogInfoLabel}>收衫時間：</Text>
+              {formValue.pickupDateTime}
+            </Text>
+            <Text style={styles.dialogInfo}>
+              <Text style={styles.dialogInfoLabel}>送衫時間：</Text>
+              {formValue.deliveryDateTime}
+            </Text>
+            <TextInput
+              {...register("pc",
+                { required: true }
+              )}
+              onChangeText={(v: string) => {
+                const filteredV = v.replace(/[^0-9]/g, '');
+                setFormValue((formValue) => {
+                  const newFormValue = { ...formValue };
+                  newFormValue.pc = Number(filteredV);
+                  return newFormValue;
+                });
+              }}
+              keyboardType="numeric"
+              mode="outlined"
+              label="衣服袋數"
+              value={(formValue.pc).toString()}
+              style={{
+                backgroundColor: Colors[colorScheme ?? "light"].surfaceContainer,
+              }}
+                outlineColor= {Colors[colorScheme ?? "light"].outline}
+                activeOutlineColor={Colors[colorScheme ?? "light"].tint}
+            />
+            <TextInput
+              {...register("remarks",
+                { required: true }
+              )}
+              onChangeText={handleRemarksChange}
+              onBlur={handleRemarksBlur}
+              value={remarks}
+              multiline
+              mode="outlined"
+              label="備注（如有需要）"
+              placeholder="請填寫注意事項"               
+              numberOfLines={2
+              }
+              style={{
+                backgroundColor: Colors[colorScheme ?? "light"].surfaceContainer,
+                minHeight: 80,
+
+              }}
+              outlineColor= {Colors[colorScheme ?? "light"].outline}
+              activeOutlineColor={Colors[colorScheme ?? "light"].tint}
+            />
+          </Dialog.Content>
+          <Dialog.Actions style={{justifyContent: 'space-between'}}>
+          <IconButton 
+            icon={'close'} 
+            iconColor={Colors[colorScheme?? 'light'].outline}
+            onPress={hideDialog}
+          />
+            <Button
+              onPress={hideDialog}
+              textColor={Colors[colorScheme ?? "light"].tint}
+              labelStyle={{fontSize: 16}}
+              icon="send"
+            >發送訂單</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 };
@@ -216,6 +240,8 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingTop: 10,
     paddingBottom: 20,
+    width: "100%",
+    height: "auto",
   },
   surface: {
     flex: 1,
@@ -250,4 +276,32 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 16,
   },
+  dialogBox: {
+    borderRadius: 14,
+    borderWidth: 0,
+    gap: 0
+  },
+  dialogTitle: {
+    alignSelf: "center",
+    fontSize: 21,
+    fontWeight: 'bold',
+  },
+  dialogContent: {
+    gap: 20,
+    padding: 20,
+  },
+  dialogInfoLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  dialogInfo: {
+    fontSize: 16,
+  },
+  dialogInput: {
+    fontSize: 16,
+  },
+  dialogTextarea: {
+    minHeight: 80
+  }
+
 });
