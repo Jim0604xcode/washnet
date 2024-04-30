@@ -46,6 +46,9 @@ export default function LaundryScreen() {
         backgroundColor: Colors[colorScheme ?? 'light'].background,
         overflow: 'scroll',
       }}
+      keyboardDismissMode = 'on-drag'
+      keyboardShouldPersistTaps = 'handled'
+      contentInsetAdjustmentBehavior = 'always'
     >
       <View style={styles.carouselBox}>
         <Carousel
@@ -76,7 +79,7 @@ export default function LaundryScreen() {
           colorScheme={colorScheme}
         />
       </View>
-      <OrderForm colorScheme={colorScheme} />
+      <OrderForm />
     </ScrollView>
   );
 }

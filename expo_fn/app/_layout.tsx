@@ -7,6 +7,9 @@ import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { useColorScheme } from '@/components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,17 +52,19 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <PaperProvider>
-        <SafeAreaProvider>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="drawer" options={{ presentation: 'modal', headerTitle: '用戶設定'}} />
-            <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
-          </Stack>
-        </SafeAreaProvider>
-      </PaperProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <PaperProvider>
+          <SafeAreaProvider>
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="drawer" options={{ presentation: 'modal', headerTitle: '用戶設定'}} />
+              <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
+            </Stack>
+          </SafeAreaProvider>
+        </PaperProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

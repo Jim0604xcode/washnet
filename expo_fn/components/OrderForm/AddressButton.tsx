@@ -1,146 +1,157 @@
 import React from 'react';
-import { ColorSchemeName, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
 import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from "@/constants/Colors";
-import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated, { withSpring } from 'react-native-reanimated';
 import { useDebounce } from "@/utils/useDebounce";
 import { TextInput } from 'react-native-paper';
 import { UseFormRegister } from 'react-hook-form';
-import { Order } from '@/models';
+import { FormButtonControls, FormInputFlags, Order } from '@/models';
 
 type AddressButtonProps = {
-    colorScheme: ColorSchemeName;
-    isCollapsed1: boolean;
-    setIsCollapsed1: React.Dispatch<React.SetStateAction<boolean>>
-    setIsCollapsed2: React.Dispatch<React.SetStateAction<boolean>>
-    setIsCollapsed3: React.Dispatch<React.SetStateAction<boolean>>
-    addressIsFilled: boolean;
+    formBtnCtrls: FormButtonControls;
+    formInputFlags: FormInputFlags;
     register:  UseFormRegister<Order>
     formValue: Order
     setFormValue: React.Dispatch<React.SetStateAction<Order>>
 };
 
 const AddressButton: React.FC<AddressButtonProps> = ({
-    colorScheme,
-    isCollapsed1,
-    setIsCollapsed1,
-    setIsCollapsed2,
-    setIsCollapsed3,
-    addressIsFilled,
+    formBtnCtrls,
+    formInputFlags,
     register,
     formValue,
     setFormValue
-}) => { 
-const height1 = useSharedValue(80);
+}) => {
+const colorScheme = useColorScheme(); 
+
+const {
+  height1,
+  height2,
+  height3,
+  isOpen1,
+  isOpen2,
+  isOpen3,
+  setIsOpen1,
+  setIsOpen2,
+  setIsOpen3,
+} = formBtnCtrls;
+
+const { hasAddress, hasPickupDateTime, hasDeliveryDateTime } = formInputFlags;
+
 const handlePress1 = useDebounce(() => {
-    if (isCollapsed1) {
-      height1.value = withSpring(350, {damping: 15})
-    } else {
-      addressIsFilled ? (
-        height1.value = withSpring(100, {damping: 15})
-      ) : (
-        height1.value = withSpring(80, {damping: 15})
-      )
-    };
-    setIsCollapsed1(!isCollapsed1);
-    setIsCollapsed2(true);
-    setIsCollapsed3(true);
-  }, 100);
+  if (isOpen1 === false) {
+    height1.value = withSpring(350, { damping: 15 });
+  } else if (isOpen1 === true) {
+    hasAddress ? 
+      (height1.value = withSpring(100, { damping: 15 }))
+    : (height1.value = withSpring(80, { damping: 15 }));
+  }
+  setIsOpen1(!isOpen1);
+  if (isOpen2 === true) {
+    hasPickupDateTime ?
+      (height2.value = withSpring(100, { damping: 14 }))
+    : (height2.value = withSpring(80, { damping: 14 }));
+    setIsOpen2(false);
+  }
+  if (isOpen3 === true) {
+    hasDeliveryDateTime ?
+      (height3.value = withSpring(100, { damping: 14 }))
+    : (height3.value = withSpring(80, { damping: 14 }));
+    setIsOpen3(false);
+  }
+}, 100);
+
   return (
     <Animated.View
         style={[
           styles.surface,
           { height: height1,
             backgroundColor:
-              addressIsFilled ? Colors[colorScheme ?? "light"].tertiary
+              hasAddress ? Colors[colorScheme ?? "light"].tertiary
               : Colors[colorScheme ?? "light"].surfaceContainer,
           },
         ]}>
-      <TouchableOpacity style={styles.expandBtn}
+      <TouchableOpacity style={styles.openBtn}
         onPress={ handlePress1 }
       >
         <View style={styles.btnTitle}>
           <FontAwesome
             name="map-pin"
             size={28}
-            color={ addressIsFilled ? Colors.light.text
-              : Colors[colorScheme ?? "light"].text
-            }
+            color={Colors[colorScheme ?? "light"].text}
           />
           <Text
             style={[
               styles.btnText,
-              { color: addressIsFilled ? Colors.light.text
-                : Colors[colorScheme ?? "light"].text
-              },
+              { color: Colors[colorScheme ?? "light"].text },
             ]}
           >
             第一步：填寫地址
           </Text>
           <FontAwesome
-            name={isCollapsed1 ? "chevron-down" : "chevron-up"}
+            name={isOpen1 ? "chevron-up" : "chevron-down"}
             size={16}
-            color={ addressIsFilled ? Colors.light.text
-              : Colors[colorScheme ?? "light"].text
-            }
+            color={Colors[colorScheme ?? "light"].text}
+
           />
         </View>
         <Text style={ styles.info }
           lightColor={ Colors.light.outline }
-          darkColor={ Colors.light.outline }
+          darkColor={ Colors.dark.outline }
         >
-          {addressIsFilled ? formValue.fullAddress : null}
+          {hasAddress ? formValue.fullAddress : null}
         </Text>
       </TouchableOpacity>
-      { isCollapsed1 ? ( null ) : (
+      { isOpen1 ? (
         <View style={styles.inputBox}>
           <TextInput
             mode="outlined"
             label="地區"
             placeholder="請填寫地區"
-            {...register("district")}
+            {...register("district",
+              { required: true }
+            )}
             onChangeText={(v: string) => {
               setFormValue((formValue) => {
                 let newFormValue = { ...formValue };
                 newFormValue.district = v;
-                newFormValue.fullAddress =
-                  newFormValue.district +
-                  newFormValue.street +
-                  newFormValue.building;
+                newFormValue.fullAddress = `${v} ${formValue.street} ${formValue.building}`;
                 return newFormValue;
               });
             }}
             value={formValue.district}
             style={{
-                backgroundColor: addressIsFilled ? Colors[colorScheme ?? "light"].tertiary
+                backgroundColor: hasAddress ? Colors[colorScheme ?? "light"].tertiary
                   : Colors[colorScheme ?? "light"].surfaceContainer,
                 borderColor: Colors[colorScheme ?? "light"].outline,
               }}
+            outlineColor= {Colors[colorScheme ?? "light"].outline}
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
           <TextInput
             mode="outlined"
             label="街道"
             placeholder="請填寫街道"
-            {...register("street")}
+            {...register("street",
+              { required: true }
+            )}
             onChangeText={(v: string) => {
               setFormValue((formValue) => {
                 let newFormValue = { ...formValue };
                 newFormValue.street = v;
-                newFormValue.fullAddress =
-                  newFormValue.district +
-                  newFormValue.street +
-                  newFormValue.building;
+                newFormValue.fullAddress = `${formValue.district} ${v} ${formValue.building}`;
                 return newFormValue;
               });
             }}
             value={formValue.street}
             style={{
-                backgroundColor: addressIsFilled ? Colors[colorScheme ?? "light"].tertiary
+                backgroundColor: hasAddress ? Colors[colorScheme ?? "light"].tertiary
                   : Colors[colorScheme ?? "light"].surfaceContainer,
                 borderColor: Colors[colorScheme ?? "light"].outline,
               }}
+            outlineColor= {Colors[colorScheme ?? "light"].outline}
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
           <TextInput
@@ -154,23 +165,22 @@ const handlePress1 = useDebounce(() => {
               setFormValue((formValue) => {
                 const newFormValue = { ...formValue };
                 newFormValue.building = v;
-                newFormValue.fullAddress =
-                  newFormValue.district +
-                  newFormValue.street +
-                  newFormValue.building;
+                newFormValue.fullAddress = `${formValue.district} ${formValue.street} ${v}`;
                 return newFormValue;
               });
             }}
             value={formValue.building}
             style={{
-                backgroundColor: addressIsFilled ? Colors[colorScheme ?? "light"].tertiary
+                backgroundColor: hasAddress ? Colors[colorScheme ?? "light"].tertiary
                   : Colors[colorScheme ?? "light"].surfaceContainer,
                 borderColor: Colors[colorScheme ?? "light"].outline,
               }}
+            outlineColor= {Colors[colorScheme ?? "light"].outline}
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
         </View>
-      )}
+        ) : ( null )
+      }
     </Animated.View>
   )
 }
@@ -178,37 +188,37 @@ const handlePress1 = useDebounce(() => {
 export default AddressButton
 
 const styles = StyleSheet.create({
-    surface: {
-        flex: 1,
-        maxHeight: 350,
-        borderRadius: 14,
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        alignItems: "center",
-        justifyContent: "flex-start",
-      },
-    expandBtn: {
+  surface: {
+      flex: 1,
+      maxHeight: 350,
+      borderRadius: 14,
+      paddingHorizontal: 20,
+      paddingVertical: 20,
+      alignItems: "center",
+      justifyContent: "flex-start",
+    },
+  openBtn: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: 80,
-    },
-    btnTitle: {
-        width: "100%",
-        height: 40,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-    btnText: {
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    inputBox: {
-        width: "100%",
-        gap: 20,
-    },
-    info: {
-        fontSize: 16,
-    },
+  },
+  btnTitle: {
+    width: "100%",
+    height: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  btnText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  inputBox: {
+    width: "100%",
+    gap: 20,
+  },
+  info: {
+    fontSize: 16,
+  },
 })

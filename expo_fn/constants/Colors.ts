@@ -21,12 +21,14 @@ const p30 = '#005233';
 const p10 = '#002112';
 const s40 = '#486553';
 const s80 = '#8F9E8F';
+const t90 = '#B5EBFF';
+const t30 = '#074D5F';
 
 export default {
   light: {
     primary: primary,
     secondary: secondary,
-    tertiary: tertiary,
+    tertiary: t90,
     neutral: neutral,
     error: error,
     onPrimary: p10,
@@ -43,7 +45,7 @@ export default {
   dark: {
     primary: primary,
     secondary: secondary,
-    tertiary: tertiary,
+    tertiary: t30,
     neutral: neutral,
     error: error,
     onPrimary: p10,
