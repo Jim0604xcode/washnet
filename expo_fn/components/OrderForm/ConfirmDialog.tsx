@@ -92,19 +92,31 @@ const ConfirmDialog = ({
           請確認訂單
         </Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
-          <Text style={styles.dialogInfo}>
+          <Text style={[
+            styles.dialogInfo,
+            { color: Colors[colorScheme ?? "light"].text }
+            ]}>
             <Text style={styles.dialogInfoLabel}>電話：</Text>
             {formValue.tel}
           </Text>
-          <Text style={styles.dialogInfo}>
+          <Text style={[
+            styles.dialogInfo,
+            { color: Colors[colorScheme ?? "light"].text }
+          ]}>
             <Text style={styles.dialogInfoLabel}>地址：</Text>
             {formValue.fullAddress}
           </Text>
-          <Text style={styles.dialogInfo}>
+          <Text style={[
+            styles.dialogInfo,
+            { color: Colors[colorScheme ?? "light"].text }
+          ]}>
             <Text style={styles.dialogInfoLabel}>收衫時間：</Text>
             {formValue.pickupDateTime}
           </Text>
-          <Text style={styles.dialogInfo}>
+          <Text style={[
+            styles.dialogInfo,
+            { color: Colors[colorScheme ?? "light"].text }
+          ]}>
             <Text style={styles.dialogInfoLabel}>送衫時間：</Text>
             {formValue.deliveryDateTime}
           </Text>
