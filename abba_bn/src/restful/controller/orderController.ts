@@ -28,7 +28,7 @@ export let addOrderSchema = yup.object().shape({
     district:yup.string().required(),
     street:yup.string().required(),
     building:yup.string().required(),
-    remarks:yup.string().required(),
+    remarks:yup.string(),
 });
 export class OrderController implements IOrderController{
     async addOrder(req:express.Request,res:express.Response){
@@ -47,6 +47,7 @@ export class OrderController implements IOrderController{
                 remarks:orderData.remarks,
                 status:orderStatus,
                 customer_id:jwt.usersId,
+                // customer_id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF3',
             })
                 res.json({
                     data:null,
