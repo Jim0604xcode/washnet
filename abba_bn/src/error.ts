@@ -8,7 +8,7 @@ export function errorHandler(error:any, req:express.Request,res:express.Response
         isErr:true,
         errMess:`${error.message} - ${req.route.path}`,
         data:null,
-        
+
     }    
     
     // res.status(500).json(result)

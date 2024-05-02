@@ -44,7 +44,6 @@ export class UserController implements IUserController{
     constructor(){}
     async login(req:express.Request,res:express.Response){
         try {
-    
             let userData = req.body as LoginUser
             let {id,role} = await userService.login({
               mobile_or_email:userData.mobileOrEmail,
