@@ -30,7 +30,7 @@ export class UserService {
             if(result.length === 0){
                 throw new Error('Not exist this user')
             }
-            let checked = checkPassword(userData.password,result[0].password)
+            let checked = await checkPassword(userData.password,result[0].password);
             if(!checked){
                 throw new Error('password not match')
             }
