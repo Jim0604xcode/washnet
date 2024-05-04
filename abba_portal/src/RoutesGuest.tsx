@@ -10,6 +10,7 @@ import Error404 from './pages/Error404';
 import { useRecoilValue } from 'recoil';
 import { languageState } from './service/Recoil';
 import { useState } from 'react';
+import G_resetPassword from './pages/Guest/G_resetPassword';
 
 
 
@@ -46,6 +47,9 @@ const RoutesGuest: React.FC = () => {
                 <G_setting />
             </Route>
 
+            <Route path="/reset-password/:token">
+                <G_resetPassword />
+            </Route>
 
 
             <Route exact path="/">

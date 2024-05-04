@@ -19,7 +19,8 @@ export async function seed(knex: Knex): Promise<void> {
             mobile:'51823007',
             email: 'test@gmail.com',
             password: '$2a$10$JUN9Uqt7uEiToHKcaIGroO5HNTtrIDOh/WdJbwyW.iAN7j2SIY0Wq',
-            role:'admin'
+            role:'admin',
+            status:'active'
         },
         {
             id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF3',
@@ -27,7 +28,17 @@ export async function seed(knex: Knex): Promise<void> {
             mobile:'51823008',
             email: 'tony@gmail.com',
             password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
-            role:'customer'
+            role:'customer',
+            status:'active'
+        },
+        {
+            id:'sadadhCc9kJ1JYeasdadXlYcF3',
+            display_name:'eddie',
+            mobile:'51823009',
+            email: 'eddie@gmail.com',
+            password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
+            role:'customer',
+            status:'non_active'
         },
         
     ]);

@@ -4,6 +4,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { formatter } from "./moment";
 
 
+// ResetPassword Form start
+const ResetPasswordFormSchema = yup.object({
+  password: yup.string().min(6, '至少6隻字').required(),
+}).required();
+
+export type ResetPasswordFormState = yup.InferType<typeof ResetPasswordFormSchema>;
+export const getResetPasswordFormDefaultValues = () => {
+    return {
+        password: "",
+      }
+}
+export let getResetPasswordFormYupResolver = () => yupResolver(ResetPasswordFormSchema)
+// ResetPassword Form end
 
 // Login Form start
 

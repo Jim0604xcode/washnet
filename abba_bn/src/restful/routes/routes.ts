@@ -21,6 +21,10 @@ export class UserRoutes extends Routes{
         this.routes.get('/getCurrentUser',isLoggedInAPI,controller.getCurrentUser)
         this.routes.get('/getPickUpAddressAndMobile',isLoggedInAPI,controller.getPickUpAddressAndMobile)
         this.routes.get('/getLanguageData/:require',controller.getLanguageDataGuest)
+        this.routes.put('/delUser',isLoggedInAPI,controller.deleteUser)
+        this.routes.get('/checkResetPasswordToken',isLoggedInAPI,controller.checkResetPasswordToken)
+        this.routes.post('/forgetPassword',isLoggedInAPI,controller.forgetPassword)
+        this.routes.post('/resetPassword',isLoggedInAPI,controller.resetPassword)
         
     }
 }

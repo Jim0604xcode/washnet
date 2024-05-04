@@ -11,6 +11,7 @@ import A_themeSystem_editor from './pages/Admin/A_themeSystemEditor';
 import A_staffSystem from './pages/Admin/A_staffSystem';
 import A_setting from './pages/Admin/A_setting';
 import { useState } from 'react';
+import G_resetPassword from './pages/Guest/G_resetPassword';
 
 
 
@@ -44,6 +45,9 @@ const RoutesCustomer: React.FC = () => {
                 <A_themeSystem_editor />
             </Route>
 
+            <Route path="/reset-password/:token">
+                <G_resetPassword />
+            </Route>
            
             {/* Guest */}
             <Route path="/G-laundryService">

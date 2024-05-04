@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("email").notNullable().unique()
         table.string("password").notNullable()
         table.enu('role',["admin","customer"]).notNullable()
+        table.enu('status',["active","non_active"]).notNullable()
         table.timestamp("created_at").defaultTo(knex.fn.now())
         table.timestamp("updated_at")
     })
