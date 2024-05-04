@@ -82,9 +82,9 @@ export const verifyJwt = (jwt:string) => {
 const base64EncodeHook = (text:string) => {
     //'+' to '-' '/'to'_' '='to''
     let p = text
-    p = p.replaceAll('+','-')
-    p = p.replaceAll('/','_')
-    p = p.replaceAll('=','')
+    p = p.replace(/\+/g,'-')
+    p = p.replace(/\//g,'_')
+    p = p.replace(/=/g,'')
 
     return base64encode(p)
 }

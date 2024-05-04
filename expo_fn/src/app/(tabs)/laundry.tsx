@@ -41,7 +41,7 @@ export default function LaundryScreen() {
     const main = async () =>{
       try {
         
-        let res = await fetch(process.env.BNHOST+"/theme/getEditor/pw")
+        let res = await fetch(process.env.EXPO_PUBLIC_API_URL+"/theme/getEditor/pw")
         let json = await res.json()
         
         if(!json.isErr){
