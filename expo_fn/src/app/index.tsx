@@ -1,17 +1,8 @@
-import { Link } from "expo-router";
-import React, { Suspense, useState } from "react";
+import { useRouter } from "expo-router";
+import React, { Suspense } from "react";
 import {
-  Alert,
   Dimensions,
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
   StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
   useColorScheme,
 } from "react-native";
 import Colors from "@/src/constants/Colors";
@@ -19,27 +10,48 @@ import { FontAwesome } from "@expo/vector-icons";
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/src/context/AuthContext";
+import { useStorageState } from "../utils/useStorageState";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import { StatusBar } from "expo-status-bar";
 
 const index = () => {
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
-  const [tel, setTel] = useState("");
-  const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const router = useRouter();
+  const [[_, token]] = useStorageState(`${process.env.EXPO_PUBLIC_API_KEY}`); 
+  const {verify} = useAuth();
+  const sv = useSharedValue(0.8);
 
-  const handleTelChange = (value: string) => {
-    const filteredValue: string = value.replace(/[^0-9]/g, "");
-    setTel(filteredValue);
-  };
+  const animation = useAnimatedStyle(
+    () => ({transform: [{ scale: withSpring(sv.value, {damping: 4}) }],
+    })
+  );
 
-  const handlePasswordChange = (value: string) => {
-    setPassword(value);
-  };
+  const redirectToLogin = React.useCallback(() => {
+    const timeoutId = setTimeout(() => router.push('/login'), 800);
+    return () => clearTimeout(timeoutId);
+  }, [router]);
 
-  const handleLogin = async () => {
-    await login!(tel, password);
-  };
+  React.useEffect(() => {
+    sv.value = sv.value + 0.4;
+  },[])
 
+  React.useEffect(() => {
+    if (!token) {
+      return redirectToLogin();
+    } else {
+      verify!(token).then(isVerified => {
+        console.log('Verification:', isVerified);
+        if (!isVerified) {
+          return redirectToLogin();
+        }
+      }).catch(err => {
+        console.error('Verification failed:', err);
+        return redirectToLogin();
+      });
+    }
+  }, [token, redirectToLogin]);
+  
   return (
     <SafeAreaView
       style={[
@@ -49,6 +61,7 @@ const index = () => {
          },
       ]}
     >
+      <StatusBar style="dark" />
       <Suspense
         fallback={
           <ActivityIndicator
@@ -58,123 +71,11 @@ const index = () => {
           />
         }
       >
-        <Image
+        <Animated.Image
           source={require("@/src/assets/images/logo-p99.png")}
-          style={styles.logo}
+          style={[styles.logo, animation]}
         />
       </Suspense>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.intro}>
-          <Text style={styles.text}>一個電話</Text>
-          <Text style={styles.text}>三步落單</Text>
-          <Text style={styles.text}>洗衫... 其實唔難👍</Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.loginBox}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inner}>
-            <TextInput
-              mode="flat"
-              label="手機號碼"
-              placeholder="請輸入手機號碼"
-              value={tel}
-              onChangeText={handleTelChange}
-              keyboardType="numeric"
-              autoComplete="password"
-              maxLength={8}
-              theme={{
-                colors: { onSurfaceVariant: Colors.light.outline}
-              }}
-              style={[styles.input, {
-                backgroundColor: Colors.light.primary,
-              }]}
-              underlineColor={Colors.light.outline}
-              textColor={Colors.light.text}
-              placeholderTextColor={Colors.light.outline}
-              activeUnderlineColor={Colors.light.text}
-            />
-            <TextInput
-              mode="flat"
-              label="密碼"
-              placeholder="請輸入密碼"
-              value={password}
-              onChangeText={handlePasswordChange}
-              autoComplete="password"
-              secureTextEntry={true}
-              maxLength={16}
-              theme={{
-                colors: { onSurfaceVariant: Colors.light.outline}
-              }}
-              style={[styles.input, {
-                backgroundColor: Colors.light.primary,
-              }]}
-              underlineColor={Colors.light.outline}
-              textColor={Colors.light.text}
-              activeUnderlineColor={Colors.light.text}
-            />
-            <View style={styles.textBtnBox}>
-              <Pressable>
-                {({ pressed }) => (
-                  <Button
-                    style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
-                    mode="text"
-                    icon={() => (
-                      <FontAwesome
-                        name="pencil"
-                        size={12}
-                        color={Colors.light.text}
-                      />
-                    )}
-                    textColor={Colors.light.text}
-                    labelStyle={{ fontSize: 12 }}
-                  >
-                    註冊
-                  </Button>
-                )}
-              </Pressable>
-              <Pressable>
-                {({ pressed }) => (
-                  <Button
-                    style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
-                    mode="text"
-                    icon={() => (
-                      <FontAwesome
-                        name="question-circle"
-                        size={12}
-                        color={Colors.light.text}
-                      />
-                    )}
-                    textColor={Colors.light.text}
-                    labelStyle={{ fontSize: 12 }}
-                  >
-                    忘記密碼
-                  </Button>
-                )}
-              </Pressable>
-            </View>
-            <Button
-              style={styles.button}
-              mode="contained"
-              buttonColor={Colors.light.text}
-              icon={() => (
-                <FontAwesome
-                  name="sign-in"
-                  size={16}
-                  color={Colors.light.surface}
-                />
-              )}
-              textColor={Colors.light.surface}
-              labelStyle={{ fontSize: 16 }}
-              onPress={handleLogin}
-            >
-              登入
-            </Button>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -183,14 +84,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     // paddingTop: 20,
   },
   logo: {
-    width: 180,
-    height: 60,
+    width: 210,
+    height: 70,
     resizeMode: "contain",
-    flex: 0.5,
+    flex: 1,
   },
   intro: {
     gap: 10,
@@ -200,7 +101,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 40,
     flex: 1,
-  },
+  }, 
   text: {
     color: Colors.light.text,
     fontSize: 31,
@@ -220,7 +121,7 @@ const styles = StyleSheet.create({
   inner: {
     gap: 10,
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-around",
     alignItems: "center",
     paddingHorizontal: 40,
   },

@@ -79,7 +79,7 @@ const handlePress1 = useDebounce(() => {
         >
         <View style={styles.btnTitle}>
           <FontAwesome
-            name="map-pin"
+            name="map-marker"
             size={28}
             color={Colors[colorScheme ?? "light"].text}
           />

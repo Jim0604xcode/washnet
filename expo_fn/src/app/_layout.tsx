@@ -9,6 +9,7 @@ import { useColorScheme } from '@/src/components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from '@/src/context/AuthContext';
+import { useStorageState } from '../utils/useStorageState';
 
 const queryClient = new QueryClient();
 
@@ -31,10 +32,13 @@ const StackLayout = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const inAuthGroup = segments[0] === '(tabs)';
-    if (authState?.isAuthenticated === false && inAuthGroup) {
-      router.replace('/');
-    } else if (authState?.isAuthenticated === true) {
+    const firstSegment = segments.length > 0 ? segments[0] : null;
+    const isAuthenticated = authState?.isAuthenticated;
+    const inProtected = firstSegment === '(tabs)';
+
+    if (!isAuthenticated && inProtected) {
+      router.replace('/login');
+    } else if (isAuthenticated) {
       router.replace('/laundry');
     }
   }, [authState?.isAuthenticated])
@@ -42,6 +46,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
     </Stack>

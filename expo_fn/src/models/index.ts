@@ -49,3 +49,15 @@ export interface LoginRequest {
   mobileOrEmail: string;
   password: string;
 }
+
+
+export interface RegisterRequest {
+  displayName: string,
+  mobile: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+  district: string,
+  street: string,
+  building: string,
+}

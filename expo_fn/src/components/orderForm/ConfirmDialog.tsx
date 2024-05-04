@@ -195,7 +195,7 @@ const ConfirmDialog = ({
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
         </Dialog.Content>
-        <Dialog.Actions style={{ justifyContent: "space-between" }}>
+        <Dialog.Actions style={{ justifyContent: "space-between", paddingBottom: 10 }}>
           <IconButton
             icon={"close"}
             iconColor={Colors[colorScheme ?? "light"].outline}
@@ -222,15 +222,17 @@ const styles = StyleSheet.create({
   dialogBox: {
     borderRadius: 14,
     borderWidth: 0,
+    // paddingTop: 10,
   },
   dialogTitle: {
     alignSelf: "center",
     fontSize: 21,
     fontWeight: "bold",
+    paddingBottom: 10,
   },
   dialogContent: {
     gap: 20,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   dialogInfo: {
     fontSize: 16,

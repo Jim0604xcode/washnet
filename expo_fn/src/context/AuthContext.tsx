@@ -1,17 +1,27 @@
 import { setStorageItemAsync, useStorageState } from '@/src/utils/useStorageState';
 import React from 'react';
 import { Alert } from 'react-native';
-import { LoginRequest, LoginResponse } from '../models';
+import { LoginRequest, LoginResponse, RegisterRequest } from '../models';
 
 interface AuthProps {
   authState: { 
     isAuthenticated: boolean | null, 
     token: string | null,
-    tel: string | null,
-  },
-  login: (tel: string, password: string) => Promise<any>;
+    mobile: string | null,
+  };
+  login: (mobile: string, password: string) => Promise<any>;
   logout: () => void;
-  register: (tel: string, password: string) => Promise<any>;
+  register: ({
+    displayName,
+    mobile,
+    email,
+    password,
+    confirmPassword,
+    district,
+    street,
+    building,
+  }: RegisterRequest) => Promise<any>;
+  verify: (token: string) => Promise<any>;
 };
 
 const AuthContext = React.createContext<Partial<AuthProps>>({});
@@ -24,13 +34,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [authState, setAuthState] = React.useState<{
     isAuthenticated: boolean | null,
     token: string | null,
-    tel: string | null,
-  }>({isAuthenticated: null,
-      tel: null,
+    mobile: string | null,
+  }>({
+      isAuthenticated: null,
+      mobile: null,
       token: null
     })
 
-  const login = React.useCallback(async (tel: string, password: string) => {
+  const login = React.useCallback(async (mobile: string, password: string) => {
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/login`, {
         headers: {
@@ -38,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
         method: "POST",
         body: JSON.stringify({
-          mobileOrEmail: tel,
+          mobileOrEmail: mobile,
           password: password,
         } as LoginRequest),
       });
@@ -54,10 +65,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
-          tel: tel,
+          mobile: mobile,
         });
       } else {
-        Alert.alert("唔好意思...", "請稍後再試");
         throw new Error(result.errMess as string);
       };
     } catch (error) {
@@ -70,10 +80,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = React.useCallback(async() => {
     await setStorageItemAsync(`${process.env.EXPO_PUBLIC_API_KEY}`, null)
-    setAuthState({isAuthenticated: false, tel: null, token: null})
+    setAuthState({isAuthenticated: false, mobile: null, token: null})
   },[]);
 
-  const register = React.useCallback(async(tel: string, password: string) => {
+  const register = React.useCallback(async({
+      displayName,
+      mobile,
+      email,
+      password,
+      confirmPassword,
+      district,
+      street,
+      building,
+    }: RegisterRequest) => {
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/register`,{
         headers:{
@@ -81,8 +100,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
         method:"POST",
         body:JSON.stringify({
-            mobile: tel,
-            password: password
+          displayName,
+          mobile,
+          email,
+          password,
+          confirmPassword,
+          district,
+          street,
+          building,
           })  
         }
       )
@@ -91,10 +116,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
-          tel: tel,
+          mobile: mobile,
         })
       } else if (result.isErr){
-        Alert.alert('請重新註冊');
+        // Alert.alert('請重新註冊');
         throw new Error(result.errMess)
       };
     } catch (err) {
@@ -103,12 +128,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   },[])
 
+  const verify = React.useCallback(async (token: string) => {
+    if (token === null) {
+      return false;
+    } else {
+      try {
+        console.log(token);
+        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          method: "GET",
+        });
+        if (!res.ok) {
+          throw new Error(`HTTP error ${res.status}`);
+        }
+        const result = await res.json();
+        if (!result.isErr) {
+          setAuthState({
+            isAuthenticated: true,
+            token: token,
+            mobile: result.data.mobile,
+          });
+          return true;  // Verification successful
+        } else {
+          throw new Error(result.errMess);
+        }
+      } catch (error) {
+        console.error('Error verifying:', error);
+        return false;  // Verification failed
+      }
+    }
+  }, []);
+  
+  
+
   const contextValue = React.useMemo(() => ({
     authState,
     login: login,
     logout: logout,
     register: register,
-  }), [authState, login, register, logout])
+    verify : verify
+  }), [authState, login, register, logout, verify])
 
   return (
     <AuthContext.Provider value={contextValue}>
