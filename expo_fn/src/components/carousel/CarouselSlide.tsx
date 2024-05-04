@@ -1,15 +1,12 @@
 import Colors from "@/src/constants/Colors";
 import React from "react";
-import { Image, Text, View, StyleSheet, ColorSchemeName } from "react-native";
+import { Image, Text, View, StyleSheet, ColorSchemeName, ImageBackground } from "react-native";
 
 type CarouselSlideProps = {
   data: {
     title?: string;
-    subtitle?: string;
-    info: string;
-    info2: string;
-    info3: string;
-    info4: string;
+    type: string;
+    infos: string | string[] | { text: string, checked: boolean }[] | any;
     image?: any;
   };
   colorScheme: ColorSchemeName;
@@ -25,37 +22,45 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         {/* Conditionally rendering title or subtitle */}
         <Text
           style={[
-            ( data.title ) ? ( styles.title ) : ( styles.subtitle ),
+            styles.title,
             { color: Colors[colorScheme ?? "light"].tint },
           ]}
         >
-          {( data.title ) ? ( data.title ) : ( data.subtitle )}
+          {data.title}
         </Text>
-        <Text
-          style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
-        >
-          {data.info}
-        </Text>
-        <Text
-          style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
-        >
-          {data.info2}
-        </Text>
-        <Text
-          style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
-        >
-          {data.info3}
-        </Text>
-        <Text
-          style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
-        >
-          {data.info4}
-        </Text>
+        {
+          data.type === "paragraph" &&
+          <Text style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}>
+            {data.infos}
+          </Text>
+        }
+        {
+          data.type === "checklist" &&
+          data.infos.map((obj: { text: string, checked: boolean }, id: number) =>
+            <Text style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]} key={id} >
+              {obj.text}
+            </Text>)
+        }
+        {
+          data.type === "list" &&
+          data.infos.map((info: string, id: number) =>
+            <Text style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]} key={id} >
+              {info}
+            </Text>)
+        }
+
+
+
+
+
+
+        
+        
       </View>
       {/* Conditionally rendering title or subtitle */}
-      {( data.image ) ? (
+      {(data.image) ? (
         <Image source={data.image} style={styles.img} />
-        ) : ( null )
+      ) : (null)
       }
     </View>
   );
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom:10,
+    paddingBottom: 10,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "flex-start",
