@@ -90,7 +90,7 @@ const OrderForm: React.FC = () => {
     ) {
       setDialogIsOpen(true);
     } else {
-      console.log('Form is not yet completed.')
+      console.warn('Form is not yet completed.')
     }
   },[formInputFlags.hasStep123Completed]
   );
@@ -154,8 +154,8 @@ export default OrderForm;
 const styles = StyleSheet.create({
   formBox: {
     paddingHorizontal: 20,
-    gap: 10,
-    paddingTop: 10,
+    gap: 20,
+    paddingTop: 40,
     paddingBottom: 20,
     width: "100%",
     alignItems: "center",

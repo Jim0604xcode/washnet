@@ -113,6 +113,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       )
       const result = await res.json()
       if (!result.isErr){
+        await setStorageItemAsync(
+          `${process.env.EXPO_PUBLIC_API_KEY}`,
+          result.data.token
+        );
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
@@ -133,7 +137,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     } else {
       try {
-        console.log(token);
         const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -148,7 +151,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setAuthState({
             isAuthenticated: true,
             token: token,
-            mobile: result.data.mobile,
+            mobile: result.data.tel,
           });
           return true;  // Verification successful
         } else {

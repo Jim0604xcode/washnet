@@ -84,7 +84,7 @@ const ConfirmDialog = ({
     };
     submission.mutate(fetchFormValue, {
       onSuccess: () => {
-        console.log('Form submitted successfully', fetchFormValue);
+        console.log('Form submitted successfully');
         setFormValue(defaultFormValue);
         setPc("1");
         setRemarks("");

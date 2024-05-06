@@ -197,8 +197,9 @@ const styles = StyleSheet.create({
       minHeight: 80,
       maxHeight: 350,
       borderRadius: 14,
-      paddingHorizontal: 20,
       paddingVertical: 20,
+      paddingLeft: 24,
+      paddingRight: 20,
       alignItems: "center",
       justifyContent: "flex-start",
       width: "100%"

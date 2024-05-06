@@ -10,6 +10,7 @@ import { FormButtonControls, FormInputFlags, Order } from '@/src/models';
 import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { IconButton } from 'react-native-paper';
+import { parseAndAddDays } from '@/src/utils/parseAndAddDays';
 
 type PickupButtonProps = {
     formBtnCtrls: FormButtonControls;
@@ -81,7 +82,9 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       setFormValue(prev => ({ ...prev, pickupDateTime: combinedDateTime }));
     }
   };
-
+  const dayBeforeDelivery = React.useMemo(()=>{
+    return parseAndAddDays(formValue.deliveryDateTime,'YYYY-MM-DD ddd h:mm A', -1)
+  }, [formValue.deliveryDateTime])
   const setTime = (event: DateTimePickerEvent, selectedTime?: Date) => {
     const currentTime = selectedTime || pickupTime;
     setPickupTime(currentTime); // Update the time state
@@ -153,6 +156,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           value={pickupDate}
           onChange={setDate}
           minimumDate={tomorrow}
+          maximumDate={dayBeforeDelivery && dayBeforeDelivery}
           accentColor={Colors[colorScheme?? 'light'].tint}
           textColor={Colors[colorScheme?? 'light'].text}
           positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
@@ -170,7 +174,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
           neutralButton={{label: '重設', textColor: Colors[colorScheme?? 'light'].outline}}
           negativeButton={{label: '取消', textColor: Colors[colorScheme?? 'light'].outline}}
-          minuteInterval={5}
+          minuteInterval={30}
         />
         <IconButton 
           icon={'close'} 
@@ -209,7 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    },
+  },
   btnText: {
     fontSize: 16,
     fontWeight: "bold",

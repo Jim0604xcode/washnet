@@ -1,13 +1,10 @@
-import { Link } from "expo-router";
-import React, { Suspense, useState } from "react";
+import React from "react";
 import {
-  Alert,
   Dimensions,
-  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -16,17 +13,22 @@ import {
 } from "react-native";
 import Colors from "@/src/constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
-import { ActivityIndicator, Button, TextInput } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Button, TextInput } from "react-native-paper";
 import { useAuth } from "@/src/context/AuthContext";
 import { useForm, Controller } from "react-hook-form";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView } from "react-native-gesture-handler";
+import { SegmentedButtons } from "react-native-paper";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const RegisterScreen = () => {
-  const width = Dimensions.get("window").width;
   const colorScheme = useColorScheme();
-  const { register, login } = useAuth();
+  const width = Dimensions.get("window").width;
+  const { register } = useAuth();
   const {
     control,
     handleSubmit,
@@ -46,12 +48,32 @@ const RegisterScreen = () => {
   });
 
   const onRegister = async (data: any) => {
-    console.log(data);
-    const result = await register!(data);
-    if (result && !result.isErr) {
-      // await login!(getValues(mobile), getValues(password));
-    };
+    await register!(data);
   };
+  const [segment, setSegment] = React.useState("login");
+  const opacity = useSharedValue(1);
+  const translateX = useSharedValue(0);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+      transform: [{ translateX: translateX.value }],
+    };
+  });
+
+  const leftIn = React.useCallback(() => {
+    opacity.value = 0;
+    translateX.value = -40;
+    opacity.value = withTiming(1, { duration: 300 });
+    translateX.value = withTiming(0, { duration: 300 });
+  }, [segment]);
+
+  const rightIn = React.useCallback(() => {
+    opacity.value = 0;
+    translateX.value = 40;
+    opacity.value = withTiming(1, { duration: 300 });
+    translateX.value = withTiming(0, { duration: 300 });
+  }, [segment]);
 
   return (
     <View
@@ -64,34 +86,74 @@ const RegisterScreen = () => {
       ]}
     >
       <StatusBar style="dark" />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.intro}>
-          <Text style={styles.title}>註冊用戶</Text>
-          <Text style={styles.content}>
-            {"我們將以 "}
-            <FontAwesome
-              name="whatsapp"
-              size={18}
-              color={Colors[colorScheme ?? "light"].text}
-            />
-            {" WhatsApp聯絡閣下號碼"}
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={styles.intro}>
+        <Text style={styles.title}>註冊用戶</Text>
+        <Text style={styles.content}>
+          {"我們將以 "}
+          <FontAwesome
+            name="whatsapp"
+            size={18}
+            color={Colors[colorScheme ?? "light"].text}
+          />
+          {" WhatsApp聯絡閣下號碼"}
+        </Text>
+      </View>
       <KeyboardAvoidingView
+        style={{flex: 1}}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.loginBox}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Adjust based on your app's header height or any top padding
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inner}>
+      <View style={styles.formBox}>
+        <SegmentedButtons
+          value={segment}
+          onValueChange={setSegment}
+          buttons={[
+            {
+              value: "login",
+              label: "登入資料",
+              icon: "login",
+              onPress: () => {
+                leftIn();
+              },
+            },
+            {
+              value: "address",
+              label: "收送地址",
+              icon: "map-marker",
+              onPress: () => {
+                rightIn();
+              },
+            },
+          ]}
+          theme={{
+            colors: {
+              secondaryContainer: Colors.light.tertiary,
+              onSecondaryContainer: Colors.light.text,
+              onSurface: Colors.light.outline,
+              outline: Colors.light.outline,
+            },
+          }}
+        />
+        {segment === "login" && (
+          <Animated.View style={[styles.inner, animatedStyles]}>
             <Controller
               control={control}
               name="mobile"
               rules={{
                 required: "需要聯絡閣下以收衫送衫",
-                minLength: { value: 8, message: "Mobile number must be 8 digits" },
-                maxLength: { value: 8, message: "Mobile number must be 8 digits" },
-                pattern: { value: /^[0-9]+$/, message: "Only numeric values are allowed" }
+                minLength: {
+                  value: 8,
+                  message: "Mobile number must be 8 digits",
+                },
+                maxLength: {
+                  value: 8,
+                  message: "Mobile number must be 8 digits",
+                },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Only numeric values are allowed",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -120,18 +182,27 @@ const RegisterScreen = () => {
                 />
               )}
             />
-            {errors.mobile && <Text style={styles.errorText}>{errors.mobile.message}</Text>}
+            {errors.mobile && (
+              <Text style={styles.errorText}>{errors.mobile?.message}</Text>
+            )}
             <Controller
               control={control}
               name="password"
               rules={{
                 required: "Password is required",
-                minLength: { value: 8, message: "Password must be at least 8 characters" },
-                maxLength: { value: 16, message: "Password can be no more than 16 characters" },
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
+                maxLength: {
+                  value: 16,
+                  message: "Password can be no more than 16 characters",
+                },
                 pattern: {
                   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                  message: "Password must include at least one lowercase letter, one uppercase letter, and one number"
-                }
+                  message:
+                    "Password must include at least one lowercase letter, one uppercase letter, and one number",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -142,6 +213,7 @@ const RegisterScreen = () => {
                   onChangeText={onChange}
                   onBlur={onBlur}
                   autoComplete="password"
+                  autoCapitalize="none"
                   secureTextEntry={true}
                   maxLength={16}
                   theme={{
@@ -159,14 +231,17 @@ const RegisterScreen = () => {
                 />
               )}
             />
-            {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password?.message}</Text>
+            )}
 
             <Controller
               control={control}
               name="confirmPassword"
               rules={{
                 required: "Confirm password is required",
-                validate: value => value === getValues('password') || "Passwords do not match"
+                validate: (value) =>
+                  value === getValues("password") || "Passwords do not match",
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -179,6 +254,7 @@ const RegisterScreen = () => {
                   autoComplete="password"
                   secureTextEntry={true}
                   maxLength={16}
+                  autoCapitalize="none"
                   theme={{
                     colors: { onSurfaceVariant: Colors.light.outline },
                   }}
@@ -194,14 +270,21 @@ const RegisterScreen = () => {
                 />
               )}
             />
-          {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>}
+            {errors.confirmPassword && (
+              <Text style={styles.errorText}>
+                {errors.confirmPassword?.message}
+              </Text>
+            )}
 
             <Controller
               control={control}
               name="email"
               rules={{
                 required: "Email is required",
-                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email format" }
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Invalid email format",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -212,7 +295,9 @@ const RegisterScreen = () => {
                   onChangeText={onChange}
                   onBlur={onBlur}
                   autoComplete="email"
+                  keyboardType="email-address"
                   maxLength={30}
+                  autoCapitalize="none"
                   theme={{
                     colors: { onSurfaceVariant: Colors.light.outline },
                   }}
@@ -228,15 +313,26 @@ const RegisterScreen = () => {
                 />
               )}
             />
-            {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
-
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email?.message}</Text>
+            )}
+          </Animated.View>
+        )}
+        {segment === "address" && (
+          <Animated.View style={[styles.inner, animatedStyles]}>
             <Controller
               control={control}
               name="displayName"
               rules={{
                 required: "Display name is required",
-                minLength: { value: 2, message: "Display name must be at least 2 characters" },
-                maxLength: { value: 16, message: "Display name can be no more than 16 characters" }
+                minLength: {
+                  value: 2,
+                  message: "Display name must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 16,
+                  message: "Display name can be no more than 16 characters",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -247,6 +343,7 @@ const RegisterScreen = () => {
                   onChangeText={onChange}
                   onBlur={onBlur}
                   autoComplete="name"
+                  autoCapitalize="words"
                   maxLength={16}
                   theme={{
                     colors: { onSurfaceVariant: Colors.light.outline },
@@ -263,15 +360,24 @@ const RegisterScreen = () => {
                 />
               )}
             />
-            {errors.displayName && <Text style={styles.errorText}>{errors.displayName.message}</Text>}
-
+            {errors.displayName && (
+              <Text style={styles.errorText}>
+                {errors.displayName?.message}
+              </Text>
+            )}
             <Controller
               control={control}
               name="district"
               rules={{
                 required: "This field is required",
-                minLength: { value: 2, message: "Must be at least 2 characters" },
-                maxLength: { value: 30, message: "Can be no more than 30 characters" }
+                minLength: {
+                  value: 2,
+                  message: "Must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Can be no more than 30 characters",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -281,8 +387,8 @@ const RegisterScreen = () => {
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  // autoComplete="password"
                   maxLength={30}
+                  autoCapitalize="words"
                   theme={{
                     colors: { onSurfaceVariant: Colors.light.outline },
                   }}
@@ -298,15 +404,23 @@ const RegisterScreen = () => {
                 />
               )}
             />
-            {errors.district && <Text style={styles.errorText}>{errors.district.message}</Text>}
+            {errors.district && (
+              <Text style={styles.errorText}>{errors.district?.message}</Text>
+            )}
 
             <Controller
               control={control}
               name="street"
               rules={{
                 required: "This field is required",
-                minLength: { value: 2, message: "Must be at least 2 characters" },
-                maxLength: { value: 30, message: "Can be no more than 30 characters" }
+                minLength: {
+                  value: 2,
+                  message: "Must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Can be no more than 30 characters",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -316,8 +430,8 @@ const RegisterScreen = () => {
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  // autoComplete="password"
                   maxLength={30}
+                  autoCapitalize="words"
                   theme={{
                     colors: { onSurfaceVariant: Colors.light.outline },
                   }}
@@ -333,15 +447,23 @@ const RegisterScreen = () => {
                 />
               )}
             />
-            {errors.street && <Text style={styles.errorText}>{errors.street.message}</Text>}
+            {errors.street && (
+              <Text style={styles.errorText}>{errors.street?.message}</Text>
+            )}
 
             <Controller
               control={control}
               name="building"
               rules={{
                 required: "This field is required",
-                minLength: { value: 2, message: "Must be at least 2 characters" },
-                maxLength: { value: 30, message: "Can be no more than 30 characters" }
+                minLength: {
+                  value: 2,
+                  message: "Must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Can be no more than 30 characters",
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -351,7 +473,7 @@ const RegisterScreen = () => {
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  // autoComplete="password"
+                  autoCapitalize="words"
                   maxLength={30}
                   theme={{
                     colors: { onSurfaceVariant: Colors.light.outline },
@@ -368,10 +490,13 @@ const RegisterScreen = () => {
                 />
               )}
             />
-          {errors.building && <Text style={styles.errorText}>{errors.building.message}</Text>}
-
-          </View>
-        </TouchableWithoutFeedback>
+            {errors.building && (
+              <Text style={styles.errorText}>{errors.building?.message}</Text>
+            )}
+          </Animated.View>
+        )}
+      </View>
+      </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
       <Button
         style={styles.button}
@@ -395,14 +520,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 20,
-    gap: 20,
   },
   intro: {
     gap: 10,
     alignItems: "center",
-    display: "flex",
-    justifyContent: "flex-start",
-    width: "100%",
+    justifyContent: "center",
   },
   title: {
     color: Colors.light.text,
@@ -414,19 +536,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  loginBox: {
-    alignItems: "center",
-    justifyContent: "center",
+  formBox: {
     flex: 1,
     width: "100%",
     gap: 20,
+    padding: 40,
+    justifyContent: 'center'
   },
   inner: {
     gap: 10,
-    flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 40,
   },
   input: {
     width: "100%",
@@ -438,7 +558,8 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 280,
-    marginBottom: 10,
+    marginBottom: 34
   },
+
 });
 export default RegisterScreen;

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
 import { Text } from "@/src/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import { FormButtonControls, FormInputFlags, Order } from '@/src/models';
 import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { IconButton } from 'react-native-paper';
+import { parseAndAddDays } from '@/src/utils/parseAndAddDays';
 
 type DeliveryButtoProps = {
     formBtnCtrls: FormButtonControls;
@@ -66,6 +67,9 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
     }
   }, 100);
   const dayAfterTomorrow = dayjs().add(2, 'days').toDate();
+  const dayAfterPickup = useMemo(() =>
+     parseAndAddDays(formValue.pickupDateTime, 'YYYY-MM-DD ddd h:mm A', 1)
+  , [formValue.pickupDateTime]);
   const [deliveryDate, setDeliveryDate] = useState<Date>(dayAfterTomorrow);
   const [deliveryTime, setDeliveryTime] = useState<Date>(dayAfterTomorrow);
 
@@ -152,7 +156,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           disabled={!isOpen3}
           value={deliveryDate}
           onChange={setDate}
-          minimumDate={dayAfterTomorrow}
+          minimumDate={dayAfterPickup ?? dayAfterTomorrow}
           accentColor={Colors[colorScheme?? 'light'].tint}
           textColor={Colors[colorScheme?? 'light'].text}
           positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
@@ -170,7 +174,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
           neutralButton={{label: '重設', textColor: Colors[colorScheme?? 'light'].outline}}
           negativeButton={{label: '取消', textColor: Colors[colorScheme?? 'light'].outline}}
-          minuteInterval={5}
+          minuteInterval={30}
         />
         <IconButton 
           icon={'close'} 
@@ -192,8 +196,9 @@ const styles = StyleSheet.create({
     minHeight: 80,
     maxHeight: 175,
     borderRadius: 14,
-    paddingHorizontal: 20,
     paddingVertical: 20,
+    paddingLeft: 16,
+    paddingRight: 20,
     alignItems: "center",
     justifyContent: "flex-start",
     },
@@ -209,7 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    },
+  },
   btnText: {
     fontSize: 16,
     fontWeight: "bold",

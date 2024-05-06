@@ -69,7 +69,7 @@ const LoginScreen = () => {
         <View style={styles.intro}>
           <Text style={styles.text}>一個電話</Text>
           <Text style={styles.text}>三步落單</Text>
-          <Text style={styles.text}>幫你收衫 洗衫 送衫 👍</Text>
+          <Text style={styles.subText}>幫你收衫 洗衫 送衫 👍</Text>
         </View>
       </TouchableWithoutFeedback>
       <KeyboardAvoidingView
@@ -105,6 +105,7 @@ const LoginScreen = () => {
               value={password}
               onChangeText={handlePasswordChange}
               autoComplete="password"
+              autoCapitalize="none"
               secureTextEntry={true}
               maxLength={16}
               enterKeyHint="done"
@@ -161,7 +162,6 @@ const LoginScreen = () => {
                 )}
               </Pressable>
             </View>
-
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
+    padding: 20,
   },
   logo: {
     width: 180,
@@ -208,12 +209,12 @@ const styles = StyleSheet.create({
   }, 
   text: {
     color: Colors.light.text,
-    fontSize: 31,
+    fontSize: 36,
     fontWeight: "bold",
   },
   subText: {
-    color: Colors.light.secondary,
-    fontSize: 16,
+    color: Colors.light.text,
+    fontSize: 26,
     fontWeight: "bold",
   },
   loginBox: {
@@ -224,9 +225,9 @@ const styles = StyleSheet.create({
   },
   inner: {
     gap: 10,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
     // minHeight: 160,
     flex: 1
   },
