@@ -7,13 +7,11 @@ export const isLoggedInAPI = async (req:express.Request, res:express.Response, n
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             let token = req.headers.authorization.split(' ')[1];
             res.locals.jwt = await verifyJwt(token);
-            next()
+            next();
         }else{
             throw new Error('Please provide jwt to verify')
         }
     } catch (err) {
-        
-        errorHandler(err,req,res)
+        errorHandler(err,req,res);
     }
-    
   };
