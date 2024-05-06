@@ -1,4 +1,4 @@
-import { StyleSheet, useColorScheme } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, useColorScheme } from "react-native";
 import React, { useCallback, useState } from "react";
 import {
   Button,
@@ -9,7 +9,7 @@ import {
 } from "react-native-paper";
 import { Text } from "@/src/components/Themed"
 import Colors from "@/src/constants/Colors";
-import { UseFormRegister, set } from "react-hook-form";
+import { UseFormRegister } from "react-hook-form";
 import { FetchOrder, FormButtonControls, Order } from "@/src/models";
 import useSubmitForm from "@/src/utils/useSubmitForm";
 
@@ -128,6 +128,7 @@ const ConfirmDialog = ({
           請確認訂單
         </Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
+
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }

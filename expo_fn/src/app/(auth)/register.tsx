@@ -4,7 +4,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -23,7 +22,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const RegisterScreen = () => {
   const colorScheme = useColorScheme();
@@ -32,7 +30,7 @@ const RegisterScreen = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, dirtyFields },
     getValues,
   } = useForm({
     defaultValues: {
@@ -48,8 +46,17 @@ const RegisterScreen = () => {
   });
 
   const onRegister = async (data: any) => {
-    await register!(data);
+    if (!dirtyFields.mobile || !dirtyFields.email || !dirtyFields.password || !dirtyFields.confirmPassword) {
+      setSegment("login");
+      leftIn();
+    } else if (!dirtyFields.displayName || !dirtyFields.district || !dirtyFields.street || !dirtyFields.building) {
+      setSegment("address");
+      rightIn();
+    } else {
+      await register!(data)
+    }
   };
+
   const [segment, setSegment] = React.useState("login");
   const opacity = useSharedValue(1);
   const translateX = useSharedValue(0);
@@ -101,9 +108,9 @@ const RegisterScreen = () => {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Adjust based on your app's header height or any top padding
+        keyboardVerticalOffset={Platform.OS === "ios" ? 120 : 0}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.formBox}>
         <SegmentedButtons
           value={segment}
@@ -119,7 +126,7 @@ const RegisterScreen = () => {
             },
             {
               value: "address",
-              label: "收送地址",
+              label: "收發地址",
               icon: "map-marker",
               onPress: () => {
                 rightIn();
@@ -141,25 +148,25 @@ const RegisterScreen = () => {
               control={control}
               name="mobile"
               rules={{
-                required: "需要聯絡閣下以收衫送衫",
+                required: "須提供手機號碼",
                 minLength: {
                   value: 8,
-                  message: "Mobile number must be 8 digits",
+                  message: "須8位數香港號碼",
                 },
                 maxLength: {
                   value: 8,
-                  message: "Mobile number must be 8 digits",
+                  message: "須8位數香港號碼",
                 },
                 pattern: {
                   value: /^[0-9]+$/,
-                  message: "Only numeric values are allowed",
+                  message: "只接受電話號碼",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   mode="flat"
                   label="手機號碼"
-                  placeholder="請輸入手機號碼"
+                  placeholder="需要聯絡閣下收衫送衫"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
@@ -189,19 +196,19 @@ const RegisterScreen = () => {
               control={control}
               name="password"
               rules={{
-                required: "Password is required",
+                required: "須提供密碼",
                 minLength: {
                   value: 8,
-                  message: "Password must be at least 8 characters",
+                  message: "至少8字元",
                 },
                 maxLength: {
                   value: 16,
-                  message: "Password can be no more than 16 characters",
+                  message: "上限16字元",
                 },
                 pattern: {
                   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
                   message:
-                    "Password must include at least one lowercase letter, one uppercase letter, and one number",
+                    "密碼須包括大、小階英文及數字",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -239,9 +246,9 @@ const RegisterScreen = () => {
               control={control}
               name="confirmPassword"
               rules={{
-                required: "Confirm password is required",
+                required: "須確認密碼",
                 validate: (value) =>
-                  value === getValues("password") || "Passwords do not match",
+                  value === getValues("password") || "密碼不符",
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -280,10 +287,10 @@ const RegisterScreen = () => {
               control={control}
               name="email"
               rules={{
-                required: "Email is required",
+                required: "須提供電郵",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
+                  message: "不符電郵格式",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -324,14 +331,14 @@ const RegisterScreen = () => {
               control={control}
               name="displayName"
               rules={{
-                required: "Display name is required",
+                required: "請讓本店知道閣下稱呼",
                 minLength: {
                   value: 2,
-                  message: "Display name must be at least 2 characters",
+                  message: "至少2字元",
                 },
                 maxLength: {
                   value: 16,
-                  message: "Display name can be no more than 16 characters",
+                  message: "上限16字元",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -369,21 +376,21 @@ const RegisterScreen = () => {
               control={control}
               name="district"
               rules={{
-                required: "This field is required",
+                required: "須提供地區用作收衫送衫",
                 minLength: {
                   value: 2,
-                  message: "Must be at least 2 characters",
+                  message: "至少2字元",
                 },
                 maxLength: {
                   value: 30,
-                  message: "Can be no more than 30 characters",
+                  message: "上限30字元",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   mode="flat"
                   label="地區"
-                  placeholder="用作收衫送衫地址"
+                  placeholder="收衫送衫地址"
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
@@ -412,14 +419,14 @@ const RegisterScreen = () => {
               control={control}
               name="street"
               rules={{
-                required: "This field is required",
+                required: "須提供街道名稱用作收衫送衫",
                 minLength: {
                   value: 2,
-                  message: "Must be at least 2 characters",
+                  message: "至少2字元",
                 },
                 maxLength: {
                   value: 30,
-                  message: "Can be no more than 30 characters",
+                  message: "上限30字元",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -455,14 +462,14 @@ const RegisterScreen = () => {
               control={control}
               name="building"
               rules={{
-                required: "This field is required",
+                required: "須提供大廈名稱用作收衫送衫",
                 minLength: {
                   value: 2,
-                  message: "Must be at least 2 characters",
+                  message: "至少2字元",
                 },
                 maxLength: {
                   value: 30,
-                  message: "Can be no more than 30 characters",
+                  message: "上限30字元",
                 },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -541,7 +548,7 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 20,
     padding: 40,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   inner: {
     gap: 10,
@@ -553,7 +560,7 @@ const styles = StyleSheet.create({
     minWidth: 280,
   },
   errorText: {
-    color: Colors.light.secondary,
+    color: Colors.light.outline,
     fontSize: 14,
   },
   button: {
