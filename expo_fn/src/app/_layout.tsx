@@ -47,7 +47,7 @@ const StackLayout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
     </Stack>
   );

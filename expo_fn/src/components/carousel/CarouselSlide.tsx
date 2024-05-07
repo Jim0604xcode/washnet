@@ -1,6 +1,6 @@
 import Colors from "@/src/constants/Colors";
 import React from "react";
-import { Image, Text, View, StyleSheet, ColorSchemeName, ImageBackground } from "react-native";
+import { Image, Text, View, StyleSheet, ColorSchemeName, ImageBackground, useColorScheme } from "react-native";
 
 type CarouselSlideProps = {
   data: {
@@ -9,13 +9,20 @@ type CarouselSlideProps = {
     infos: string | string[] | { text: string, checked: boolean }[] | any;
     image?: any;
   };
-  colorScheme: ColorSchemeName;
 };
+
+const images = [
+  { serivce: "pw",
+    src: require('@/src/assets/images/drawing-1.png')},
+  { service: "dc",
+    src: require('@/src/assets/images/drawing-1.png')},
+]
 
 const CarouselSlide: React.FC<CarouselSlideProps> = ({
   data,
-  colorScheme,
 }) => {
+  const colorScheme = useColorScheme();
+
   return (
     <View style={styles.slide}>
       <View style={styles.textBox}>
@@ -30,9 +37,11 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         </Text>
         {
           data.type === "paragraph" &&
+
           <Text style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}>
             {data.infos}
           </Text>
+          
         }
         {
           data.type === "checklist" &&
@@ -43,23 +52,16 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         }
         {
           data.type === "list" &&
-          data.infos.map((info: string, id: number) =>
+          data.infos.map((info: string, id: number) => (
             <Text style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]} key={id} >
               {info}
-            </Text>)
+            </Text>
+          ))
         }
 
-
-
-
-
-
-        
-        
       </View>
-      {/* Conditionally rendering title or subtitle */}
-      {(data.image) ? (
-        <Image source={data.image} style={styles.img} />
+      {(data.type === "list") ? (
+      <Image source={images[0].src} style={styles.img} />
       ) : (null)
       }
     </View>

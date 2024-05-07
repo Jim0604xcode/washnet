@@ -59,11 +59,13 @@ export class UserService {
     async login(userData:LoginUser){
         const txn = await this.knex.transaction()
         try {
-            
+            console.log(userData.mobile_or_email)
+            console.log(userData.password)
+
             let result = await txn.select("id","role","password","status").from("users")
             .where("mobile",userData.mobile_or_email)
             .orWhere("email",userData.mobile_or_email)
-            
+            console.log(result[0])
             if(result.length === 0){
                 throw new Error('Not exist this user')
             }
@@ -136,8 +138,11 @@ export class UserService {
     async getMobileAndPickUpAddress(userId:string):Promise<{tel:string,fullAddress:string}>{
         const txn = await this.knex.transaction()
         try {
-            let result = await txn.select("users.mobile as tel","customer_meta.full_address as fullAddress","status").from("users")
-            .join("customer_meta","customer_meta.customer_id",userId)
+            let result = await txn.select(
+                "users.mobile as tel",
+                "customer_meta.full_address as fullAddress",
+                "status").from("users")
+            .join("customer_meta", "customer_meta.customer_id", "users.id")
             .where("users.id",userId)
             
             

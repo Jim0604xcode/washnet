@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 //     info2: '○ 只需兩天送達',
 //     info3: '○ 另設加急服務',
 //     info4: '○ $8/磅（免運費）',
-//     image: require('@/assets/images/drawing-1.png'),
+//     image: require('@/src/assets/images/drawing-1.png'),
 //   },
 //   {
 //     subtitle: '輕鬆洗衫｜每磅$8｜零煩惱',
@@ -40,10 +40,8 @@ export default function LaundryScreen() {
   useEffect(()=>{
     const main = async () =>{
       try {
-        
-        let res = await fetch(process.env.EXPO_PUBLIC_API_URL+"/theme/getEditor/pw")
+        let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/pw`)
         let json = await res.json()
-        
         if(!json.isErr){
           json.data.blocks = await JSON.parse(json.data.blocks)
           // console.log(json.data.blocks)
@@ -66,8 +64,6 @@ export default function LaundryScreen() {
           })
           // console.log(pages)
           // console.log(data)
-
-
           let newData:any = []
           data.forEach((obj:any,p:number)=>{
             
@@ -79,15 +75,11 @@ export default function LaundryScreen() {
                       title:header,
                       infos: obj.data.items.slice((x*4)-4,x*4),
                       type:"list"
-
                     })
-
                   }  
                 }
               }
-              
               if(obj.type==="checklist"){
-              
                 if(p>0){
                   for(let x=1;x<=obj.page-data[p-1].page;x++){
                     // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
@@ -100,7 +92,6 @@ export default function LaundryScreen() {
                   }  
                 }
               }
-
               if(obj.type==="paragraph"){
                 newData.push({
                   title:header,
@@ -108,25 +99,18 @@ export default function LaundryScreen() {
                   type:"paragraph"
                 })
               }
-            
             p++
-
           })
           // console.log(newData)
-
-          
-          
           setBlock(newData)
+          console.log(newData)
         }
-    
       } catch (error:any) {
         console.log(error.message)
       }
     }
     main()
   },[])
-
-
 
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
@@ -165,7 +149,7 @@ export default function LaundryScreen() {
           }
           
           renderItem={({ index }) => (
-            <CarouselSlide data={block[index]} colorScheme={colorScheme} />
+            <CarouselSlide data={block[index]} />
           )}
         />
         <Pagination 

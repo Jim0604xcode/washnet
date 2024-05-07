@@ -10,7 +10,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/src/context/AuthContext";
-import { useStorageState } from "../utils/useStorageState";
+import { setStorageItemAsync, useStorageState } from "../utils/useStorageState";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
 
@@ -27,29 +27,32 @@ const index = () => {
     })
   );
 
-  const redirectToLogin = React.useCallback(() => {
-    const timeoutId = setTimeout(() => router.push('/login'), 800);
-    return () => clearTimeout(timeoutId);
-  }, [router]);
 
   React.useEffect(() => {
     sv.value = sv.value + 0.4;
   },[])
 
+  const redirectToLogin = React.useCallback(() => {
+    const timeoutId = setTimeout(() => router.push('/login'), 600);
+    return () => clearTimeout(timeoutId);
+  }, [router]);
+
   React.useEffect(() => {
-    if (!token) {
-      return redirectToLogin();
-    } else {
-      verify!(token).then(isVerified => {
+    if (token){
+      verify!(token)
+      .then(isVerified => {
         console.log('Verification:', isVerified);
         if (!isVerified) {
           return redirectToLogin();
         }
-      }).catch(err => {
+      })
+      .catch(err => {
         console.error('Verification failed:', err);
-        return redirectToLogin();
       });
+    } else {
+      return redirectToLogin();
     }
+  
   }, [token, redirectToLogin]);
   
   return (

@@ -21,7 +21,7 @@ interface AuthProps {
     street,
     building,
   }: RegisterRequest) => Promise<any>;
-  verify: (token: string) => Promise<any>;
+  verify: (token: string | null) => Promise<any>;
 };
 
 const AuthContext = React.createContext<Partial<AuthProps>>({});
@@ -132,7 +132,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   },[])
 
-  const verify = React.useCallback(async (token: string) => {
+  const verify = React.useCallback(async (token: string | null) => {
     if (token === null) {
       return false;
     } else {
@@ -141,7 +141,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           headers: {
             'Authorization': `Bearer ${token}`,
           },
-          method: "GET",
         });
         if (!res.ok) {
           throw new Error(`HTTP error ${res.status}`);
