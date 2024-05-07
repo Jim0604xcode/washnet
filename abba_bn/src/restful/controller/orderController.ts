@@ -63,7 +63,6 @@ export class OrderController implements IOrderController{
     async getUserAllOrder(req:express.Request,res:express.Response){
         try {
             let jwt = res.locals.jwt as JWT
-            
             let orders = await orderService.getUserAllOrder(jwt.usersId,jwt.role)
             orders = orders.map(obj=>Object.assign(obj,{
                 district:obj.fullAddress.split('|_|')[0],
@@ -77,6 +76,23 @@ export class OrderController implements IOrderController{
             })
         }catch(err){
             errorHandler(err,req,res)
+        }
+    }
+
+    async getUserOrdersById(req:express.Request, res:express.Response){
+        try {
+            let jwt = res.locals.jwt as JWT;
+            let orders = await orderService.getUserOrdersById(jwt.usersId);
+            orders = orders.map(obj => 
+                Object.assign(obj, {
+                    district:obj.fullAddress.split('|_|')[0],
+                    street:obj.fullAddress.split('|_|')[1],
+                    building:obj.fullAddress.split('|_|')[2]
+                })
+            );
+            res.json({data:orders, isErr:false, errMess:null});
+        } catch (err) {
+            errorHandler(err, req, res);
         }
     }
     

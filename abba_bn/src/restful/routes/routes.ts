@@ -37,7 +37,8 @@ export class OrderRoutes extends Routes{
         this.routes.post('/addOrder',isLoggedInAPI,controller.addOrder)
         
         this.routes.get('/getUserAllOrder',isLoggedInAPI,controller.getUserAllOrder)
-        
+        this.routes.get('/userOrders', isLoggedInAPI, controller.getUserOrdersById)
+
         this.routes.get('/getOrderPickUpAddressAndMobile/:id',isLoggedInAPI,controller.getPickUpAddressAndMobile)
     }
 }

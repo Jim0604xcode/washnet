@@ -1,5 +1,4 @@
 import { SharedValue } from "react-native-reanimated";
-import { KeyboardTypeOptions } from "react-native/Libraries/Components/TextInput/TextInput";
 
 export type OrderType = "pw" | "dc" | "ws" | "lw" | "cs" | "fw";
 
@@ -61,4 +60,19 @@ export interface RegisterRequest {
   district: string,
   street: string,
   building: string,
+}
+
+export interface UserOrder {
+  orderId: number
+  orderType: OrderType
+  pc: number
+  tel: string
+  pickupDateTime: string
+  deliveryDateTime: string
+  fullAddress: string
+  remarks: string
+  orderStatus: string
+  district: string
+  street: string
+  building: string
 }

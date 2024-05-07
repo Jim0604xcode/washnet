@@ -46,6 +46,32 @@ class OrderService{
             throw new Error(`${err.message}`)
         }
     }
+
+    async getUserOrdersById(userId:string){
+        const txn = await this.knex.transaction();
+        try {
+            
+            let result = await txn.select(
+                    "id as orderId",
+                    "order_type as orderType",
+                    "pc",
+                    "tel",
+                    "pickup_date_time as pickupDateTime",
+                    "delivery_date_time as deliveryDateTime",
+                    "full_address as fullAddress",
+                    "remarks",
+                    "status as orderStatus")
+                .from("orders")
+                .where("customer_id", userId)
+                .orderBy("orders.created_at","desc");
+            
+            await txn.commit();
+            return result;
+        } catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`);
+        }
+    }
     
     async getPickUpAddress(orderId:number):Promise<{fullAddress:string}>{
         const txn = await this.knex.transaction()
