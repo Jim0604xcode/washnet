@@ -6,8 +6,10 @@ import { JWT,Role,createJwt } from "../../jwt";
 import { v4 as uuid } from 'uuid';
 import { hashPassword } from "../../bcrypt";
 import { userService } from "../service/userService";
+import nodemailer, { Transporter } from 'nodemailer';
 
-// import { encryptionData } from "../../language/crypt";
+import { env_config } from "../../env";
+import {google} from 'googleapis'
 type LoginUser = {
     mobileOrEmail:string
     password:string
@@ -42,6 +44,103 @@ export let loginUserSchema = yup.object().shape({
 
 export class UserController implements IUserController{
     constructor(){}
+    async forgetPassword(req:express.Request,res:express.Response){
+      try {
+      const CLIENT_ID = '116868407254-0dju0qqkm92mdaoltcplkc25l55n6vtq.apps.googleusercontent.com';
+      const CLIENT_SECRET = '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';
+      const REDIRECT_URL = 'https://developers.google.com/oauthplayground';
+      const REFRESH_TOKEN = "1//04KRnqPrv7xJoCgYIARAAGAQSNwF-L9Ir3RM7hpIttG_rNA0zftsDOUk0-TwygGUy2bUMSlVmHAlPT-spDHpOdVnF2Dx5j2mE48U"
+
+      const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
+      oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+      const accessToken:any = await oAuth2Client.getAccessToken();
+      console.log(oAuth2Client)
+        let jwt = res.locals.jwt as JWT
+        // let {email} = await userService.forgetPass(jwt.usersId)
+        let token = await createJwt(jwt.usersId,jwt.role,300)
+        const transporter: Transporter<any> = nodemailer.createTransport({
+          service: 'gmail', // 或者其他支持的郵件服務名稱
+          auth: {
+            type: 'OAuth2',
+            user: 'logbechan@gmail.com',
+            clientId: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
+            refreshToken:REFRESH_TOKEN,
+            accessToken:accessToken            
+          },
+        });
+        const mailOptions = {
+          from: "codemasterpro1314@gmail.com",
+          to: "logbechan@gmail.com",
+          subject: 'Password Reset',
+          text: `Click the following link to reset your password: ${env_config.PORTAL_HOST}/reset-password/${token}`,
+        };
+        await transporter.sendMail(mailOptions)
+        
+        res.json({
+          data:null,
+          isErr:false,
+          errMess:null
+        })
+
+      } catch (err) {
+        console.log(err.message)  
+        // errorHandler(err,req,res)
+      }
+    }
+    async checkResetPasswordToken(req:express.Request,res:express.Response){
+      try {
+        let jwt = res.locals.jwt as JWT
+        console.log(jwt)
+        
+        res.json({
+            data:null,
+            isErr:false,
+            errMess:null
+        })
+        
+    
+      } catch (err) {
+        
+        errorHandler(err,req,res)
+      }
+    }
+    async resetPassword(req:express.Request,res:express.Response){
+      try {
+        let jwt = res.locals.jwt as JWT
+        console.log(jwt)
+        let userData = req.body as {password:string}
+        await userService.resetPass(jwt.usersId,userData.password)
+        
+        res.json({
+            data:null,
+            isErr:false,
+            errMess:null
+        })
+        
+    
+      } catch (err) {
+        
+        errorHandler(err,req,res)
+      }
+    }
+    async deleteUser(req:express.Request,res:express.Response){
+      try {
+          let jwt = res.locals.jwt as JWT
+          await userService.delUser(jwt.usersId)
+          
+          res.json({
+              data:null,
+              isErr:false,
+              errMess:null
+          })
+          
+      
+        } catch (err) {
+          
+          errorHandler(err,req,res)
+        }
+  }
     async login(req:express.Request,res:express.Response){
         try {
             let userData = req.body as LoginUser
@@ -50,7 +149,7 @@ export class UserController implements IUserController{
               password:userData.password
             })
             console.log(id,role)
-            let jwt = await createJwt(id,role)
+            let jwt = await createJwt(id,role,172800)
             res.json({
                 data:{
                   role:role,
@@ -94,7 +193,7 @@ export class UserController implements IUserController{
            
             })
 
-            let jwt = await createJwt(id,role)
+            let jwt = await createJwt(id,role,172800)
             
             res.json({
                 data:{
@@ -131,9 +230,9 @@ export class UserController implements IUserController{
       try {
           let jwt = res.locals.jwt as JWT
           
-          let {fullAddress} = await userService.getPickUpAddress(jwt.usersId)
+          let {tel,fullAddress} = await userService.getMobileAndPickUpAddress(jwt.usersId)
           
-          let {tel} = await userService.getMobile(jwt.usersId)
+          
           
           res.json({
               data:{

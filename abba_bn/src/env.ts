@@ -16,6 +16,7 @@ export const env_config = {
   POSTGRES_DB_TEST: '',
   POSTGRES_USER_TEST: '',
   POSTGRES_PASSWORD_TEST: '',
+  PORTAL_HOST:'',
 };
 
 populateEnv(env_config, { mode: 'halt' });

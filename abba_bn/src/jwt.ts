@@ -11,7 +11,7 @@ export type JWT = {
 
 }
 
-export const createJwt = (usersId:string,role:Role) => {
+export const createJwt = (usersId:string,role:Role,duration:number) => {
 
     // create Header
     let header = JSON.stringify({
@@ -19,7 +19,7 @@ export const createJwt = (usersId:string,role:Role) => {
         'alg':'HS384'
     })
     let now = Math.ceil(new Date().getTime() / 1000)
-    let exp = now + 172800;
+    let exp = now + duration;
     // console.log('22',now,exp)
     //create the token payload
     let payload = JSON.stringify({
@@ -82,9 +82,9 @@ export const verifyJwt = (jwt:string) => {
 const base64EncodeHook = (text:string) => {
     //'+' to '-' '/'to'_' '='to''
     let p = text
-    p = p.replaceAll('+','-')
-    p = p.replaceAll('/','_')
-    p = p.replaceAll('=','')
+    p = p.replace(/\+/g,'-')
+    p = p.replace(/\//g,'_')
+    p = p.replace(/=/g,'')
 
     return base64encode(p)
 }

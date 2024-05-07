@@ -21,14 +21,56 @@ export class UserService {
     constructor(protected knex:Knex) {
      
     }
-    
+    async resetPass(userId:string,password:string){
+        const txn = await this.knex.transaction()
+        try {
+            await txn("users").update("password",password).where("id",userId).andWhere("status","active")
+            
+            await txn.commit()
+            return 
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async forgetPass(userId:string){
+        const txn = await this.knex.transaction()
+        try {
+            let result = await txn.select("email").from("users").where("id",userId).andWhere("status","active")
+            
+            await txn.commit()
+            return result[0]
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async delUser(userId:string){
+        const txn = await this.knex.transaction()
+        try {
+            await txn("users").update("status","non_active").where("id",userId)
+            await txn.commit()
+            return
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
     async login(userData:LoginUser){
         const txn = await this.knex.transaction()
         try {
-            
-            let result = await this.knex.select("id","role","password").from("users").where("mobile",userData.mobile_or_email).orWhere("email",userData.mobile_or_email)
+            console.log(userData.mobile_or_email)
+            console.log(userData.password)
+
+            let result = await txn.select("id","role","password","status").from("users")
+            .where("mobile",userData.mobile_or_email)
+            .orWhere("email",userData.mobile_or_email)
+            console.log(result[0])
             if(result.length === 0){
                 throw new Error('Not exist this user')
+            }
+            if(result[0].status==="non_active"){
+                throw new Error('Non active user')
             }
             let checked = await checkPassword(userData.password,result[0].password);
             if(!checked){
@@ -54,7 +96,8 @@ export class UserService {
                     mobile:userData.mobile,
                     email:userData.email,
                     password:userData.password,
-                    role:userData.role
+                    role:userData.role,
+                    status:"active"
                 }]).into("users").returning(["id","role"])
             await txn.insert([
                 {
@@ -77,9 +120,12 @@ export class UserService {
         const txn = await this.knex.transaction()
         try {
             
-            let result = await txn.select("role").from("users").where("id",userId)
+            let result = await txn.select("role","status").from("users").where("id",userId)
             if(result.length === 0){
                 throw new Error('Not exist this user')
+            }
+            if(result[0].status==="non_active"){
+                throw new Error('Non active user')
             }
             await txn.commit()
             return result[0]
@@ -89,13 +135,22 @@ export class UserService {
         }
         
     }
-    async getPickUpAddress(userId:string):Promise<{fullAddress:string}>{
+    async getMobileAndPickUpAddress(userId:string):Promise<{tel:string,fullAddress:string}>{
         const txn = await this.knex.transaction()
         try {
+            let result = await txn.select(
+                "users.mobile as tel",
+                "customer_meta.full_address as fullAddress",
+                "status").from("users")
+            .join("customer_meta", "customer_meta.customer_id", "users.id")
+            .where("users.id",userId)
             
-            let result = await txn.select("full_address as fullAddress").from("customer_meta").where("customer_id",userId)
+            
             if(result.length === 0){
                 throw new Error('Not exist this user')
+            }
+            if(result[0].status==="non_active"){
+                throw new Error('Non active user')
             }
             await txn.commit()
             return result[0]
@@ -104,21 +159,6 @@ export class UserService {
             throw new Error(`${err.message}`)
         }
         
-    }
-    async getMobile(userId:string):Promise<{tel:string}>{
-        const txn = await this.knex.transaction()
-        try {
-            let result = await txn.select("mobile as tel").from("users").where("id",userId)
-            if(result.length === 0){
-                throw new Error('Not exist this user')
-            }            
-            await txn.commit()
-            return result[0]
-
-        }catch (err) {
-            await txn.rollback();
-            throw new Error(`${err.message}`)
-        }
     }
     async getLan(reqLan:`cn`|`eng`){
         const txn = await this.knex.transaction()
