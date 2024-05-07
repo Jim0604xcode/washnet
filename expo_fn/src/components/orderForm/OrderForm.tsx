@@ -9,22 +9,24 @@ import PickupButton from "@/src/components/orderForm/PickupButton";
 import { useSharedValue } from "react-native-reanimated";
 import DeliveryButton from "@/src/components/orderForm/DeliveryButton";
 import ConfirmDialog from "@/src/components/orderForm/ConfirmDialog";
+import { useAuth } from "@/src/context/AuthContext";
 
-export const defaultLaundryFormValue: Order = {
-  orderType: "pw",
-  pc: 1,
-  pickupDateTime: "",
-  deliveryDateTime: "",
-  tel: "51823008",
-  building: "",
-  street: "",
-  district: "",
-  fullAddress: "",
-  remarks: "",
-};
 
 const OrderForm: React.FC = () => {
   const colorScheme = useColorScheme();
+  const { authState } = useAuth();
+  const defaultLaundryFormValue: Order = {
+    orderType: "pw",
+    pc: 1,
+    pickupDateTime: "",
+    deliveryDateTime: "",
+    tel: authState?.mobile as string,
+    building: "",
+    street: "",
+    district: "",
+    fullAddress: "",
+    remarks: "",
+  };
 
   const [formValue, setFormValue] = useState<Order>(defaultLaundryFormValue);
   const { register, control, handleSubmit, formState: { errors } } = useForm({
@@ -88,7 +90,7 @@ const OrderForm: React.FC = () => {
     ) {
       setDialogIsOpen(true);
     } else {
-      console.log('Form is not yet completed.')
+      console.warn('Form is not yet completed.')
     }
   },[formInputFlags.hasStep123Completed]
   );
@@ -152,8 +154,8 @@ export default OrderForm;
 const styles = StyleSheet.create({
   formBox: {
     paddingHorizontal: 20,
-    gap: 10,
-    paddingTop: 10,
+    gap: 20,
+    paddingTop: 40,
     paddingBottom: 20,
     width: "100%",
     alignItems: "center",

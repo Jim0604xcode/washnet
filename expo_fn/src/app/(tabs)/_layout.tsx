@@ -120,9 +120,9 @@ export default function TabLayout() {
               <Link href="/orders" asChild>
                 <Pressable>
                   {({ pressed }) => (
-                    <FontAwesome
-                      name="shopping-basket"
-                      size={24}
+                    <MaterialCommunityIcons
+                      name="basket-check"
+                      size={28}
                       color={Colors[colorScheme ?? 'light'].text}
                       style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                     />

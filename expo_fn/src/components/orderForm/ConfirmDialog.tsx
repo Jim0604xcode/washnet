@@ -1,4 +1,4 @@
-import { StyleSheet, useColorScheme } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, useColorScheme } from "react-native";
 import React, { useCallback, useState } from "react";
 import {
   Button,
@@ -9,7 +9,7 @@ import {
 } from "react-native-paper";
 import { Text } from "@/src/components/Themed"
 import Colors from "@/src/constants/Colors";
-import { UseFormRegister, set } from "react-hook-form";
+import { UseFormRegister } from "react-hook-form";
 import { FetchOrder, FormButtonControls, Order } from "@/src/models";
 import useSubmitForm from "@/src/utils/useSubmitForm";
 
@@ -84,7 +84,7 @@ const ConfirmDialog = ({
     };
     submission.mutate(fetchFormValue, {
       onSuccess: () => {
-        console.log('Form submitted successfully', fetchFormValue);
+        console.log('Form submitted successfully');
         setFormValue(defaultFormValue);
         setPc("1");
         setRemarks("");
@@ -128,6 +128,7 @@ const ConfirmDialog = ({
           請確認訂單
         </Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
+
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
@@ -195,7 +196,7 @@ const ConfirmDialog = ({
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
         </Dialog.Content>
-        <Dialog.Actions style={{ justifyContent: "space-between" }}>
+        <Dialog.Actions style={{ justifyContent: "space-between", paddingBottom: 10 }}>
           <IconButton
             icon={"close"}
             iconColor={Colors[colorScheme ?? "light"].outline}
@@ -222,15 +223,17 @@ const styles = StyleSheet.create({
   dialogBox: {
     borderRadius: 14,
     borderWidth: 0,
+    // paddingTop: 10,
   },
   dialogTitle: {
     alignSelf: "center",
     fontSize: 21,
     fontWeight: "bold",
+    paddingBottom: 10,
   },
   dialogContent: {
     gap: 20,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   dialogInfo: {
     fontSize: 16,

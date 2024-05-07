@@ -41,6 +41,10 @@ export default {
     tint: p40,
     tabIconDefault: nv80,
     tabIconSelected: p10,
+    p80: p80,
+    p30: p30,
+    s40: s40,
+    s80: s80,
   },
   dark: {
     primary: primary,
@@ -58,5 +62,9 @@ export default {
     tint: p90,
     tabIconDefault: nv80,
     tabIconSelected: p10,
+    p80: p80,
+    p30: p30,
+    s40: s40,
+    s80: s80,
   },
 };
