@@ -1,21 +1,15 @@
 import { useRouter } from "expo-router";
 import React, { Suspense } from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  useColorScheme,
-} from "react-native";
+import { StyleSheet, useColorScheme } from "react-native";
 import Colors from "@/src/constants/Colors";
-import { FontAwesome } from "@expo/vector-icons";
-import { ActivityIndicator, Button, TextInput } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/src/context/AuthContext";
-import { setStorageItemAsync, useStorageState } from "../utils/useStorageState";
+import { useStorageState } from "../utils/useStorageState";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
 
 const index = () => {
-  const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
   const router = useRouter();
   const [[_, token]] = useStorageState(`${process.env.EXPO_PUBLIC_API_KEY}`); 
@@ -26,7 +20,6 @@ const index = () => {
     () => ({transform: [{ scale: withSpring(sv.value, {damping: 4}) }],
     })
   );
-
 
   React.useEffect(() => {
     sv.value = sv.value + 0.4;
@@ -52,7 +45,6 @@ const index = () => {
     } else {
       return redirectToLogin();
     }
-  
   }, [token, redirectToLogin]);
   
   return (
@@ -60,7 +52,6 @@ const index = () => {
       style={[
         styles.container,
         { backgroundColor: Colors[colorScheme ?? "light"].primary,
-          width: width,
          },
       ]}
     >
@@ -88,13 +79,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    // paddingTop: 20,
   },
   logo: {
     width: 210,
     height: 70,
     resizeMode: "contain",
     flex: 1,
+    marginBottom: 25
   },
   intro: {
     gap: 10,

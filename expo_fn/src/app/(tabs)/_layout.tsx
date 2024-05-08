@@ -67,6 +67,7 @@ export default function TabLayout() {
           backgroundColor: Colors[colorScheme ?? 'light'].background,
           shadowColor: 'transparent',
         },
+        
         headerTitle: () => (
           <Image 
             source={require('@/src/assets/images/logo.png')}

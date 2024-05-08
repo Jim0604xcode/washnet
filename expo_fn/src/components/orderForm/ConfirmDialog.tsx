@@ -128,7 +128,6 @@ const ConfirmDialog = ({
           請確認訂單
         </Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
-
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
@@ -222,8 +221,6 @@ export default ConfirmDialog;
 const styles = StyleSheet.create({
   dialogBox: {
     borderRadius: 14,
-    borderWidth: 0,
-    // paddingTop: 10,
   },
   dialogTitle: {
     alignSelf: "center",

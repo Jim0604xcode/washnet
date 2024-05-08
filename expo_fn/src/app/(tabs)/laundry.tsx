@@ -122,7 +122,6 @@ export default function LaundryScreen() {
         justifyContent: 'flex-start',
         gap: 20,
         backgroundColor: Colors[colorScheme ?? 'light'].background,
-        overflow: 'scroll',
       }}
       keyboardDismissMode = 'on-drag'
       keyboardShouldPersistTaps = 'handled'

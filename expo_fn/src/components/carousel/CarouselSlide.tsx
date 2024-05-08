@@ -11,10 +11,8 @@ type CarouselSlideProps = {
   };
 };
 
-const images = [
+const imageList = [
   { serivce: "pw",
-    src: require('@/src/assets/images/drawing-1.png')},
-  { service: "dc",
     src: require('@/src/assets/images/drawing-1.png')},
 ]
 
@@ -61,7 +59,7 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
 
       </View>
       {(data.type === "list") ? (
-      <Image source={images[0].src} style={styles.img} />
+      <Image source={imageList[0].src} style={styles.img} />
       ) : (null)
       }
     </View>
