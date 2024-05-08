@@ -10,9 +10,9 @@ import { View } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
 import { useAuth } from "@/src/context/AuthContext";
 import { ActivityIndicator } from "react-native-paper";
-import { UserOrder } from "../models";
+import { UserOrder } from "@/src/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import useOrderData from "../utils/useOrderData";
+import useOrderData from "@/src/utils/useOrderData";
 
 export default function Orders() {
   const colorScheme = useColorScheme();
@@ -20,7 +20,7 @@ export default function Orders() {
   const { data, isSuccess, isLoading, error } = useOrderData(authState?.token);
 
   return (
-    <View style={styles.container} lightColor="#FFFFFF">
+    <View style={styles.container} lightColor={Colors.light.neutral}>
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       {isLoading ? (
         <ActivityIndicator
@@ -50,12 +50,13 @@ export default function Orders() {
               <View
                 key={idx}
                 style={styles.orderItem}
-                lightColor={Colors.light.surfaceContainerLow}
+                lightColor={Colors.light.surfaceContainer}
                 darkColor={Colors.dark.surfaceContainerDarkHigh}
+                
               >
                 <View
                   style={styles.itemTitle}
-                  lightColor={Colors.light.surfaceContainerLow}
+                  lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerDarkHigh}
                 >
                   {order.orderType === "pw" ? (
@@ -172,7 +173,7 @@ export default function Orders() {
                 </Text>
                 <View
                   style={styles.labelAndText}
-                  lightColor={Colors.light.surfaceContainerLow}
+                  lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerDarkHigh}
                 >
                   <Text
@@ -194,7 +195,7 @@ export default function Orders() {
                 </View>
                 <View
                   style={styles.labelAndText}
-                  lightColor={Colors.light.surfaceContainerLow}
+                  lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerDarkHigh}
                 >
                   <Text
@@ -216,7 +217,7 @@ export default function Orders() {
                 </View>
                 <View
                   style={styles.labelAndText}
-                  lightColor={Colors.light.surfaceContainerLow}
+                  lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerDarkHigh}
                 >
                   <Text

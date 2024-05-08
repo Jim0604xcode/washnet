@@ -2,6 +2,7 @@ import { setStorageItemAsync, useStorageState } from '@/src/utils/useStorageStat
 import React from 'react';
 import { Alert } from 'react-native';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../models';
+import { useRouter, useSegments } from 'expo-router';
 
 interface AuthProps {
   authState: { 
@@ -163,8 +164,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
   
-  
-
   const contextValue = React.useMemo(() => ({
     authState,
     login: login,

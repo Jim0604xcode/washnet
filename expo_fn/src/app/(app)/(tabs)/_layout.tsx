@@ -1,5 +1,4 @@
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Link, Tabs } from 'expo-router';
@@ -67,7 +66,6 @@ export default function TabLayout() {
           backgroundColor: Colors[colorScheme ?? 'light'].background,
           shadowColor: 'transparent',
         },
-        
         headerTitle: () => (
           <Image 
             source={require('@/src/assets/images/logo.png')}

@@ -13,6 +13,10 @@ export default function AuthLayout() {
       <Stack>
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="register" options={{ 
+            presentation: "card",
+            headerBackVisible: false,
+            headerBackTitleVisible: false,
+            headerTintColor: Colors.light.text,
             headerShown: true,
               headerStyle: {
                 backgroundColor: Colors.light.primary,
@@ -22,23 +26,24 @@ export default function AuthLayout() {
               headerTitle: () => (
                 <Image 
                   source={require('@/src/assets/images/logo-p99.png')}
-                  style={{width: 100, height: 28, marginTop: 10}
+                  style={{width: 100, height: 28}
                 }
                 />
               ),
             headerLeft: () => (
+              <Link href="/login" asChild>
                 <Pressable >
                   {({ pressed }) => (
-                    <Link href="/login" asChild>
                       <IconButton icon={"arrow-left"}
                         iconColor={Colors.light.text}
-                        style={{ marginLeft: 15, opacity: pressed ? 0.5 : 1 }}
+                        style={{ marginLeft: 15, marginTop: 0, opacity: pressed ? 0.5 : 1 }}
                         size={28}
                       />
-                    </Link>
                   )}
                 </Pressable>
-            )}}
+              </Link>
+            )
+          }}
         />
       </Stack>
     )

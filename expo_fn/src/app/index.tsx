@@ -17,7 +17,7 @@ const index = () => {
   const sv = useSharedValue(0.8);
 
   const animation = useAnimatedStyle(
-    () => ({transform: [{ scale: withSpring(sv.value, {damping: 4}) }],
+    () => ({transform: [{ scale: withSpring(sv.value, {damping: 5}) }],
     })
   );
 
@@ -26,7 +26,7 @@ const index = () => {
   },[])
 
   const redirectToLogin = React.useCallback(() => {
-    const timeoutId = setTimeout(() => router.push('/login'), 600);
+    const timeoutId = setTimeout(() => router.replace('/login'), 600);
     return () => clearTimeout(timeoutId);
   }, [router]);
 

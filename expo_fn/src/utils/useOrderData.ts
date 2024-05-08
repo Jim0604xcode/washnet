@@ -6,10 +6,6 @@ interface FetchResponse<T> {
   errMess: string;
 }
 
-// interface UseOrderDataProps {
-//   authToken: string;
-// }
-
 const useOrderData = ( authToken: string | null | undefined ): UseQueryResult<any, Error> => {
   return useQuery({
     queryKey: ['orderData', authToken],
@@ -24,13 +20,10 @@ const useOrderData = ( authToken: string | null | undefined ): UseQueryResult<an
             'Authorization': `Bearer ${authToken}`
           },
         });
-
         if (!res.ok) {
           throw new Error(`${res.status} - ${res.statusText}`);
         }
-
         const result: FetchResponse<any> = await res.json();
-
         if (!result.isErr) {
           return result.data;
         } else {
@@ -40,7 +33,7 @@ const useOrderData = ( authToken: string | null | undefined ): UseQueryResult<an
         throw error;
       }
     },
-    enabled: !!authToken 
+    enabled: !!authToken,
   });
 };
 

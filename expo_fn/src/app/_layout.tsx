@@ -26,7 +26,7 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const StackLayout = () => {
+const MainLayout = () => {
   const { authState } = useAuth();
   const segments = useSegments();
   const router = useRouter();
@@ -34,21 +34,20 @@ const StackLayout = () => {
   useEffect(() => {
     const firstSegment = segments.length > 0 ? segments[0] : null;
     const isAuthenticated = authState?.isAuthenticated;
-    const inProtected = firstSegment === '(tabs)';
+    const inProtected = firstSegment === '(app)';
 
     if (!isAuthenticated && inProtected) {
-      router.replace('/login');
+      router.replace('/(auth)/login');
     } else if (isAuthenticated) {
-      router.replace('/laundry');
+      router.replace('/(app)/(tabs)/laundry');
     }
   }, [authState?.isAuthenticated])
 
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(app)" options={{ headerShown: false }} />
     </Stack>
   );
 }
@@ -87,7 +86,7 @@ function RootLayoutNav() {
           <PaperProvider>
             <SafeAreaProvider>
               <AuthProvider>
-                <StackLayout />
+                <MainLayout/>
               </AuthProvider>
             </SafeAreaProvider>
           </PaperProvider>
