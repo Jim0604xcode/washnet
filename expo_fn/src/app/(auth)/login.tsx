@@ -121,9 +121,9 @@ const LoginScreen = () => {
               activeUnderlineColor={Colors.light.text}
             />
             <View style={styles.textBtnBox}>
-              <Pressable>
-                {({ pressed }) => (
-                  <Link href="/register" asChild>
+              <Link href="/register" asChild>
+                <Pressable>
+                  {({ pressed }) => (
                     <Button
                       style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
                       mode="text"
@@ -139,9 +139,9 @@ const LoginScreen = () => {
                     >
                       註冊
                     </Button>
-                  </Link>
-                )}
-              </Pressable>
+                  )}
+                </Pressable>
+              </Link>
               <Pressable>
                 {({ pressed }) => (
                   <Button

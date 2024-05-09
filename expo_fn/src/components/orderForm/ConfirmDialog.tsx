@@ -70,6 +70,7 @@ const ConfirmDialog = ({
   const submission = useSubmitForm();
   
   const handleSubmit = useCallback(() => {
+    // Create the most updated formValue {} for fetching
     const fetchFormValue: FetchOrder = {
       orderType: formValue.orderType,
       tel: formValue.tel,
@@ -78,7 +79,7 @@ const ConfirmDialog = ({
       district: formValue.district,
       pickupDateTime: formValue.pickupDateTime,
       deliveryDateTime: formValue.deliveryDateTime,
-      // Ensure the latest states of pc and remarks
+      // Using the local states of pc and remarks
       pc: Number(pc),
       remarks: remarks,
     };
@@ -93,7 +94,7 @@ const ConfirmDialog = ({
           setIsOpen1(false)
         };
         if (isOpen2) {
-          height1.value = (80)
+          height2.value = (80)
           setIsOpen2(false)
         };
         if (isOpen3) {
@@ -128,7 +129,6 @@ const ConfirmDialog = ({
           請確認訂單
         </Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
-
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
@@ -222,8 +222,6 @@ export default ConfirmDialog;
 const styles = StyleSheet.create({
   dialogBox: {
     borderRadius: 14,
-    borderWidth: 0,
-    // paddingTop: 10,
   },
   dialogTitle: {
     alignSelf: "center",

@@ -26,33 +26,6 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const StackLayout = () => {
-  const { authState } = useAuth();
-  const segments = useSegments();
-  const router = useRouter();
-
-  useEffect(() => {
-    const firstSegment = segments.length > 0 ? segments[0] : null;
-    const isAuthenticated = authState?.isAuthenticated;
-    const inProtected = firstSegment === '(tabs)';
-
-    if (!isAuthenticated && inProtected) {
-      router.replace('/login');
-    } else if (isAuthenticated) {
-      router.replace('/laundry');
-    }
-  }, [authState?.isAuthenticated])
-
-  return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="orders" options={{ presentation: 'modal', headerTitle: '現時訂單' }} />
-    </Stack>
-  );
-}
-
 export default function RootLayout() {
 
   const [loaded, error] = useFonts({
@@ -78,20 +51,47 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const MainLayout = () => {
+  const { authState } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    const firstSegment = segments.length > 0 ? segments[0] : null;
+    const isAuthenticated = authState?.isAuthenticated;
+    const inProtected = firstSegment === '(app)';
+
+    if (!isAuthenticated && inProtected) {
+      router.replace('/login');
+    } else if (isAuthenticated) {
+      router.replace('/laundry');
+    }
+  }, [authState?.isAuthenticated])
+
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(app)" options={{ headerShown: false }} />
+    </Stack>
+
+  );
+}
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
+    <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <PaperProvider>
             <SafeAreaProvider>
-              <AuthProvider>
-                <StackLayout />
-              </AuthProvider>
+                <MainLayout/>
             </SafeAreaProvider>
           </PaperProvider>
         </ThemeProvider>
       </QueryClientProvider>
+    </AuthProvider>
   );
 }

@@ -79,18 +79,35 @@ export class OrderController implements IOrderController{
         }
     }
 
-    async getUserOrdersById(req:express.Request, res:express.Response){
+    async getUserCurrentOrders(req:express.Request, res:express.Response){
         try {
             let jwt = res.locals.jwt as JWT;
-            let orders = await orderService.getUserOrdersById(jwt.usersId);
+            let orders = await orderService.getUserCurrentOrders(jwt.usersId);
             orders = orders.map(obj => 
                 Object.assign(obj, {
-                    district:obj.fullAddress.split('|_|')[0],
-                    street:obj.fullAddress.split('|_|')[1],
-                    building:obj.fullAddress.split('|_|')[2]
+                    district: obj.fullAddress.split('|_|')[0],
+                    street: obj.fullAddress.split('|_|')[1],
+                    building: obj.fullAddress.split('|_|')[2]
                 })
             );
-            res.json({data:orders, isErr:false, errMess:null});
+            res.json({data: orders, isErr: false, errMess: null});
+        } catch (err) {
+            errorHandler(err, req, res);
+        }
+    }
+
+    async getUserOrderHistory(req:express.Request, res:express.Response){
+        try {
+            let jwt = res.locals.jwt as JWT;
+            let orders = await orderService.getUserOrderHistory(jwt.usersId);
+            orders = orders.map(obj => 
+                Object.assign(obj, {
+                    district: obj.fullAddress.split('|_|')[0],
+                    street: obj.fullAddress.split('|_|')[1],
+                    building: obj.fullAddress.split('|_|')[2]
+                })
+            );
+            res.json({data: orders, isErr: false, errMess: null});
         } catch (err) {
             errorHandler(err, req, res);
         }
