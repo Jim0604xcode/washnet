@@ -6,7 +6,13 @@ interface FetchResponse<T> {
   errMess: string;
 }
 
-const useOrderData = ( authToken: string | null | undefined ): UseQueryResult<any, Error> => {
+export enum QueryPeriod {
+  CURRENT = 'userCurrentOrders',
+  HISTORY = 'userOrderHistory'
+};
+
+const useOrderData = ( authToken: string | null | undefined, period: QueryPeriod ): UseQueryResult<any, Error> => {
+
   return useQuery({
     queryKey: ['orderData', authToken],
     queryFn: async () => {
@@ -14,7 +20,7 @@ const useOrderData = ( authToken: string | null | undefined ): UseQueryResult<an
         throw new Error("Auth token is not provided");
       }
       try {
-        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/order/userOrders`, {
+        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/order/${period}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${authToken}`

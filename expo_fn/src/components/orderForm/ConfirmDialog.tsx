@@ -70,6 +70,7 @@ const ConfirmDialog = ({
   const submission = useSubmitForm();
   
   const handleSubmit = useCallback(() => {
+    // Create the most updated formValue {} for fetching
     const fetchFormValue: FetchOrder = {
       orderType: formValue.orderType,
       tel: formValue.tel,
@@ -78,7 +79,7 @@ const ConfirmDialog = ({
       district: formValue.district,
       pickupDateTime: formValue.pickupDateTime,
       deliveryDateTime: formValue.deliveryDateTime,
-      // Ensure the latest states of pc and remarks
+      // Using the local states of pc and remarks
       pc: Number(pc),
       remarks: remarks,
     };
@@ -93,7 +94,7 @@ const ConfirmDialog = ({
           setIsOpen1(false)
         };
         if (isOpen2) {
-          height1.value = (80)
+          height2.value = (80)
           setIsOpen2(false)
         };
         if (isOpen3) {

@@ -5,6 +5,7 @@ import {
   Platform,
   StyleSheet,
   useColorScheme,
+  Dimensions,
 } from "react-native";
 import { View } from "@/src/components/Themed";
 import Colors from "@/src/constants/Colors";
@@ -12,30 +13,32 @@ import { useAuth } from "@/src/context/AuthContext";
 import { ActivityIndicator } from "react-native-paper";
 import { UserOrder } from "@/src/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import useOrderData from "@/src/utils/useOrderData";
+import useOrderData, { QueryPeriod } from "@/src/utils/useOrderData";
 
 export default function Orders() {
+  const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
   const { authState } = useAuth();
-  const { data, isSuccess, isLoading, error } = useOrderData(authState?.token);
+  const { data, isSuccess, isLoading, error } = useOrderData(authState?.token, QueryPeriod.CURRENT);
 
   return (
-    <View style={styles.container} lightColor={Colors.light.neutral}>
+    <ScrollView
+      style={[styles.container, {width: width}]}
+      contentContainerStyle={{
+      paddingTop: 20,
+      paddingHorizontal: 40,
+      paddingBottom: 40,
+      gap: 20,
+    }}>
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       {isLoading ? (
         <ActivityIndicator
           animating={true}
           color={Colors[colorScheme ?? "light"].tint}
           size={"large"}
-          style={{ marginTop: 40 }}
+          style={{ marginTop: 0 }}
         />
       ) : null}
-      <ScrollView
-        contentContainerStyle={{
-          padding: 20,
-          gap: 20,
-        }}
-      >
         {error ? (
           <Text
             style={{
@@ -241,15 +244,14 @@ export default function Orders() {
             ))
           : null}
       </ScrollView>
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // flex: 1,
+    // alignItems: "center",
+    // justifyContent: "flex-start",
   },
   title: {
     fontSize: 26,
@@ -257,7 +259,7 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     alignItems: "flex-start",
-    width: "auto",
+    width: "100%",
     paddingTop: 20,
     paddingBottom: 40,
     paddingHorizontal: 20,
