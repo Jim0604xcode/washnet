@@ -14,11 +14,11 @@ import {
   View,
   useColorScheme,
 } from "react-native";
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@/src/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { StatusBar } from "expo-status-bar";
 
 const LoginScreen = () => {
@@ -61,7 +61,7 @@ const LoginScreen = () => {
         }
       >
         <Image
-          source={require("@/src/assets/images/logo-p99.png")}
+          source={require("@/assets/images/logo-p99.png")}
           style={styles.logo}
         />
       </Suspense>

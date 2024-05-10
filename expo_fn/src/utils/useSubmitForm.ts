@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { FetchOrder } from "@/src/models";
-import { useAuth } from "@/src/context/AuthContext";
+import { FetchOrder } from "@/models";
+import { useAuth } from "@/context/AuthContext";
 
 const useSubmitForm = () => {
     const { authState } = useAuth();

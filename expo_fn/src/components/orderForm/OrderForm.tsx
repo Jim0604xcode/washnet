@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View, useColorScheme} from "react-native";
 import { Button, IconButton } from "react-native-paper";
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import { useForm } from "react-hook-form";
-import { Order, FormButtonControls, FormInputFlags } from "@/src/models";
-import AddressButton from "@/src/components/orderForm/AddressButton";
-import PickupButton from "@/src/components/orderForm/PickupButton";
+import { Order, FormButtonControls, FormInputFlags } from "@/models";
+import AddressButton from "@/components/orderForm/AddressButton";
+import PickupButton from "@/components/orderForm/PickupButton";
 import { useSharedValue } from "react-native-reanimated";
-import DeliveryButton from "@/src/components/orderForm/DeliveryButton";
-import ConfirmDialog from "@/src/components/orderForm/ConfirmDialog";
-import { useAuth } from "@/src/context/AuthContext";
+import DeliveryButton from "@/components/orderForm/DeliveryButton";
+import ConfirmDialog from "@/components/orderForm/ConfirmDialog";
+import { useAuth } from "@/context/AuthContext";
 
 
 const OrderForm: React.FC = () => {

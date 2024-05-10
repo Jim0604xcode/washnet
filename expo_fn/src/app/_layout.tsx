@@ -5,10 +5,10 @@ import { Slot, Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
-import { useColorScheme } from '@/src/components/useColorScheme';
+import { useColorScheme } from '@/components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider, useAuth } from '@/src/context/AuthContext';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useStorageState } from '../utils/useStorageState';
 
 const queryClient = new QueryClient();
@@ -51,7 +51,25 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
-const MainLayout = () => {
+function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <PaperProvider>
+            <SafeAreaProvider>
+                <StackLayout/>
+            </SafeAreaProvider>
+          </PaperProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+function StackLayout() {
   const { authState } = useAuth();
   const segments = useSegments();
   const router = useRouter();
@@ -73,25 +91,7 @@ const MainLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(app)" options={{ headerShown: false }} />
+      <Stack.Screen name="orders" options={{ headerTitle: '現時訂單', presentation: 'modal' }} />
     </Stack>
-
-  );
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
-  return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <PaperProvider>
-            <SafeAreaProvider>
-                <MainLayout/>
-            </SafeAreaProvider>
-          </PaperProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </AuthProvider>
   );
 }

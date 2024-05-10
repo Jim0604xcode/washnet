@@ -7,11 +7,11 @@ import {
   Portal,
   TextInput,
 } from "react-native-paper";
-import { Text } from "@/src/components/Themed"
-import Colors from "@/src/constants/Colors";
+import { Text } from "@/components/Themed"
+import Colors from "@/constants/Colors";
 import { UseFormRegister } from "react-hook-form";
-import { FetchOrder, FormButtonControls, Order } from "@/src/models";
-import useSubmitForm from "@/src/utils/useSubmitForm";
+import { FetchOrder, FormButtonControls, Order } from "@/models";
+import useSubmitForm from "@/utils/useSubmitForm";
 
 type ConfirmDialogProps = {
   dialogOpen: boolean;

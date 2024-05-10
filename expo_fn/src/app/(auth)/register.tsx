@@ -10,10 +10,10 @@ import {
   View,
   useColorScheme,
 } from "react-native";
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { Button, TextInput } from "react-native-paper";
-import { useAuth } from "@/src/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useForm, Controller } from "react-hook-form";
 import { StatusBar } from "expo-status-bar";
 import { SegmentedButtons } from "react-native-paper";

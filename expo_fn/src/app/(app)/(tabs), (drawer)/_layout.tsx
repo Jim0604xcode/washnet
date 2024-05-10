@@ -1,21 +1,24 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Link, Tabs } from 'expo-router';
+import { Link, Stack, Tabs, useNavigation } from 'expo-router';
 import { Image, Pressable } from 'react-native';
-import Colors from '@/src/constants/Colors'
-import { useColorScheme } from '@/src/components/useColorScheme';
-import { useClientOnlyValue } from '@/src/components/useClientOnlyValue';
-import { useAuth } from '@/src/context/AuthContext';
+import Colors from '@/constants/Colors'
+import { useColorScheme } from '@/components/useColorScheme';
+import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useAuth } from '@/context/AuthContext';
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import { Drawer } from 'react-native-paper';
+import { DrawerActions } from '@react-navigation/native';
 
 const tabData = [
   { name: 'laundry', 
     title: '磅洗',
-    icon: (color: string) => (
+    icon: (color: string, size: number) => (
       <MaterialCommunityIcons
         name="scale"
         style={{ marginBottom: -8 }}
-        size={28} 
+        size={size} 
         color={color}
       />
     ),
@@ -57,27 +60,15 @@ const tabData = [
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { logout } = useAuth();
 
   return (
     <Tabs
       screenOptions={{
-        headerStyle: {
-          backgroundColor: Colors[colorScheme ?? 'light'].background,
-          shadowColor: 'transparent',
-        },
-        headerTitle: () => (
-          <Image 
-            source={require('@/src/assets/images/logo.png')}
-            style={{width: 100, height: 28}
-          }
-          />
-        ),
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
         tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        headerShown: false,
         tabBarLabelStyle: {
           fontSize: 12,
         },
@@ -102,36 +93,26 @@ export default function TabLayout() {
           name={tab.name}
           options={{
             title: tab.title,
-            tabBarIcon: ({ color }) => (tab.icon(color)),
-            headerLeft: () => (
-                <Pressable onPress={()=>logout!()}>
-                  {({ pressed }) => (
-                    <MaterialIcons
-                      name="more-vert"
-                      size={28}
-                      color={Colors[colorScheme ?? 'light'].text}
-                      style={{ marginLeft: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-            ),
-            headerRight: () => (
-              <Link href="/orders" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <MaterialCommunityIcons
-                      name="basket-check"
-                      size={28}
-                      color={Colors[colorScheme ?? 'light'].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
-            ),
+            tabBarIcon: ({ color, size }) => (tab.icon(color, size)),
           }}
         />
       ))}
+        <Tabs.Screen
+         name='mobile'
+         options={{href: null}}
+        />
+        <Tabs.Screen
+         name='address'
+         options={{href: null}}
+        />
+        <Tabs.Screen
+         name='password'
+         options={{href: null}}
+        />
+        <Tabs.Screen
+         name='userDeletion'
+         options={{href: null}}
+        />
     </Tabs>
   );
 }

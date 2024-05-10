@@ -1,14 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '@/src/components/EditScreenInfo';
-import { Text, View } from '@/src/components/Themed';
+import { Text, View } from '@/components/Themed';
 
-export default function AlterationScreen() {
+export default function MobileDrawer() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>改衣服務</Text>
+      <Text style={styles.title}>重設手機號碼</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { setStorageItemAsync, useStorageState } from '@/src/utils/useStorageState';
+import { setStorageItemAsync, useStorageState } from '@/utils/useStorageState';
 import React from 'react';
 import { Alert } from 'react-native';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../models';
@@ -97,7 +97,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/register`,{
         headers:{
-          "Content-type":"application/json",
+          "Content-type": "application/json",
         },
         method:"POST",
         body:JSON.stringify({

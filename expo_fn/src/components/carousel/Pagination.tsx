@@ -1,7 +1,7 @@
 import { StyleSheet, ColorSchemeName, View } from "react-native";
 import { SharedValue } from "react-native-reanimated";
-import Colors from "@/src/constants/Colors";
-import PaginationDot from "@/src/components/carousel/PaginationDot";
+import Colors from "@/constants/Colors";
+import PaginationDot from "@/components/carousel/PaginationDot";
 
 type PaginationProps = {
   carouselData: {

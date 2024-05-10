@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { Text } from "@/src/components/Themed";
+import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
-import { useDebounce } from "@/src/utils/useDebounce";
+import { useDebounce } from "@/utils/useDebounce";
 import { TextInput } from 'react-native-paper';
 import { UseFormRegister } from 'react-hook-form';
-import { FormButtonControls, FormInputFlags, Order } from '@/src/models';
+import { FormButtonControls, FormInputFlags, Order } from '@/models';
 
 type AddressButtonProps = {
     formBtnCtrls: FormButtonControls;
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
       maxHeight: 350,
       borderRadius: 14,
       paddingVertical: 20,
-      paddingLeft: 24,
+      paddingLeft: 20,
       paddingRight: 20,
       alignItems: "center",
       justifyContent: "flex-start",
@@ -213,6 +213,7 @@ const styles = StyleSheet.create({
   btnTitle: {
     width: "100%",
     height: 40,
+    paddingLeft: 4,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   inputBox: {
-    width: "100%",
+    width: '100%',
     gap: 20,
   },
   info: {

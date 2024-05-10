@@ -7,15 +7,15 @@ import {
   useColorScheme,
   Dimensions,
 } from "react-native";
-import { View } from "@/src/components/Themed";
-import Colors from "@/src/constants/Colors";
-import { useAuth } from "@/src/context/AuthContext";
+import { View } from "@/components/Themed";
+import Colors from "@/constants/Colors";
+import { useAuth } from "@/context/AuthContext";
 import { ActivityIndicator } from "react-native-paper";
-import { UserOrder } from "@/src/models";
+import { UserOrder } from "@/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import useOrderData, { QueryPeriod } from "@/src/utils/useOrderData";
+import useOrderData, { QueryPeriod } from "@/utils/useOrderData";
 
-export default function Orders() {
+export default function OrdersModal() {
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
   const { authState } = useAuth();

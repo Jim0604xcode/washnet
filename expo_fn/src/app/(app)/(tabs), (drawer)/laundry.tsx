@@ -1,40 +1,40 @@
 import { Dimensions, ScrollView, StyleSheet, useColorScheme } from 'react-native';
 import * as React from 'react';
-import Colors from '@/src/constants/Colors'
-import { View } from '@/src/components/Themed';
+import Colors from '@/constants/Colors'
+import { View } from '@/components/Themed';
 import Carousel from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
-import CarouselSlide from '@/src/components/carousel/CarouselSlide';
-import Pagination from '@/src/components/carousel/Pagination';
-import OrderForm from '@/src/components/orderForm/OrderForm';
+import CarouselSlide from '@/components/carousel/CarouselSlide';
+import Pagination from '@/components/carousel/Pagination';
+import OrderForm from '@/components/orderForm/OrderForm';
 import { useEffect, useState } from 'react';
 
-// const carouselData = [
-//   {
-//     title: '磅洗服務',
-//     info: '○ 自選時間上門收衫送衫',
-//     info2: '○ 只需兩天送達',
-//     info3: '○ 另設加急服務',
-//     info4: '○ $8/磅（免運費）',
-//     image: require('@/src/assets/images/drawing-1.png'),
-//   },
-//   {
-//     subtitle: '輕鬆洗衫｜每磅$8｜零煩惱',
-//     info: '○ 只需兩個工作天即可送回乾淨衣服',
-//     info2: '○ 特快洗衫只需一個工作天',
-//     info3: '○ （星期六、日及公眾假期前夕不適用）',
-//     info4: '○ 最低消費$160，不足10磅以10磅計算',
-//   },
-//   {
-//     subtitle: '磅洗類別',
-//     info: '○ 普通衣物不包厚毛巾、浴袍、毛毯、被子等',
-//     info2: '○ 以上厚重布料需額外處理並收取附加費',
-//     info3: '○ 窗簾、梳化袋、毛公仔 等請選擇其他清洗',
-//     info4: '○ 歡迎與我們聯絡了解詳情',
-//   }
-// ]
+const carouselData = [
+  {
+    title: '磅洗服務',
+    info: '○ 自選時間上門收衫送衫',
+    info2: '○ 只需兩天送達',
+    info3: '○ 另設加急服務',
+    info4: '○ $8/磅（免運費）',
+    image: require('@/assets/images/drawing-1.png'),
+  },
+  {
+    subtitle: '輕鬆洗衫｜每磅$8｜零煩惱',
+    info: '○ 只需兩個工作天即可送回乾淨衣服',
+    info2: '○ 特快洗衫只需一個工作天',
+    info3: '○ （星期六、日及公眾假期前夕不適用）',
+    info4: '○ 最低消費$160，不足10磅以10磅計算',
+  },
+  {
+    subtitle: '磅洗類別',
+    info: '○ 普通衣物不包厚毛巾、浴袍、毛毯、被子等',
+    info2: '○ 以上厚重布料需額外處理並收取附加費',
+    info3: '○ 窗簾、梳化袋、毛公仔 等請選擇其他清洗',
+    info4: '○ 歡迎與我們聯絡了解詳情',
+  }
+]
 
-export default function LaundryScreen() {
+export default function LaundryTab() {
   const [block,setBlock] = useState<any[]>([])
 
   useEffect(()=>{
@@ -117,7 +117,8 @@ export default function LaundryScreen() {
   const progressValue = useSharedValue<number>(0);
 
   return (
-    <ScrollView contentContainerStyle={{
+    <ScrollView 
+        contentContainerStyle={{
         alignItems: 'center',
         justifyContent: 'flex-start',
         gap: 20,
@@ -167,5 +168,7 @@ const styles = StyleSheet.create({
   carouselBox: {
     alignItems: 'center',
     justifyContent: 'flex-start',
+    flex: 1,
+    width: '100%',
   },
 });

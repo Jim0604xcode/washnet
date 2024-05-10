@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { Text } from "@/src/components/Themed";
+import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
-import { useDebounce } from "@/src/utils/useDebounce";
+import { useDebounce } from "@/utils/useDebounce";
 import { UseFormRegister } from 'react-hook-form';
-import { FormButtonControls, FormInputFlags, Order } from '@/src/models';
+import { FormButtonControls, FormInputFlags, Order } from '@/models';
 import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { IconButton } from 'react-native-paper';
-import { parseAndAddDays } from '@/src/utils/parseAndAddDays';
+import { parseAndAddDays } from '@/utils/parseAndAddDays';
 
 type DeliveryButtoProps = {
     formBtnCtrls: FormButtonControls;

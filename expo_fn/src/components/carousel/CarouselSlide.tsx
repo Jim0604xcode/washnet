@@ -1,4 +1,4 @@
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import React from "react";
 import { Image, Text, View, StyleSheet, ColorSchemeName, ImageBackground, useColorScheme } from "react-native";
 
@@ -13,7 +13,7 @@ type CarouselSlideProps = {
 
 const imageList = [
   { serivce: "pw",
-    src: require('@/src/assets/images/drawing-1.png')},
+    src: require('@/assets/images/drawing-1.png')},
 ]
 
 const CarouselSlide: React.FC<CarouselSlideProps> = ({
