@@ -54,13 +54,13 @@ export default function OrdersModal() {
                 key={idx}
                 style={styles.orderItem}
                 lightColor={Colors.light.surfaceContainer}
-                darkColor={Colors.dark.surfaceContainerDarkHigh}
+                darkColor={Colors.dark.surfaceContainerHL}
                 
               >
                 <View
                   style={styles.itemTitle}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   {order.orderType === "pw" ? (
                     <MaterialCommunityIcons
@@ -177,7 +177,7 @@ export default function OrdersModal() {
                 <View
                   style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   <Text
                     style={[
@@ -199,7 +199,7 @@ export default function OrdersModal() {
                 <View
                   style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   <Text
                     style={[
@@ -221,7 +221,7 @@ export default function OrdersModal() {
                 <View
                   style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   <Text
                     style={[

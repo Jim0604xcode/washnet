@@ -21,6 +21,7 @@ function CustomDrawerContent(props: any) {
     <DrawerContentScrollView {...props}
       style={styles.container}
       contentContainerStyle={{
+        backgroundColor: Colors[colorScheme ?? 'light'].surfaceContainerHL,
         flex: 1,
         gap: 10,
       }}
@@ -167,7 +168,6 @@ export default function AppLayout() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
     flex: 1,
   },
   infoBox: {

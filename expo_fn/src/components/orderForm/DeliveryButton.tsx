@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
 import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
@@ -114,7 +114,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           { height: height3,
             backgroundColor:
             hasDeliveryDateTime ? Colors[colorScheme ?? "light"].tertiary
-              : Colors[colorScheme ?? "light"].surfaceContainer,
+              : Colors[colorScheme ?? "light"].surfaceContainer
           },
         ]}>
         <TouchableOpacity style={styles.openBtn}
