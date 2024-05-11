@@ -33,7 +33,7 @@ import RoutesGuest from './RoutesGuest';
 import RoutesAdmin from './RoutesAdmin';
 
 import { PushNotifications } from '@capacitor/push-notifications';
-import { requestForToken } from './firebaseConfig';
+// import { requestForToken } from './firebaseConfig';
 
 setupIonicReact();
 
