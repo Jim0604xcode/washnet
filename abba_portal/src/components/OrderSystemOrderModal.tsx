@@ -5,8 +5,9 @@ import PlaceOrder from "./PlaceOrder";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../service/Recoil";
 
-const OrderSystemOrderModal: React.FC<{isOpen:boolean,cbSetIsOpen:(boo:boolean)=>void,title:string,cbSubmitForm:(placeOrder:any)=>void,placeOrder:PlaceOrderType,orderId:number,orderStatus:string}> = ({isOpen,cbSetIsOpen,title,cbSubmitForm,placeOrder,orderId,orderStatus}) => {
+const OrderSystemOrderModal: React.FC<{isOpen:boolean,cbSetIsOpen:(boo:boolean)=>void,title:string,cbSubmitForm:(placeOrder:any,orderId:number)=>void,placeOrder:PlaceOrderType,orderId:number,orderStatus:string}> = ({isOpen,cbSetIsOpen,title,cbSubmitForm,placeOrder,orderId,orderStatus}) => {
   const getLanguage = useRecoilValue(languageState);
+  
   console.log(placeOrder)
   
   return (

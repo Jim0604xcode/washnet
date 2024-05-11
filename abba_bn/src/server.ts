@@ -10,7 +10,8 @@ import { ThemeController } from "./restful/controller/themeController";
 
 const app = express();
 app.use(cors({
-  origin:"http://localhost:8100"
+  origin:"*"
+  // origin:["http://localhost:8100","http://192.168.45.65"]
 }))
 
 app.use(express.urlencoded({ extended: true }));

@@ -131,7 +131,8 @@ export type PlaceOrderType = {
   street:string
   building:string
   remarks:string,
-  orderType:string
+  orderType:string,
+  status:string
 };
 
 export const getPlaceOrderFormDefaultValues = () => {
@@ -144,7 +145,8 @@ export const getPlaceOrderFormDefaultValues = () => {
     street:"",
     district:"",
     remarks:"",
-    orderType:""
+    orderType:"",
+    status:""
   }
 }
 

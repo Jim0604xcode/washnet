@@ -3,7 +3,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonItem, IonLabel, IonLoa
 import { useMemo } from "react";
 import { Order } from "../service/OrderTableData";
 import { useRecoilValue } from "recoil";
-import { languageState } from "../service/Recoil";
+import { languageState, roleState } from "../service/Recoil";
 
 // import { data } from "../service/TableData";
 
@@ -14,6 +14,7 @@ import { languageState } from "../service/Recoil";
 
 const OrderSystemTableModal: React.FC<{isOpen:boolean,cbSetIsOpen:(boo:boolean)=>void,title:string,cbFilter:(cri:string[]|number[],accessor:string,initTData:Order[])=>void,accessor:string,initTData:Order[]}> = ({isOpen,cbSetIsOpen,title,cbFilter,accessor,initTData}) => {
   const getLanguage = useRecoilValue(languageState);
+  
   const memoData = useMemo(()=>{
         
         let newData = initTData.map(obj=>{

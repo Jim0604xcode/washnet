@@ -16,13 +16,13 @@ import { formatter } from "../service/moment";
 
 import { getValue } from "../service/LocalStorage";
 import { useRecoilValue } from "recoil";
-import { languageState } from "../service/Recoil";
+import { languageState, roleState } from "../service/Recoil";
 
 
 
 
-const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFormState)=>void,placeOrder:PlaceOrderType,orderId:number,orderStatus:string}> = ({status,cbSubmitForm,placeOrder,orderId,orderStatus}) => {
-  
+const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFormState,orderId:number)=>void,placeOrder:PlaceOrderType,orderId:number,orderStatus:string}> = ({status,cbSubmitForm,placeOrder,orderId,orderStatus}) => {
+  console.log(orderStatus)
   const [formValue,setFormValue] = useState({
     pc:placeOrder.pc,
     pickupDateTime:placeOrder.pickupDateTime,
@@ -32,7 +32,9 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
     street:"",
     district:"",
     remarks:placeOrder.remarks,
-    orderType:placeOrder.orderType
+    orderType:placeOrder.orderType,
+    orderStatus:orderStatus,
+    isSubmit:false
     })
     
   
@@ -67,7 +69,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
   
   let cbFetchOrderPickUpAddress = useCallback(async ()=>{
     let token = await getValue("token")
-    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/order/getOrderPickUpAddressAndMobile/${orderId}`,{
+    let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/getOrderPickUpAddressAndMobile/${orderId}`,{
       headers:{
         'Authorization': `Bearer ${token}`
       },
@@ -83,6 +85,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
         newFormValue.building = json.data.building
         newFormValue.street = json.data.street
         newFormValue.district = json.data.district
+        // newFormValue.orderStatus = json.data.orderStatus
         return newFormValue
       })
       
@@ -94,12 +97,11 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       // customer open order 
       cbFetchUserPickUpAddress()
     }else if(status === 1){
-      // admin edit order
       
+      // admin edit order
+      // delivery or landry edit order
       cbFetchOrderPickUpAddress()
       
-    }else if(status === 2){
-      // admin open order
       
     }
   },[])
@@ -112,15 +114,26 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
   
 
 
-
+  const changeOrderStatus = (status:string) => {
+    
+    setFormValue(formValue=>{
+      let newFormValue = {...formValue}
+      newFormValue.orderStatus = status
+      newFormValue.isSubmit = true 
+      return newFormValue
+    })
+    
+  }
+  
   const onSubmit = async (data: PlaceOrderFormState) => {
     
     
     
     if(status===1){
       // admin edit order
+      // delivery or landry edit order
       try {
-        console.log(data)
+        // console.log(data)
         
         let token = await getValue("token")
         let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/editOrder/${orderId}`,{
@@ -129,7 +142,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
             'Authorization': `Bearer ${token}`
           },
           method:"PUT",
-          body:JSON.stringify(Object.assign(data,{orderStatus:orderStatus}))  
+          body:JSON.stringify(data)
         })
         let json = await res.json()
         console.log(json)
@@ -141,11 +154,11 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
           showConfirmButton: false,
           timer: 1500
           })
-          data = Object.assign(data,{orderId:orderId,orderStatus:orderStatus})
-          console.log(data)
+          
+          
 
 
-          cbSubmitForm(data)
+          cbSubmitForm(data,orderId)
         }else{
           throw new Error(json.errMess)
         }  
@@ -163,50 +176,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
 
       
     }
-    // else if(status === 2){
-    //   // admin open order
-
-    //   try {
-    //     console.log(data)
-        
-    //     let token = await getValue("token")
-    //     let res = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/admin/addOrder`,{
-    //       headers:{
-    //         "Content-type":"application/json",
-    //         'Authorization': `Bearer ${token}`
-    //       },
-    //       method:"POST",
-    //       body:JSON.stringify(Object.assign(data,{orderType:"pw"}))  
-    //     })
-    //     let json = await res.json()
-    //     console.log(json)
-    //     if(!json.isErr){
-    //       sweetAlert.fire({
-    //       icon: 'success',
-    //       title: 'Message',
-    //       text:'Successfully place new order',
-    //       showConfirmButton: false,
-    //       timer: 1500
-    //       })
-    //       data = Object.assign(data,{orderId:orderId,orderStatus:orderStatus})
-    //       console.log(data)
-
-
-    //       cbSubmitForm(data)
-    //     }else{
-    //       throw new Error(json.errMess)
-    //     }  
-    //   } catch (error:any) {
-    //     sweetAlert.fire({
-    //       icon: 'info',
-    //       title: 'Message',
-    //       text:error.message,
-    //       showConfirmButton: false,
-    //       timer: 1500
-    //     })
-    //   }
-
-    // }
+  
     
     
     
@@ -215,13 +185,16 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
   
   
   
-  // async function handleOpenServiceSelect(){
-  //   let serviceSelect = document.querySelector("#serviceSelect") as HTMLIonSelectElement
-  //   serviceSelect.click()
-  // }
   
   
-  
+  useEffect(()=>{
+    // onSubmit(formValue)
+    if(formValue.isSubmit){
+      // console.log(formValue)
+      onSubmit(formValue)
+    }
+    
+  },[formValue.orderStatus])
 
   return (
     
@@ -229,9 +202,24 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       <h1 style={{textAlign:"center",color:"#FFC13B"}}>{getLanguage.language.cls.formTitle}</h1>
       <h4 style={{textAlign:"center",color:"#FFC13B"}}>{getLanguage.language.cls.formSubTitle}</h4>
       
+      {formValue.orderStatus === "w_pickup" && 
+      <IonButton onClick={()=>changeOrderStatus("w_service")}>
+        Complete Pickup
+      </IonButton>
+      }
+      {formValue.orderStatus === "w_service" && 
+      <IonButton onClick={()=>changeOrderStatus("w_delivery")}>
+        Conplete Service
+      </IonButton>
+      }
+      {formValue.orderStatus === "w_delivery" && 
+      <IonButton onClick={()=>changeOrderStatus("complete")}>
+        Complete Delivery
+      </IonButton>
+      }
         
 
-      
+
       
         <IonItem>
           <IonLabel>{getLanguage.language.cls.itemTotal}</IonLabel>

@@ -2,7 +2,12 @@
   "appId": "com.abba0604laundry2023.app",
   "appName": "abba",
   "webDir": "build",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }  
 }
   
 

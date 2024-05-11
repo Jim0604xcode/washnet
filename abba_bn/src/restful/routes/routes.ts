@@ -21,6 +21,9 @@ export class UserRoutes extends Routes{
         this.routes.get('/getCurrentUser',isLoggedInAPI,controller.getCurrentUser)
         this.routes.get('/getPickUpAddressAndMobile',isLoggedInAPI,controller.getPickUpAddressAndMobile)
         this.routes.get('/getLanguageData/:require',controller.getLanguageDataGuest)
+        this.routes.put('/editUserPassword',isLoggedInAPI,controller.editUserPassword)
+        this.routes.put('/editUserMobile',isLoggedInAPI,controller.editUserMobile)
+        this.routes.put('/editUserAddress',isLoggedInAPI,controller.editUserAddress)
         this.routes.put('/delUser',isLoggedInAPI,controller.deleteUser)
         this.routes.get('/checkResetPasswordToken',isLoggedInAPI,controller.checkResetPasswordToken)
         this.routes.post('/forgetPassword',isLoggedInAPI,controller.forgetPassword)
@@ -61,7 +64,7 @@ export class AdminRoutes extends Routes{
         this.routes.get('/getLanguageData/:require',controller.getLanguageData)
 
         this.routes.put('/editUser/:userId',isLoggedInAPI,controller.editUser)
-
+        this.routes.get('/getOrderPickUpAddressAndMobile/:id',isLoggedInAPI,controller.getPickUpAddressAndMobile)
     }
 }
 
