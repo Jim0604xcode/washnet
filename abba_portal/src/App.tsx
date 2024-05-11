@@ -33,6 +33,7 @@ import RoutesGuest from './RoutesGuest';
 import RoutesAdmin from './RoutesAdmin';
 
 import { PushNotifications } from '@capacitor/push-notifications';
+import { requestForToken } from './firebaseConfig';
 
 setupIonicReact();
 
@@ -50,6 +51,7 @@ const App: React.FC = () => {
   useEffect(()=>{
     console.log(process.env.REACT_APP_API_ENDPOINT)
     const main = async () => {
+      // requestForToken()
       await reg_push_notifications_token()
       await reg_push_notification_listeners()
     }

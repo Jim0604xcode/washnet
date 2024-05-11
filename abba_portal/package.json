@@ -36,6 +36,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
     "editorjs-text-color-plugin": "^2.0.4",
+    "firebase": "^10.11.1",
     "history": "^4.9.0",
     "ionicons": "^6.0.3",
     "match-sorter": "^6.3.1",
