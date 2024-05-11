@@ -138,20 +138,20 @@ export class AdminController implements IAdminController{
     async editOrder(req:Request,res:Response){
         try {
             let jwt = res.locals.jwt as JWT
-            if(jwt.role !== "admin"){
-                throw new Error("You aren't Admin")
+            if(jwt.role !== "admin" && jwt.role !== "delivery" && jwt.role !== "laundry"){
+                throw new Error("You have no permit")
             }
             let orderData = req.body as Order
             let orderId = Number(req.params.id)
             await addOrderSchema.validate(orderData);
             
-            if(
-                orderData.orderStatus !== "w_pickup" &&
-                orderData.orderStatus !== "w_delivery" && 
-                orderData.orderStatus !== "complete"
-            ){
-                throw new Error("Not correct order status")
-            }
+            // if(
+            //     orderData.orderStatus !== "w_pickup" &&
+            //     orderData.orderStatus !== "w_delivery" && 
+            //     orderData.orderStatus !== "complete"
+            // ){
+            //     throw new Error("Not correct order status")
+            // }
             await adminService.editOrder({
                 order_type:orderData.orderType,
                 pc:orderData.pc,
@@ -294,5 +294,28 @@ export class AdminController implements IAdminController{
         }catch(err){
           errorHandler(err,req,res)
         }
-      }
+    }
+
+    async getPickUpAddressAndMobile(req:Request,res:Response){
+        try{
+            let orderId = Number(req.params.id)
+            let {fullAddress} = await adminService.getPickUpAddress(orderId)
+            let jwt = res.locals.jwt as JWT
+            let {tel} = await adminService.getMobile(jwt.usersId)  
+            // console.log(fullAddress,orderStatus)
+            res.json({
+              data:{
+                district:fullAddress.split('|_|')[0],
+                street:fullAddress.split('|_|')[1],
+                building:fullAddress.split('|_|')[2],
+                tel:tel,
+                
+              },
+              isErr:false,
+              errMess:null
+            })
+        }catch(err){
+            errorHandler(err,req,res)
+        }
+    }
 }

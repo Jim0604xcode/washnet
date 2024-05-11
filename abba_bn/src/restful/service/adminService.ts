@@ -225,6 +225,43 @@ class AdminService{
             throw new Error(`${err.message}`)
         }
     }
+
+    async getPickUpAddress(orderId:number):Promise<{fullAddress:string,orderStatus:string}>{
+        const txn = await this.knex.transaction()
+        try {
+            let userRow = await txn.select("customer_id").from("orders").where("id",orderId)
+            // console.log(userRow)
+            if(userRow.length === 0){
+                throw new Error('Not exist this order')
+            }
+            // console.log(userRow)
+            let result = await txn.select("full_address as fullAddress").from("customer_meta").where("customer_id",userRow[0].customer_id)
+            if(result.length === 0){
+                throw new Error('Not exist this user')
+            }
+            await txn.commit()
+            // Object.assign(result[0],{orderStatus:userRow[0].status})
+            return result[0]
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async getMobile(userId:string):Promise<{tel:string}>{
+        const txn = await this.knex.transaction()
+        try {
+            let result = await txn.select("mobile as tel").from("users").where("id",userId)
+            if(result.length === 0){
+                throw new Error('Not exist this user')
+            }            
+            await txn.commit()
+            return result[0]
+
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
 }    
 
 export let adminService = new AdminService(knex)

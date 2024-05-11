@@ -14,7 +14,7 @@ export interface Order {
   
   fullAddress: string;
   remarks: string;
-  orderStatus:"w_pickup"|"w_delivery"|"complete";
+  orderStatus:"w_pickup"|"w_delivery"|"w_service"|"complete";
 }
 type ColumnDefinitionType<T, K extends keyof T> = {
   key: K;

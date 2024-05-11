@@ -45,6 +45,17 @@ export class UserService {
             throw new Error(`${err.message}`)
         }
     }
+    async editUser(userId:string,obj:any){
+        const txn = await this.knex.transaction()
+        try {
+            await txn("users").update(obj).where("id",userId)
+            await txn.commit()
+            return
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
     async delUser(userId:string){
         const txn = await this.knex.transaction()
         try {

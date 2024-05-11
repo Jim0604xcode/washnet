@@ -3,7 +3,7 @@ let sha384 = sha512.sha384
 let secret = 'ashdkjashdsadasdsadsadajkashdkjashdkjhasjkdakjsdh'
 
 
-export type Role = "admin"|"customer"
+export type Role = "admin"|"customer"|"delivery"|"laundry"
 export type JWT = {
     usersId:string
     role:Role

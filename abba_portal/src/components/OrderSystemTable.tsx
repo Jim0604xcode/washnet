@@ -237,14 +237,14 @@ let openEditOrderForm = (oid:number,index:number) => {
   
   
 }
-let cbEditData = useCallback((data:PlaceOrderType|any)=>{
+let cbEditData = useCallback((data:PlaceOrderType|any,orderId:number)=>{
   // admin edit order status 1
-  console.log('order system table',data,orderId)
+  // console.log('order system table',data,orderId)
   
   setTData(tData=>{
     let newTData = [...tData]
-    // console.log('order system table tData',newTData)
-    newTData = newTData.map(obj=>obj.orderId === data.orderId 
+    
+    newTData = newTData.map(obj=>obj.orderId === orderId 
     ? 
     Object.assign(obj,{
       fullAddress:data.fullAddress,
@@ -254,13 +254,16 @@ let cbEditData = useCallback((data:PlaceOrderType|any)=>{
       pickupDateTimeUnix:momentUnix(data.pickupDateTime),
       remarks:data.remarks,
       pc:data.pc,
+      orderStatus:data.orderStatus
       
     })
     :
     obj
     )
+    // console.log('order system table tData',newTData)
     return newTData
   })
+  // console.log(tData)
   setIsOpenModal(false);
 },[])    
 

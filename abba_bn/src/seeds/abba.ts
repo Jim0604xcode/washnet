@@ -24,9 +24,9 @@ export async function seed(knex: Knex): Promise<void> {
         },
         {
             id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF3',
-            display_name:'tony',
+            display_name:'jim',
             mobile:'51823008',
-            email: 'tony@gmail.com',
+            email: 'jim@gmail.com',
             password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
             role:'customer',
             status:'active'
@@ -40,6 +40,24 @@ export async function seed(knex: Knex): Promise<void> {
             role:'customer',
             status:'non_active'
         },
+        {
+            id:'sah8gh8fehCc9kJasdadXlYcF3',
+            display_name:'pakhei',
+            mobile:'51823010',
+            email: 'pakhei@gmail.com',
+            password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
+            role:'delivery',
+            status:'active'
+        },
+        {
+            id:'sadadhCc9kJ1JYeasdasgkYcF3',
+            display_name:'mei',
+            mobile:'51823011',
+            email: 'mei@gmail.com',
+            password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
+            role:'laundry',
+            status:'active'
+        },
         
     ]);
     
@@ -52,14 +70,14 @@ export async function seed(knex: Knex): Promise<void> {
       work_location:"九龍馬頭圍|_|曦景閣(A座)17/F|_|22室",
       staff_id:'PASxk06xVwXXcK5cH8Wyj5zHoah1'
     },
-    // {
-    //   work_location:"car",
-    //   staff_id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF4'
-    // },
-    // {
-    //   work_location:"Pa li",
-    //   staff_id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF5'
-    // }
+    {
+      work_location:"car",
+      staff_id:'sah8gh8fehCc9kJasdadXlYcF3'
+    },
+    {
+      work_location:"Pa li",
+      staff_id:'sadadhCc9kJ1JYeasdasgkYcF3'
+    }
   ])
     const ordersData = []
     ordersData.push({

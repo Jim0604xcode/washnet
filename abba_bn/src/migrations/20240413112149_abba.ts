@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("mobile").notNullable().unique()
         table.string("email").notNullable().unique()
         table.string("password").notNullable()
-        table.enu('role',["admin","customer"]).notNullable()
+        table.enu('role',["admin","customer","delivery","laundry"]).notNullable()
         table.enu('status',["active","non_active"]).notNullable()
         table.timestamp("created_at").defaultTo(knex.fn.now())
         table.timestamp("updated_at")
@@ -35,7 +35,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("tel").notNullable();
         table.string("full_address").notNullable();
         table.string("remarks").nullable();
-        table.enu('status',["w_pickup","w_delivery","complete"]).notNullable();
+        table.enu('status',["w_pickup","w_service","w_delivery","complete"]).notNullable();
         
         table.text("customer_id").unsigned();
         table.foreign("customer_id").references("users.id");

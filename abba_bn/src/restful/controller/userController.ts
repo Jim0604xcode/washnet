@@ -110,6 +110,8 @@ export class UserController implements IUserController{
         let jwt = res.locals.jwt as JWT
         console.log(jwt)
         let userData = req.body as {password:string}
+        console.log(userData)
+        userData.password = await hashPassword(userData.password)
         await userService.resetPass(jwt.usersId,userData.password)
         
         res.json({
@@ -123,6 +125,60 @@ export class UserController implements IUserController{
         
         errorHandler(err,req,res)
       }
+    }
+    async editUserPassword(req:express.Request,res:express.Response){
+      try {
+          let jwt = res.locals.jwt as JWT
+          let userData = req.body as {password:string}
+          await userService.editUser(jwt.usersId,userData.password)
+          
+          res.json({
+              data:null,
+              isErr:false,
+              errMess:null
+          })
+          
+      
+        } catch (err) {
+          
+          errorHandler(err,req,res)
+        }
+    }
+    async editUserMobile(req:express.Request,res:express.Response){
+      try {
+          let jwt = res.locals.jwt as JWT
+          let userData = req.body as {mobile:string}
+          await userService.editUser(jwt.usersId,{mobile:userData.mobile})
+          
+          res.json({
+              data:null,
+              isErr:false,
+              errMess:null
+          })
+          
+      
+        } catch (err) {
+          
+          errorHandler(err,req,res)
+        }
+    }
+    async editUserAddress(req:express.Request,res:express.Response){
+      try {
+          let jwt = res.locals.jwt as JWT
+          let userData = req.body as {district:string,street:string,building:string}
+          await userService.editUser(jwt.usersId,{full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building})
+          
+          res.json({
+              data:null,
+              isErr:false,
+              errMess:null
+          })
+          
+      
+        } catch (err) {
+          
+          errorHandler(err,req,res)
+        }
     }
     async deleteUser(req:express.Request,res:express.Response){
       try {
@@ -140,7 +196,7 @@ export class UserController implements IUserController{
           
           errorHandler(err,req,res)
         }
-  }
+    }
     async login(req:express.Request,res:express.Response){
         try {
             let userData = req.body as LoginUser
