@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '@/src/components/EditScreenInfo';
-import { Text, View } from '@/src/components/Themed';
+import EditScreenInfo from '@/components/EditScreenInfo';
+import { Text, View } from '@/components/Themed';
 
-export default function AlterationScreen() {
+export default function AlterationTab() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>改衣服務</Text>

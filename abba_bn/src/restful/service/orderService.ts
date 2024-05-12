@@ -47,7 +47,7 @@ class OrderService{
         }
     }
 
-    async getUserCurrentOrders(userId:string){
+    async getUserCurrentOrders(userId: string) {
         const txn = await this.knex.transaction();
         try {
             
@@ -74,7 +74,7 @@ class OrderService{
         }
     }
     
-    async getUserOrderHistory(userId:string){
+    async getUserOrderHistory(userId: string) {
         const txn = await this.knex.transaction();
         try {
             let result = await txn.select(

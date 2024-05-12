@@ -150,16 +150,21 @@ export class UserController implements IUserController{
     async editUserMobile(req:express.Request,res:express.Response){
       try {
           let jwt = res.locals.jwt as JWT
-          let userData = req.body as {mobile:string}
-          await userService.editUser(jwt.usersId,{mobile:userData.mobile})
+          let userData = req.body as {newMobile:string, password:string}
           
+          const passwordVerified = await userService.verifyPassword(jwt.usersId, userData.password);
+          if(!passwordVerified){
+            throw new Error('password not match');
+          } else if (passwordVerified){
+            await userService.editUser(jwt.usersId, {mobile: userData.newMobile});
+          };
+
           res.json({
               data:null,
               isErr:false,
               errMess:null
           })
-          
-      
+        
         } catch (err) {
           
           errorHandler(err,req,res)
@@ -207,7 +212,7 @@ export class UserController implements IUserController{
               mobile_or_email:userData.mobileOrEmail,
               password:userData.password
             })
-            console.log(id,role)
+
             let jwt = await createJwt(id,role,172800)
             res.json({
                 data:{
@@ -237,9 +242,7 @@ export class UserController implements IUserController{
             await registerUserSchema.validate(userData);
             delete userData.confirmPassword
             userData.password = await hashPassword(userData.password)
-            console.log(userData)
-            
-            
+
             const userRole:Role = "customer" 
             let {id,role} = await userService.register({
               id:userId,

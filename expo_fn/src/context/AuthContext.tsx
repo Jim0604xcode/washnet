@@ -1,4 +1,4 @@
-import { setStorageItemAsync, useStorageState } from '@/src/utils/useStorageState';
+import { setStorageItemAsync, useStorageState } from '@/utils/useStorageState';
 import React from 'react';
 import { Alert } from 'react-native';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../models';
@@ -10,6 +10,11 @@ interface AuthProps {
     token: string | null,
     mobile: string | null,
   };
+  setAuthState: React.Dispatch<React.SetStateAction<{
+    isAuthenticated: boolean | null;
+    token: string | null;
+    mobile: string | null;
+}>>
   login: (mobile: string, password: string) => Promise<any>;
   logout: () => void;
   register: ({
@@ -97,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/register`,{
         headers:{
-          "Content-type":"application/json",
+          "Content-type": "application/json",
         },
         method:"POST",
         body:JSON.stringify({
@@ -166,6 +171,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   const contextValue = React.useMemo(() => ({
     authState,
+    setAuthState: setAuthState,
     login: login,
     logout: logout,
     register: register,

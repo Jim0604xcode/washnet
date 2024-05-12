@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View, useColorScheme} from "react-native";
-import { Button, IconButton } from "react-native-paper";
-import Colors from "@/src/constants/Colors";
+import { Button } from "react-native-paper";
+import Colors from "@/constants/Colors";
 import { useForm } from "react-hook-form";
-import { Order, FormButtonControls, FormInputFlags } from "@/src/models";
-import AddressButton from "@/src/components/orderForm/AddressButton";
-import PickupButton from "@/src/components/orderForm/PickupButton";
+import { Order, FormButtonControls, FormInputFlags } from "@/models";
+import AddressButton from "@/components/orderForm/AddressButton";
+import PickupButton from "@/components/orderForm/PickupButton";
 import { useSharedValue } from "react-native-reanimated";
-import DeliveryButton from "@/src/components/orderForm/DeliveryButton";
-import ConfirmDialog from "@/src/components/orderForm/ConfirmDialog";
-import { useAuth } from "@/src/context/AuthContext";
+import DeliveryButton from "@/components/orderForm/DeliveryButton";
+import ConfirmDialog from "@/components/orderForm/ConfirmDialog";
+import { useAuth } from "@/context/AuthContext";
 
 
 const OrderForm: React.FC = () => {
@@ -124,13 +124,11 @@ const OrderForm: React.FC = () => {
         style={styles.confirmBtn}
         buttonColor={
           formInputFlags.hasStep123Completed ?
-          Colors[colorScheme ?? "light"].tint :
+          Colors[colorScheme ?? "light"].secondary :
           Colors[colorScheme ?? "light"].text
         }
         labelStyle={{
           color: Colors[colorScheme ?? "light"].background,
-          fontSize: 16,
-          fontWeight: "bold",
         }}
         onPress={handleDialogOpen}
         >
@@ -154,14 +152,15 @@ export default OrderForm;
 const styles = StyleSheet.create({
   formBox: {
     paddingHorizontal: 20,
-    gap: 20,
-    paddingTop: 40,
+    gap: 10,
+    paddingTop: 10,
     paddingBottom: 20,
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
   },
   confirmBtn: {
+    marginTop: 10,
     width: "100%",
   }
 });

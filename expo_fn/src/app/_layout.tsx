@@ -1,16 +1,17 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot, Stack, useRouter, useSegments } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
-import { useColorScheme } from '@/src/components/useColorScheme';
+import { useColorScheme } from '@/components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider, useAuth } from '@/src/context/AuthContext';
-import { useStorageState } from '../utils/useStorageState';
-
+import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Colors from '@/constants/Colors';
+import { View, Text } from 'react-native';
 const queryClient = new QueryClient();
 
 export {
@@ -20,7 +21,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(app)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -51,10 +52,29 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
-const MainLayout = () => {
+function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <PaperProvider>
+            <SafeAreaProvider>
+                <StackLayout/>
+            </SafeAreaProvider>
+          </PaperProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
+function StackLayout() {
   const { authState } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const ColorScheme = useColorScheme();
 
   useEffect(() => {
     const firstSegment = segments.length > 0 ? segments[0] : null;
@@ -73,25 +93,26 @@ const MainLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(app)" options={{ headerShown: false }} />
+      <Stack.Screen name="orders" options={{
+        headerStyle: {
+          backgroundColor: Colors[ColorScheme??'light'].tint,
+        },
+        headerTitle: ()=>(
+          <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center', columnGap: 8}}>
+            <MaterialCommunityIcons
+              name="basket-check"
+              color={Colors[ColorScheme??'light'].background}
+              size={24}
+            />
+            <Text style={{color: Colors[ColorScheme ?? 'light'].background,
+              fontSize: 18,
+              fontWeight: 'bold',
+            }}>
+              現時訂單
+            </Text>
+          </View>
+          ),
+        presentation: 'modal' }} />
     </Stack>
-
-  );
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
-  return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <PaperProvider>
-            <SafeAreaProvider>
-                <MainLayout/>
-            </SafeAreaProvider>
-          </PaperProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </AuthProvider>
   );
 }

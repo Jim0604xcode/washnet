@@ -1,11 +1,11 @@
 import { useRouter } from "expo-router";
 import React, { Suspense } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@/src/context/AuthContext";
-import { useStorageState } from "../utils/useStorageState";
+import { useAuth } from "@/context/AuthContext";
+import { useStorageState } from "@/utils/useStorageState";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
 
@@ -66,7 +66,7 @@ const index = () => {
         }
       >
         <Animated.Image
-          source={require("@/src/assets/images/logo-p99.png")}
+          source={require("@/assets/images/logo-p99.png")}
           style={[styles.logo, animation]}
         />
       </Suspense>

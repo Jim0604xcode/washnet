@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { Text } from "@/src/components/Themed";
+import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
-import { useDebounce } from "@/src/utils/useDebounce";
+import { useDebounce } from "@/utils/useDebounce";
 import { TextInput } from 'react-native-paper';
 import { UseFormRegister } from 'react-hook-form';
-import { FormButtonControls, FormInputFlags, Order } from '@/src/models';
+import { FormButtonControls, FormInputFlags, Order } from '@/models';
 
 type AddressButtonProps = {
     formBtnCtrls: FormButtonControls;
@@ -45,19 +45,19 @@ const handlePress1 = useDebounce(() => {
     height1.value = withSpring(350, { damping: 15 });
   } else if (isOpen1 === true) {
     hasAddress ? 
-      (height1.value = withSpring(100, { damping: 15 }))
+      (height1.value = withSpring(110, { damping: 15 }))
     : (height1.value = withSpring(80, { damping: 15 }));
   }
   setIsOpen1(!isOpen1);
   if (isOpen2 === true) {
     hasPickupDateTime ?
-      (height2.value = withSpring(100, { damping: 14 }))
+      (height2.value = withSpring(110, { damping: 14 }))
     : (height2.value = withSpring(80, { damping: 14 }));
     setIsOpen2(false);
   }
   if (isOpen3 === true) {
     hasDeliveryDateTime ?
-      (height3.value = withSpring(100, { damping: 14 }))
+      (height3.value = withSpring(110, { damping: 14 }))
     : (height3.value = withSpring(80, { damping: 14 }));
     setIsOpen3(false);
   }
@@ -89,7 +89,7 @@ const handlePress1 = useDebounce(() => {
               { color: Colors[colorScheme ?? "light"].text },
             ]}
           >
-            第一步：填寫地址
+            填寫地址
           </Text>
           <FontAwesome
             name={isOpen1 ? "chevron-up" : "chevron-down"}
@@ -197,9 +197,8 @@ const styles = StyleSheet.create({
       minHeight: 80,
       maxHeight: 350,
       borderRadius: 14,
+      paddingHorizontal: 24,
       paddingVertical: 20,
-      paddingLeft: 24,
-      paddingRight: 20,
       alignItems: "center",
       justifyContent: "flex-start",
       width: "100%"
@@ -213,19 +212,20 @@ const styles = StyleSheet.create({
   btnTitle: {
     width: "100%",
     height: 40,
+    paddingLeft: 4,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   btnText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   inputBox: {
-    width: "100%",
+    width: '100%',
     gap: 20,
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
   },
 })

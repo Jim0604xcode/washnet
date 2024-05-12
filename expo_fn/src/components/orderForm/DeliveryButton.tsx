@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, useColorScheme } from 'react-native'
-import { Text } from "@/src/components/Themed";
+import { Text } from "@/components/Themed";
 import { FontAwesome } from '@expo/vector-icons';
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
-import { useDebounce } from "@/src/utils/useDebounce";
+import { useDebounce } from "@/utils/useDebounce";
 import { UseFormRegister } from 'react-hook-form';
-import { FormButtonControls, FormInputFlags, Order } from '@/src/models';
+import { FormButtonControls, FormInputFlags, Order } from '@/models';
 import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { IconButton } from 'react-native-paper';
-import { parseAndAddDays } from '@/src/utils/parseAndAddDays';
+import { parseAndAddDays } from '@/utils/parseAndAddDays';
 
 type DeliveryButtoProps = {
     formBtnCtrls: FormButtonControls;
@@ -42,30 +42,33 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
 
   const { hasAddress, hasPickupDateTime, hasDeliveryDateTime } = formInputFlags;
   
-  const handlePress3 = useDebounce(() => {
-    if (!isOpen3) {
-      height3.value = withSpring(175, { damping: 15 });
-    } else if (isOpen3) {
-      hasDeliveryDateTime ? 
-        (height3.value = withSpring(100, { damping: 15 }))
-      : (height3.value = withSpring(80, { damping: 15 }));
-    }
-    setIsOpen3(!isOpen3);
+ const cbHandlePress3 = useCallback(() => {
+  if (!isOpen3) {
+    height3.value = withSpring(175, { damping: 17 });
+  } else if (isOpen3) {
+    hasDeliveryDateTime ? 
+      (height3.value = withSpring(110, { damping: 15 }))
+    : (height3.value = withSpring(80, { damping: 15 }));
+  }
+  setIsOpen3(!isOpen3);
 
-    if (isOpen1) {
-      hasAddress ? 
-      (height1.value = withSpring(100, { damping: 14 }))
-    : (height1.value = withSpring(80, { damping: 14 }));
-      setIsOpen1(false);
-    }
+  if (isOpen1) {
+    hasAddress ? 
+    (height1.value = withSpring(110, { damping: 14 }))
+  : (height1.value = withSpring(80, { damping: 14 }));
+    setIsOpen1(false);
+  }
 
-    if (isOpen2) {
-      hasPickupDateTime ?
-      (height2.value = withSpring(100, { damping: 14 }))
-    : (height2.value = withSpring(80, { damping: 14 }));
-      setIsOpen2(false);
-    }
-  }, 100);
+  if (isOpen2) {
+    hasPickupDateTime ?
+    (height2.value = withSpring(110, { damping: 14 }))
+  : (height2.value = withSpring(80, { damping: 14 }));
+    setIsOpen2(false);
+  }
+  },[isOpen1, isOpen2, isOpen3, height1, height2, height3, hasAddress, hasPickupDateTime, hasDeliveryDateTime])
+
+ const handlePress3 = useDebounce(()=>{cbHandlePress3()}, 100)
+
   const dayAfterTomorrow = dayjs().add(2, 'days').toDate();
   const dayAfterPickup = useMemo(() =>
      parseAndAddDays(formValue.pickupDateTime, 'YYYY-MM-DD ddd h:mm A', 1)
@@ -114,7 +117,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           { height: height3,
             backgroundColor:
             hasDeliveryDateTime ? Colors[colorScheme ?? "light"].tertiary
-              : Colors[colorScheme ?? "light"].surfaceContainer,
+              : Colors[colorScheme ?? "light"].surfaceContainer
           },
         ]}>
         <TouchableOpacity style={styles.openBtn}
@@ -132,10 +135,10 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
                 { color: Colors[colorScheme ?? "light"].text },
               ]}
             >
-              第三步：送回衣服時間
+              送回衣服時間
             </Text>
             <FontAwesome
-              name={isOpen2 ? "chevron-up" : "chevron-down"}
+              name={isOpen3 ? "chevron-up" : "chevron-down"}
               size={16}
               color={Colors[colorScheme ?? "light"].text}
             />
@@ -197,8 +200,8 @@ const styles = StyleSheet.create({
     maxHeight: 175,
     borderRadius: 14,
     paddingVertical: 20,
-    paddingLeft: 16,
-    paddingRight: 20,
+    paddingLeft: 20,
+    paddingRight: 24,
     alignItems: "center",
     justifyContent: "flex-start",
     },
@@ -216,11 +219,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
   },
   dateTimeInput: {
     width: '100%',

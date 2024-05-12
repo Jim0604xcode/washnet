@@ -1,5 +1,5 @@
-import Colors from "@/src/constants/Colors";
-import { useAuth } from "@/src/context/AuthContext";
+import Colors from "@/constants/Colors";
+import { useAuth } from "@/context/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Stack, Link, useRouter, useSegments } from "expo-router";
 import React from "react";
@@ -25,7 +25,7 @@ export default function AuthLayout() {
               headerShadowVisible: false,
               headerTitle: () => (
                 <Image 
-                  source={require('@/src/assets/images/logo-p99.png')}
+                  source={require('@/assets/images/logo-p99.png')}
                   style={{width: 100, height: 28}
                 }
                 />

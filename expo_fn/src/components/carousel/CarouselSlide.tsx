@@ -1,4 +1,4 @@
-import Colors from "@/src/constants/Colors";
+import Colors from "@/constants/Colors";
 import React from "react";
 import { Image, Text, View, StyleSheet, ColorSchemeName, ImageBackground, useColorScheme } from "react-native";
 
@@ -13,7 +13,7 @@ type CarouselSlideProps = {
 
 const imageList = [
   { serivce: "pw",
-    src: require('@/src/assets/images/drawing-1.png')},
+    src: require('@/assets/images/drawing-1.png')},
 ]
 
 const CarouselSlide: React.FC<CarouselSlideProps> = ({
@@ -69,9 +69,10 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    paddingHorizontal: 20,
+    width: '100%',
     paddingTop: 20,
     paddingBottom: 10,
+    paddingHorizontal: 20,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "flex-start",
@@ -85,17 +86,17 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   subtitle: {
-    fontSize: 26,
+    fontSize: 29,
     fontWeight: "700",
     marginBottom: 6,
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "400",
   },
   img: {
     width: "50%",
-    height: "120%",
+    height: "100%",
   },
 });
 

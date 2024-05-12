@@ -7,15 +7,15 @@ import {
   useColorScheme,
   Dimensions,
 } from "react-native";
-import { View } from "@/src/components/Themed";
-import Colors from "@/src/constants/Colors";
-import { useAuth } from "@/src/context/AuthContext";
+import { View } from "@/components/Themed";
+import Colors from "@/constants/Colors";
+import { useAuth } from "@/context/AuthContext";
 import { ActivityIndicator } from "react-native-paper";
-import { UserOrder } from "@/src/models";
+import { UserOrder } from "@/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import useOrderData, { QueryPeriod } from "@/src/utils/useOrderData";
+import useOrderData, { QueryPeriod } from "@/utils/useOrderData";
 
-export default function Orders() {
+export default function OrdersModal() {
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
   const { authState } = useAuth();
@@ -23,7 +23,7 @@ export default function Orders() {
 
   return (
     <ScrollView
-      style={[styles.container, {width: width}]}
+      style={{width: width}}
       contentContainerStyle={{
       paddingTop: 20,
       paddingHorizontal: 40,
@@ -54,13 +54,13 @@ export default function Orders() {
                 key={idx}
                 style={styles.orderItem}
                 lightColor={Colors.light.surfaceContainer}
-                darkColor={Colors.dark.surfaceContainerDarkHigh}
+                darkColor={Colors.dark.surfaceContainerHL}
                 
               >
                 <View
                   style={styles.itemTitle}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   {order.orderType === "pw" ? (
                     <MaterialCommunityIcons
@@ -168,6 +168,8 @@ export default function Orders() {
                   </Text>
                   {order.orderStatus === "w_pickup"
                     ? "等待收衫"
+                    : order.orderStatus === "w_service"
+                    ? "已收衫"
                     : order.orderStatus === "w_delivery"
                     ? "等待派送"
                     : order.orderStatus === "complete"
@@ -177,7 +179,7 @@ export default function Orders() {
                 <View
                   style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   <Text
                     style={[
@@ -199,7 +201,7 @@ export default function Orders() {
                 <View
                   style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   <Text
                     style={[
@@ -221,7 +223,7 @@ export default function Orders() {
                 <View
                   style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
-                  darkColor={Colors.dark.surfaceContainerDarkHigh}
+                  darkColor={Colors.dark.surfaceContainerHL}
                 >
                   <Text
                     style={[
@@ -248,13 +250,8 @@ export default function Orders() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // alignItems: "center",
-    // justifyContent: "flex-start",
-  },
   title: {
-    fontSize: 26,
+    fontSize: 29,
     fontWeight: "bold",
   },
   orderItem: {
@@ -265,21 +262,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 14,
     marginTop: 10,
-    gap: 8,
+    gap: 10,
   },
   itemTitle: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    gap: 4,
+    gap: 8,
   },
   type: {
-    fontSize: 21,
+    fontSize: 16,
     fontWeight: "bold",
   },
   labelAndText: {
-    gap: 4,
+    gap: 4
   },
   text: {
     fontSize: 16,
