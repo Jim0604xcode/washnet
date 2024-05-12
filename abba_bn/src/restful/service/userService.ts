@@ -93,8 +93,6 @@ export class UserService {
             await txn.rollback();
             throw new Error(`${err.message}`)
         }
-        
-        
     }
     async register (userData:RegUser){
         const txn = await this.knex.transaction()
@@ -190,6 +188,27 @@ export class UserService {
             throw new Error(`${err.message}`)
         }
     }
+
+    async verifyPassword(userId: string, password:string){
+        const txn = await this.knex.transaction()
+        try {
+            const result = await txn.select("password","status").from("users")
+            .where("id", userId);
+            if(result.length === 0){
+                throw new Error('Not exist this user')
+            };
+            if(result[0].status==="non_active"){
+                throw new Error('Non active user')
+            };
+            const checked = await checkPassword(password, result[0].password);
+            await txn.commit();
+            return checked;
+        } catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`);
+        }
+    }
+
 }
 
 
