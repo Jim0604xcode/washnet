@@ -117,54 +117,60 @@ export default function LaundryTab() {
   const progressValue = useSharedValue<number>(0);
 
   return (
-    <ScrollView 
-        contentContainerStyle={{
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        gap: 20,
-        backgroundColor: Colors[colorScheme ?? 'light'].background,
-      }}
-      keyboardDismissMode = 'on-drag'
-      keyboardShouldPersistTaps = 'handled'
-      contentInsetAdjustmentBehavior = 'always'
-    >
-      <View style={styles.carouselBox}>
-        <Carousel
-          loop
-          width={width}
-          height={width / 2}
-          autoPlay={true}
-          autoPlayInterval={8000}
-          data={block}
-          pagingEnabled={true}
-          withAnimation={{
-            type: "spring",
-            config: {
-              damping: 15,
-            },
-          }}
-          scrollAnimationDuration={1000}
-          onProgressChange={(_, absoluteProgress) =>
-            (progressValue.value = absoluteProgress)
-          }
-          
-          renderItem={({ index }) => (
-            <CarouselSlide data={block[index]} />
-          )}
-        />
-        <Pagination 
-          carouselData={block}
-          progressValue={progressValue}
-          colorScheme={colorScheme}
-        />
-      </View>
-      <OrderForm />
-    </ScrollView>
+    <View style={[styles.container,{width: width}]}>
+      <ScrollView 
+          contentContainerStyle={{
+          alignItems: 'center',
+          gap: 20,
+          backgroundColor: Colors[colorScheme ?? 'light'].background,
+        }}
+        keyboardDismissMode = 'on-drag'
+        keyboardShouldPersistTaps = 'handled'
+        contentInsetAdjustmentBehavior = 'always'
+      >
+        <View style={styles.carouselBox}>
+          <Carousel
+            loop
+            width={width}
+            height={width / 2}
+            autoPlay={true}
+            autoPlayInterval={8000}
+            data={block}
+            pagingEnabled={true}
+            withAnimation={{
+              type: "spring",
+              config: {
+                damping: 15,
+              },
+            }}
+            scrollAnimationDuration={1000}
+            onProgressChange={(_, absoluteProgress) =>
+              (progressValue.value = absoluteProgress)
+            }
+            
+            renderItem={({ index }) => (
+              <CarouselSlide data={block[index]} />
+            )}
+          />
+          <Pagination 
+            carouselData={block}
+            progressValue={progressValue}
+            colorScheme={colorScheme}
+          />
+        </View>
+        <OrderForm />
+      </ScrollView>
+    </View>
   );
 }
 
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   carouselBox: {
     alignItems: 'center',
     justifyContent: 'flex-start',

@@ -54,7 +54,7 @@ export default {
     error: error,
     onPrimary: p10,
     surface: surfaceDark,
-    surfaceContainer: surfaceContainerDark,
+    surfaceContainer: surfaceContainerDarkHigh,
     surfaceContainerHL: surfaceContainerDarkHigh,
     text: onSurfaceDark,
     background: surfaceDark,

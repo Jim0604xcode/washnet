@@ -1,15 +1,8 @@
 import React from 'react';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Link, Stack, Tabs, useNavigation } from 'expo-router';
-import { Image, Pressable } from 'react-native';
+import { MaterialIcons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-import { useAuth } from '@/context/AuthContext';
-import { DrawerToggleButton } from '@react-navigation/drawer';
-import { Drawer } from 'react-native-paper';
-import { DrawerActions } from '@react-navigation/native';
 
 const tabData = [
   { name: 'laundry', 
@@ -18,7 +11,7 @@ const tabData = [
       <MaterialCommunityIcons
         name="scale"
         style={{ marginBottom: -8 }}
-        size={size} 
+        size={26} 
         color={color}
       />
     ),
@@ -29,7 +22,7 @@ const tabData = [
       <MaterialIcons
         name="dry-cleaning"
         style={{ marginBottom: -8 }}
-        size={28}
+        size={26}
         color={color}
       />
     ),
@@ -40,7 +33,7 @@ const tabData = [
       <MaterialCommunityIcons
         name="scissors-cutting"
         style={{ marginBottom: -8 }}
-        size={28}
+        size={26}
         color={color}
       />
     ),
@@ -48,10 +41,10 @@ const tabData = [
   { name: 'otherCleaning', 
     title: '其他清洗',
     icon: (color: string) => (
-      <MaterialIcons
+      <Entypo
         name="water"
         style={{ marginBottom: -8 }}
-        size={28}
+        size={22}
         color={color}
       />
     ),
@@ -76,15 +69,18 @@ export default function TabLayout() {
           backgroundColor: Colors[colorScheme ?? 'light'].primary,
           borderTopWidth: 0,
           marginHorizontal: 15,
-          marginBottom: 21,
-          borderRadius: 14,
-          overflow: 'hidden',
-          height: 70
+          marginBottom: 22,
+          borderTopLeftRadius: 14,
+          borderTopRightRadius: 14,
+          borderBottomStartRadius: 14,
+          borderBottomEndRadius: 14,
+          paddingHorizontal: 10,
+          height: 66
         },
         tabBarItemStyle: {
           padding: 0,
-          marginBottom: -18,
-        },
+          marginBottom: -16,
+        }
       }}
     >
       {tabData.map((tab) => (

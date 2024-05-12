@@ -154,6 +154,7 @@ const RegisterScreen = () => {
             />
             {segment === "login" && (
               <Animated.View style={[styles.inner, animatedStyles]}>
+                
                 <Controller
                   control={control}
                   name="mobile"
@@ -169,7 +170,7 @@ const RegisterScreen = () => {
                     },
                     pattern: {
                       value: /^[0-9]+$/,
-                      message: "只接受電話號碼",
+                      message: "只接受手機號碼",
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
@@ -202,6 +203,7 @@ const RegisterScreen = () => {
                 {errors.mobile && (
                   <Text style={styles.errorText}>{errors.mobile?.message}</Text>
                 )}
+
                 <Controller
                   control={control}
                   name="password"
@@ -338,6 +340,7 @@ const RegisterScreen = () => {
             )}
             {segment === "address" && (
               <Animated.View style={[styles.inner, animatedStyles]}>
+    
                 <Controller
                   control={control}
                   name="displayName"
@@ -383,6 +386,7 @@ const RegisterScreen = () => {
                     {errors.displayName?.message}
                   </Text>
                 )}
+
                 <Controller
                   control={control}
                   name="district"

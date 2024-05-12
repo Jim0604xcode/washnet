@@ -54,21 +54,21 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       height2.value = withSpring(175, { damping: 15 });
     } else if (isOpen2 === true) {
       hasPickupDateTime
-        ? (height2.value = withSpring(100, { damping: 15 }))
+        ? (height2.value = withSpring(110, { damping: 15 }))
         : (height2.value = withSpring(80, { damping: 15 }));
     }
     setIsOpen2(!isOpen2);
 
     if (isOpen1 === true) {
       hasAddress
-        ? (height1.value = withSpring(100, { damping: 14 }))
+        ? (height1.value = withSpring(110, { damping: 14 }))
         : (height1.value = withSpring(80, { damping: 14 }));
       setIsOpen1(false);
     }
 
     if (isOpen3 === true) {
       hasDeliveryDateTime
-        ? (height3.value = withSpring(100, { damping: 14 }))
+        ? (height3.value = withSpring(110, { damping: 14 }))
         : (height3.value = withSpring(80, { damping: 14 }));
       setIsOpen3(false);
     }
@@ -167,7 +167,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
               { color: Colors[colorScheme ?? "light"].text },
             ]}
           >
-            第二步：上門收衫時間
+            上門收衫時間
           </Text>
           <FontAwesome
             name={isOpen2 ? "chevron-up" : "chevron-down"}
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     minHeight: 80,
     maxHeight: 175,
     borderRadius: 14,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingVertical: 20,
     alignItems: "center",
     justifyContent: "flex-start",
@@ -269,11 +269,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   info: {
-    fontSize: 16,
+    fontSize: 18,
   },
   dateTimeInput: {
     width: "100%",

@@ -9,7 +9,7 @@ import { useColorScheme, Text } from "react-native";
 import { Link, useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { Divider } from "react-native-paper";
 
@@ -25,6 +25,7 @@ function CustomDrawerContent(props: any) {
         flex: 1,
         gap: 10,
       }}
+      
       >
       <Image
         source={require("@/assets/images/logo.png")}
@@ -43,47 +44,50 @@ function CustomDrawerContent(props: any) {
       </View>
       <Divider/>
       <DrawerItem
-        label="重設手機號碼"
+        label="更改註冊電話"
         onPress={() => router.push("/mobile")}
+        style={styles.drawerItem}
         labelStyle={{
           fontWeight: "bold",
-          fontSize: 16,
+          fontSize: 18,
         }}
         icon={(color) => (
-          <MaterialCommunityIcons
+          <FontAwesome
             name="whatsapp"
-            size={28}
+            size={20}
             color={Colors[colorScheme ?? "light"].text}
             />
 
         )}
       />
       <DrawerItem
-        label="重設常用地址"
+        label="更改常用地址"
         onPress={() => router.push("/address")}
+        style={styles.drawerItem}
         labelStyle={{
           fontWeight: "bold",
-          fontSize: 16,
+          fontSize: 18,
         }}
         icon={(color) => (
-          <MaterialCommunityIcons
+          <FontAwesome
             name="home"
-            size={28}
+            size={20}
             color={Colors[colorScheme ?? "light"].text}
           />
         )}
       />
       <DrawerItem
-        label="重設密碼"
+        label="更改密碼"
         onPress={() => router.push("/password")}
+        style={styles.drawerItem}
         labelStyle={{
           fontWeight: "bold",
-          fontSize: 16,
+          fontSize: 18,
         }}
         icon={(color) => (
           <MaterialCommunityIcons
             name="key"
-            size={28}
+            size={20}
             color={Colors[colorScheme ?? "light"].text}
           />
         )}
@@ -91,14 +95,15 @@ function CustomDrawerContent(props: any) {
       <DrawerItem
         label="刪除用戶"
         onPress={() => router.push("/userDeletion")}
+        style={styles.drawerItem}
         labelStyle={{
           fontWeight: "bold",
-          fontSize: 16,
+          fontSize: 18,
         }}
         icon={(color) => (
           <MaterialCommunityIcons
             name="delete"
-            size={28}
+            size={20}
             color={Colors[colorScheme ?? "light"].text}
           />
         )}
@@ -107,14 +112,15 @@ function CustomDrawerContent(props: any) {
       <DrawerItem
         label="登出"
         onPress={()=>logout!()}
+        style={styles.drawerItem}
         labelStyle={{
           fontWeight: "bold",
-          fontSize: 16,
+          fontSize: 18,
         }}
         icon={(color) => (
           <MaterialCommunityIcons
             name="logout"
-            size={28}
+            size={20}
             color={Colors[colorScheme ?? "light"].text}
           />
         )}
@@ -133,6 +139,8 @@ export default function AppLayout() {
           backgroundColor: Colors[colorScheme ?? "light"].background,
           shadowColor: "transparent",
         },
+        drawerActiveBackgroundColor: 'red'
+        ,
         headerTitle: () => (
           <Image
             source={require("@/assets/images/logo.png")}
@@ -151,7 +159,7 @@ export default function AppLayout() {
               {({ pressed }) => (
                 <MaterialCommunityIcons
                   name="basket-check"
-                  size={28}
+                  size={26}
                   color={Colors[colorScheme ?? "light"].text}
                   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                 />
@@ -161,7 +169,6 @@ export default function AppLayout() {
         ),
       }}
     >
-      {/* All other screens should be hidden */}
     </Drawer>
   );
 }
@@ -177,7 +184,10 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   infoText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
+  drawerItem: {
+    paddingLeft: 20,
+  }
 });

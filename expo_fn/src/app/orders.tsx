@@ -23,7 +23,7 @@ export default function OrdersModal() {
 
   return (
     <ScrollView
-      style={[styles.container, {width: width}]}
+      style={{width: width}}
       contentContainerStyle={{
       paddingTop: 20,
       paddingHorizontal: 40,
@@ -168,6 +168,8 @@ export default function OrdersModal() {
                   </Text>
                   {order.orderStatus === "w_pickup"
                     ? "等待收衫"
+                    : order.orderStatus === "w_service"
+                    ? "已收衫"
                     : order.orderStatus === "w_delivery"
                     ? "等待派送"
                     : order.orderStatus === "complete"
@@ -248,13 +250,8 @@ export default function OrdersModal() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // alignItems: "center",
-    // justifyContent: "flex-start",
-  },
   title: {
-    fontSize: 26,
+    fontSize: 29,
     fontWeight: "bold",
   },
   orderItem: {
@@ -265,21 +262,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 14,
     marginTop: 10,
-    gap: 8,
+    gap: 10,
   },
   itemTitle: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    gap: 4,
+    gap: 8,
   },
   type: {
-    fontSize: 21,
+    fontSize: 16,
     fontWeight: "bold",
   },
   labelAndText: {
-    gap: 4,
+    gap: 4
   },
   text: {
     fontSize: 16,

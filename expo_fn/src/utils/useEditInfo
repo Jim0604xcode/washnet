@@ -1,0 +1,33 @@
+import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "@/context/AuthContext";
+
+const useEditUser = () => {
+    const { authState } = useAuth();
+    const edit = useMutation({
+      mutationFn: async (formData) => {
+        try {
+          const token = authState?.token;
+          const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/order/addOrder`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formData),
+          });
+          const result = await res.json();
+          if (!result.isErr) {
+            return result.data;
+          } else {
+            throw new Error(result.errMess);
+          };
+        } catch (error) {
+          // This will automatically be handled by React Query's onError if used
+          throw error; // Re-throw the error to ensure it can be caught by React Query's error handling
+        }
+      }
+    });
+    return edit;
+  };
+
+export default useEditUser;
