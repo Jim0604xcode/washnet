@@ -7,6 +7,7 @@ import { AdminRoutes, OrderRoutes, ThemeRoutes, UserRoutes } from "./restful/rou
 import { OrderController } from "./restful/controller/orderController";
 import { AdminController } from "./restful/controller/adminController";
 import { ThemeController } from "./restful/controller/themeController";
+import path from "path";
 
 const app = express();
 app.use(cors({
@@ -31,6 +32,11 @@ app.use('/admin',adminRoute.routes)
 const themeController = new ThemeController()
 const themeRoute = new ThemeRoutes(themeController)
 app.use('/theme',themeRoute.routes)
+
+
+
+app.use(express.static(path.join(__dirname, './build')));
+
 
 httpServer.listen(env_config.PORT, () => {
     console.log(`Listening at http://localhost:${env_config.PORT}/`);

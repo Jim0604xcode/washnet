@@ -15,14 +15,14 @@ export async function up(knex: Knex): Promise<void> {
     })
     await knex.schema.createTable("customer_meta",(table)=>{
         table.string("full_address").notNullable();
-        
+
         
         table.text("customer_id").unsigned();
         table.foreign("customer_id").references("users.id");
     })
     await knex.schema.createTable("staff_meta",(table)=>{
         table.string("work_location").notNullable()
-        
+        table.string("cloud_messaging_token").nullable()
         table.text("staff_id").unsigned();
         table.foreign("staff_id").references("users.id");
     })
@@ -63,6 +63,7 @@ export async function up(knex: Knex): Promise<void> {
         table.timestamp("created_at").defaultTo(knex.fn.now())
         table.timestamp("updated_at")
     })
+    
 }
 
 

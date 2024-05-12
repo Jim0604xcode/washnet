@@ -80,7 +80,7 @@ const A_themeSystem: React.FC = () => {
                 
                 {/* <IonCardHeader> */}
                   <div onClick={()=>{history.push('/A-themeSystem/'+obj.key)}} style={{padding:"15px 10px"}}>
-                    <IonImg style={{width:"100%",height:"200px",userSelect:"none"}} src="assets/icon/wash_fold_img.svg"></IonImg>
+                    <IonImg style={{width:"100%",height:"200px",userSelect:"none"}} src="assets/icon/drawing-1.png"></IonImg>
                     <label style={{fontSize:"25px",fontFamily: "var(--noto-bold)"}}>{obj.title}</label>
                     <IonRippleEffect className="custom-ripple"></IonRippleEffect>
                   </div>  

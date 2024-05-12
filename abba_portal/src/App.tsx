@@ -33,6 +33,7 @@ import RoutesGuest from './RoutesGuest';
 import RoutesAdmin from './RoutesAdmin';
 
 import { PushNotifications } from '@capacitor/push-notifications';
+// import { requestForToken } from './firebaseConfig';
 
 setupIonicReact();
 
@@ -50,21 +51,12 @@ const App: React.FC = () => {
   useEffect(()=>{
     console.log(process.env.REACT_APP_API_ENDPOINT)
     const main = async () => {
-      await reg_push_notifications_token()
       await reg_push_notification_listeners()
     }
     main()
   },[])
   const reg_push_notification_listeners = async () => {
-    await PushNotifications.addListener('registration', token => {
-      console.log('Registration token: ', token.value);
-      prompt(JSON.stringify(token.value))
-    });
-
-    await PushNotifications.addListener('registrationError', err => {
-      console.log('Registration error: ', err.error);
-    });
-
+    
     await PushNotifications.addListener('pushNotificationReceived', notification => {
       console.log('Push notification received: ', notification);
     });
@@ -73,21 +65,7 @@ const App: React.FC = () => {
       console.log('Push notification action performed', notification.actionId, notification.inputValue);
     });
   }
-  const reg_push_notifications_token = async () => {
-    let permStatus = await PushNotifications.checkPermissions();
-
-    if (permStatus.receive === 'prompt') {
-      permStatus = await PushNotifications.requestPermissions();
-    }
-
-    if (permStatus.receive !== 'granted') {
-      throw new Error('User denied permissions!');
-    }
-
-    await PushNotifications.register();
-  }
   
-
   return (
   <IonApp>
     

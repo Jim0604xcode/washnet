@@ -3,7 +3,7 @@ import { getValue, removeValue, setValue } from "./LocalStorage"
 
 import { Language, setterRoleState } from "./Recoil"
 import sweetAlert from 'sweetalert2'
-import { LoginFormState, PlaceOrderFormState, PlaceOrderType, RegisterFormState } from "./FormBuilder"
+import { LoginFormState, PlaceOrderType, RegisterFormState } from "./FormBuilder"
 
 
 

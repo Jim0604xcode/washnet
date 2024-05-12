@@ -98,7 +98,12 @@ export class AdminController implements IAdminController{
     }
     async allOrderData(req:Request,res:Response){
         try {
-            let orders = await adminService.getUserAllOrder()
+            let jwt = res.locals.jwt as JWT
+            if(jwt.role !== "admin" && jwt.role !== "delivery" && jwt.role !== "laundry"){
+                throw new Error("You have no permit")
+            }
+
+            let orders = await adminService.getUserAllOrder(jwt.role)
             
             
             res.json({
@@ -213,7 +218,30 @@ export class AdminController implements IAdminController{
             errorHandler(err,req,res)
         }
     }
+    async editMessagongToken(req:Request,res:Response){
+        try {
+            let jwt = res.locals.jwt as JWT
+            if(jwt.role !== "admin" && jwt.role !== "delivery" && jwt.role !== "laundry"){
+                throw new Error("You have no permit")
+            }
+            let userData = req.body as {fcmToken:string}
+            let userId = jwt.usersId
+            await adminService.editMessagongToken(userId,{
+                cloud_messaging_token:userData.fcmToken
+            })    
+            
+            
+            res.json({
+                data:null,
+                isErr:false,
+                errMess:null
+            })
+        }catch(err){
+            errorHandler(err,req,res)
+        } 
+    }
     async editUser(req:Request,res:Response){
+    
         try {
             let jwt = res.locals.jwt as JWT
             if(jwt.role !== "admin"){

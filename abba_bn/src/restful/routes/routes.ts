@@ -65,6 +65,7 @@ export class AdminRoutes extends Routes{
 
         this.routes.put('/editUser/:userId',isLoggedInAPI,controller.editUser)
         this.routes.get('/getOrderPickUpAddressAndMobile/:id',isLoggedInAPI,controller.getPickUpAddressAndMobile)
+        this.routes.put('/editMessagongToken',isLoggedInAPI,controller.editMessagongToken)
     }
 }
 

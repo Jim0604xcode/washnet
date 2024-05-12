@@ -54,9 +54,9 @@ export class UserController implements IUserController{
       const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
       oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
       const accessToken:any = await oAuth2Client.getAccessToken();
-      console.log(oAuth2Client)
+      // console.log(oAuth2Client)
         let jwt = res.locals.jwt as JWT
-        // let {email} = await userService.forgetPass(jwt.usersId)
+        let {email} = await userService.forgetPass(jwt.usersId)
         let token = await createJwt(jwt.usersId,jwt.role,300)
         const transporter: Transporter<any> = nodemailer.createTransport({
           service: 'gmail', // 或者其他支持的郵件服務名稱
@@ -71,7 +71,7 @@ export class UserController implements IUserController{
         });
         const mailOptions = {
           from: "codemasterpro1314@gmail.com",
-          to: "logbechan@gmail.com",
+          to: email,
           subject: 'Password Reset',
           text: `Click the following link to reset your password: ${env_config.PORTAL_HOST}/reset-password/${token}`,
         };
@@ -129,9 +129,12 @@ export class UserController implements IUserController{
     async editUserPassword(req:express.Request,res:express.Response){
       try {
           let jwt = res.locals.jwt as JWT
-          let userData = req.body as {password:string}
+          let userData = req.body as {currentPassword:string,password:string}
+          if(userData.password !== userData.currentPassword){
+            throw new Error('password not match!')
+          }
+          userData.password = await hashPassword(userData.password)
           await userService.editUser(jwt.usersId,userData.password)
-          
           res.json({
               data:null,
               isErr:false,

@@ -53,7 +53,8 @@ class AdminService{
                     mobile:userData.mobile,
                     email:userData.email,
                     password:userData.password,
-                    role:userData.role
+                    role:userData.role,
+                    status:"active"
                 }]).into("users").returning(["id","role"])
             
                 if(userData.role==="admin"){
@@ -87,7 +88,7 @@ class AdminService{
             console.log(row)
             
             if(row.role==="admin"){
-                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","staff_meta.work_location as fullAddress").from("users")
+                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","staff_meta.work_location as fullAddress","users.status").from("users")
                 .join("staff_meta","staff_meta.staff_id","users.id")
                 .where("users.id",userId)
                 .orderBy("users.created_at","desc")
@@ -96,7 +97,7 @@ class AdminService{
                 return result
             }
             if(row.role==="customer"){
-                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.full_address as fullAddress").from("users")
+                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.full_address as fullAddress","users.status").from("users")
                 .join("customer_meta","customer_meta.customer_id","users.id")
                 .where("users.id",userId)
                 .orderBy("users.created_at","desc")
@@ -113,7 +114,7 @@ class AdminService{
     async getUserAllUser(){
         const txn = await this.knex.transaction()
         try {
-            let result = await txn.select("id as userId","display_name as displayName","mobile","email","role").from("users").orderBy("users.created_at","desc")
+            let result = await txn.select("id as userId","display_name as displayName","mobile","email","role","status").from("users").orderBy("users.created_at","desc")
             await txn.commit()
             return result
         } catch (err) {
@@ -121,10 +122,20 @@ class AdminService{
             throw new Error(`${err.message}`)
         }    
     }
-    async getUserAllOrder(){
+    async getUserAllOrder(role:string){
         const txn = await this.knex.transaction()
         try {
-            let result = await txn.select("id as orderId","order_type as orderType","pc","tel","pickup_date_time as pickupDateTime","delivery_date_time as deliveryDateTime","full_address as fullAddress","remarks","status as orderStatus").from("orders").orderBy("orders.created_at","desc")
+            let result
+            if(role === "admin"){
+                result = await txn.select("id as orderId","order_type as orderType","pc","tel","pickup_date_time as pickupDateTime","delivery_date_time as deliveryDateTime","full_address as fullAddress","remarks","status as orderStatus").from("orders").orderBy("orders.created_at","desc")    
+            }
+            if(role === "delivery"){
+                result = await txn.select("id as orderId","order_type as orderType","pc","tel","pickup_date_time as pickupDateTime","delivery_date_time as deliveryDateTime","full_address as fullAddress","remarks","status as orderStatus").from("orders").where("status","w_pickup").orWhere("status","w_delivery").orderBy("orders.created_at","desc")
+            }
+            if(role === "laundry"){
+                result = await txn.select("id as orderId","order_type as orderType","pc","tel","pickup_date_time as pickupDateTime","delivery_date_time as deliveryDateTime","full_address as fullAddress","remarks","status as orderStatus").from("orders").where("status","w_service").orderBy("orders.created_at","desc")    
+            }
+            
             await txn.commit()
             return result
         } catch (err) {
@@ -188,6 +199,17 @@ class AdminService{
             await txn.commit()
             return
         }catch(err){
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async editMessagongToken(userId:string,obj:{cloud_messaging_token:string}){
+        const txn = await this.knex.transaction()
+        try {
+            await txn("customer_meta").update(obj).where("customer_id",userId)
+            await txn.commit()
+            return 
+        }catch (err) {
             await txn.rollback();
             throw new Error(`${err.message}`)
         }

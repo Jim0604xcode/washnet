@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { eyeOffOutline,eyeOutline } from 'ionicons/icons';
 import { IonButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonNote, IonSelect, IonSelectOption } from "@ionic/react";
@@ -13,7 +13,7 @@ import { getValue } from "../service/LocalStorage";
 
 type RoleList = {
   name:string
-  key:"admin"|"customer"
+  key:"admin"|"customer"|"delivery"|"laundry"
 }
 
 const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:boolean}> = ({cbSubmitForm,isAdmin}) => {
@@ -31,7 +31,7 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
   });
   
   const onSubmit = async (data: RegisterFormState) => {
-    console.log(data)
+    // console.log(data)
     
     try {
       let token = await getValue("token")
@@ -83,7 +83,7 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
     </>
     }
       
-      <h1>{getLanguage.language.gs.regFormTitle}</h1>
+      <h1 style={{textAlign:"center",color:"#FFC13B"}}>新增用戶</h1>
       <IonItem fill="outline">
         <IonLabel position="floating">{getLanguage.language.gs.regFormField1}</IonLabel>
         <IonInput className="text" clearInput={true} {...register("displayName")} aria-label="Display Name" placeholder={getLanguage.language.gs.regFormField1} onIonBlur={(e)=>{
@@ -167,7 +167,7 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
                 
         
         <IonItem fill="outline">
-          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonLabel position="floating">{"地址1"}</IonLabel>
           <IonInput className="text" clearInput={true} {...register("district")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
@@ -185,7 +185,7 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
         <IonNote>{errors.district?.message}</IonNote>   
 
         <IonItem fill="outline">
-          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonLabel position="floating">{"地址2"}</IonLabel>
           <IonInput className="text" clearInput={true} {...register("street")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
@@ -203,7 +203,7 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
         <IonNote>{errors.street?.message}</IonNote>   
 
         <IonItem fill="outline">
-          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonLabel position="floating">{"地址3"}</IonLabel>
           <IonInput className="text" clearInput={true} {...register("building")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          

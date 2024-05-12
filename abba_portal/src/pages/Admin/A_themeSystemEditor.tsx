@@ -242,7 +242,7 @@ const A_themeSystem_editor: React.FC = () => {
                             <IonGrid>  
                                 <IonRow>
                                     <IonCol size="6">
-                                        <IonButton onClick={onPreview}>{getLanguage.language.aos.addBtn}</IonButton>
+                                        <IonButton onClick={onPreview}>{getLanguage.language.aos.previewBtn}</IonButton>
 
                                     </IonCol>
                                     <IonCol size="6">

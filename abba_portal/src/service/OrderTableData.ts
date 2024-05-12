@@ -113,7 +113,14 @@ export const columns: ColumnDefinitionType<Order, keyof Order>[] = [
     canFilter: false,
     sort: null,
   },
-  
+  {
+    key: 'tel',
+    header: '電話',
+    width: 150,
+    accessor: "tel",
+    canFilter: true,
+    sort: null,
+  },
   {
     key: 'fullAddress',
     header: '地址',
