@@ -608,7 +608,7 @@ export async function seed(knex: Knex): Promise<void> {
                   header:"洗衣服務"
                 },
                 gs:{
-                  roleList:[{name:"行政",key:"admin"},{name:"顧客",key:"customer"}],
+                  roleList:[{name:"行政",key:"admin"},{name:"顧客",key:"customer"},{name:"送貨員",key:"delivery"},{name:"店員",key:"laundry"}],
                     header:"登入 / 註冊",
                     segmentBtn1:"登入",
                     segmentBtn2:"註冊",
@@ -646,7 +646,7 @@ export async function seed(knex: Knex): Promise<void> {
                 ass:{
                   header:"管理系統",
                   search:"搜尋",
-                  tableHeader:["用戶編號","名稱","電話","郵件","角色"],
+                  tableHeader:["用戶編號","名稱","電話","郵件","角色","狀態"],
                   pagination1:"行",
                   pagination2:"共",
                   pagination3:"頁",

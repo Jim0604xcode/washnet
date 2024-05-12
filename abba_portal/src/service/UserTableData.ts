@@ -5,7 +5,8 @@ export interface User {
   displayName: string;
   mobile: string;
   email: string;
-  role: "admin"|"laundryman"|"delivery"|"customer"
+  role: "admin"|"laundryman"|"delivery"|"customer",
+  status:"active"|"non_active"
 }
 type ColumnDefinitionType<T, K extends keyof T> = {
   key: K;
@@ -25,14 +26,16 @@ export const data: User[] = [
     displayName: "jim",
     mobile: "51823007",
     email: "logbechan@gmail.com",
-    role: "admin"
+    role: "admin",
+    status:"active"
   },
   {
     userId: "456",
     displayName: "jim2",
     mobile: "51823006",
     email: "logbechan@gmail2.com",
-    role: "customer"
+    role: "customer",
+    status:"active"
   }
   
 
@@ -76,6 +79,14 @@ export const columns: ColumnDefinitionType<User, keyof User>[] = [
     header: '皮革 / 洗袋',
     width: 150,
     accessor: "role",
+    canFilter: true,
+    sort: null,
+  },
+  {
+    key: 'status',
+    header: '狀態',
+    width: 150,
+    accessor: "status",
     canFilter: true,
     sort: null,
   }

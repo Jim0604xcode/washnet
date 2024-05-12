@@ -92,9 +92,9 @@ import sweetAlert from 'sweetalert2'
               <div style={{display:"flex",justifyContent:"center"}}>
                 <IonButton shape="round" type="button" onClick={handleLogout}>登出</IonButton>
               </div>
-              <div style={{display:"flex",justifyContent:"center"}}>
+              {/* <div style={{display:"flex",justifyContent:"center"}}>
                 <IonButton shape="round" type="button" onClick={handleRegCloudToken}>登記手機推送</IonButton>
-              </div>
+              </div> */}
             </div>
           
             </IonSplitPane>

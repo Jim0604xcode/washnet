@@ -113,7 +113,7 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
       
       
       
-      <h1 style={{textAlign:"center",color:"#FFC13B"}}>{getLanguage.language.gs.regFormTitle}</h1>
+      <h1 style={{textAlign:"center",color:"#FFC13B"}}>修改用戶</h1>
       <IonItem fill="outline">
         <IonLabel position="floating">{getLanguage.language.gs.regFormField1}</IonLabel>
         <IonInput className="text" clearInput={true} {...register("displayName")} aria-label="Display Name" placeholder={getLanguage.language.gs.regFormField1} onIonBlur={(e)=>{
