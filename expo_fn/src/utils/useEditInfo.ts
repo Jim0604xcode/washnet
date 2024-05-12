@@ -1,21 +1,40 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
 
-const useEditUser = () => {
+interface FetchResponse<T> {
+  data: T;
+  isErr: boolean;
+  errMess: string;
+}
+
+export interface EditUserMobile {
+  newMobile: string;
+  password: string;
+
+}
+
+export enum EditType {
+  MOBILE = 'editUserMobile',
+  ADDRESS = 'editUserAddress',
+  PASSWORD = 'editUserPassword',
+  DELETE = 'delUser'
+};
+
+const useEditUser = (editType: EditType) => {
     const { authState } = useAuth();
     const edit = useMutation({
-      mutationFn: async (formData) => {
+      mutationFn: async (formData: EditUserMobile) => {
         try {
           const token = authState?.token;
-          const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/order/addOrder`, {
-            method: 'POST',
+          const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/${editType}`, {
+            method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(formData),
           });
-          const result = await res.json();
+          const result: FetchResponse<null> = await res.json();
           if (!result.isErr) {
             return result.data;
           } else {

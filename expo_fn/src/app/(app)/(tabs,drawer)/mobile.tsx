@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import Colors from "@/constants/Colors";
@@ -6,10 +5,12 @@ import { Text, View } from "@/components/Themed";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
 import { Feather, FontAwesome, AntDesign, Entypo } from "@expo/vector-icons";
+import useEditUser, { EditType, EditUserMobile } from "@/utils/useEditInfo";
+import { useRouter } from "expo-router";
 
 export default function MobileDrawer() {
   const colorScheme = useColorScheme();
-  const { authState } = useAuth();
+  const { authState, setAuthState } = useAuth();
   const {
     control,
     handleSubmit,
@@ -20,12 +21,28 @@ export default function MobileDrawer() {
       password: "",
     },
   });
+  const router = useRouter();
 
-  const onResetNumber = async (data: any) => {
-    // if (dirtyFields.mobile && dirtyFields.newMobile) {
-    console.log("reset");
-    console.log(data);
-    // }
+  const edit = useEditUser(EditType.MOBILE);
+
+  const onResetMobile = async (data: EditUserMobile) => {
+    edit.mutate(data, {
+      onSuccess: () => {
+        setAuthState!({ 
+          isAuthenticated: true,
+          token: authState?.token as string,
+          mobile: data.newMobile 
+        });
+        router.push("/laundry");
+        alert('更改號碼成功')
+        console.log('Edited mobile successfully');
+        
+      },
+      onError: (error) => {
+        console.error('Error editing mobile:', error)
+        alert(`請稍後再試`)
+      },
+    });
   };
 
   return (
@@ -39,7 +56,7 @@ export default function MobileDrawer() {
         <Text
           style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
         >
-          請確保你的新手機號碼能以
+          請確保你的新號碼能以
           <Text style={{ fontWeight: "700" }}>WhatsApp</Text>
           通訊。下單後，我們將需要聯絡閣下確定交收事宜。
         </Text>
@@ -129,21 +146,21 @@ export default function MobileDrawer() {
           )}
           <Controller
             control={control}
-            name="newMobile"
+            name="password"
             rules={{
               required: "須提供密碼",
               minLength: {
-                value: 8,
-                message: "至少8字元",
+                value: 6,
+                message: "至少6字元",
               },
               maxLength: {
                 value: 16,
                 message: "上限16字元",
               },
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                message: "密碼須包括大、小階英文及數字",
-              },
+              // pattern: {
+              //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+              //   message: "密碼須包括大、小階英文及數字",
+              // },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -175,7 +192,7 @@ export default function MobileDrawer() {
               />
             )}
           />
-          {errors.newMobile && (
+          {errors.password && (
             <Text
               style={[
                 styles.errorText,
@@ -195,7 +212,7 @@ export default function MobileDrawer() {
         labelStyle={{
           color: Colors[colorScheme ?? "light"].background,
         }}
-        onPress={handleSubmit(onResetNumber)}
+        onPress={handleSubmit(onResetMobile)}
       >
         確認更改
       </Button>
@@ -209,7 +226,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 20,
-    gap: 40,
+    gap: 20,
   },
   titleBox: {
     width: "100%",

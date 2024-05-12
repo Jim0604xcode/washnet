@@ -10,6 +10,11 @@ interface AuthProps {
     token: string | null,
     mobile: string | null,
   };
+  setAuthState: React.Dispatch<React.SetStateAction<{
+    isAuthenticated: boolean | null;
+    token: string | null;
+    mobile: string | null;
+}>>
   login: (mobile: string, password: string) => Promise<any>;
   logout: () => void;
   register: ({
@@ -166,6 +171,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   const contextValue = React.useMemo(() => ({
     authState,
+    setAuthState: setAuthState,
     login: login,
     logout: logout,
     register: register,

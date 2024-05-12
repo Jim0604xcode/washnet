@@ -212,7 +212,7 @@ export class UserController implements IUserController{
               mobile_or_email:userData.mobileOrEmail,
               password:userData.password
             })
-            console.log(id,role)
+
             let jwt = await createJwt(id,role,172800)
             res.json({
                 data:{
@@ -242,9 +242,7 @@ export class UserController implements IUserController{
             await registerUserSchema.validate(userData);
             delete userData.confirmPassword
             userData.password = await hashPassword(userData.password)
-            console.log(userData)
-            
-            
+
             const userRole:Role = "customer" 
             let {id,role} = await userService.register({
               id:userId,

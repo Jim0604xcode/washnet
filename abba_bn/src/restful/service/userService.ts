@@ -70,13 +70,10 @@ export class UserService {
     async login(userData:LoginUser){
         const txn = await this.knex.transaction()
         try {
-            console.log(userData.mobile_or_email)
-            console.log(userData.password)
-
             let result = await txn.select("id","role","password","status").from("users")
             .where("mobile",userData.mobile_or_email)
             .orWhere("email",userData.mobile_or_email)
-            console.log(result[0])
+
             if(result.length === 0){
                 throw new Error('Not exist this user')
             }
