@@ -38,7 +38,8 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
     })
     
   
-  const [isOpen,setIsOpen] = useState(false)
+  const [isOpenPick,setIsOpenPick] = useState(false)
+  const [isOpenDelivery,setIsOpenDelivery] = useState(false)
   
   const getLanguage = useRecoilValue(languageState);
   
@@ -145,7 +146,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
           body:JSON.stringify(data)
         })
         let json = await res.json()
-        console.log(json)
+        // console.log(json)
         if(!json.isErr){
           sweetAlert.fire({
           icon: 'success',
@@ -204,17 +205,17 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       
       {formValue.orderStatus === "w_pickup" && 
       <IonButton onClick={()=>changeOrderStatus("w_service")}>
-        Complete Pickup
+        巳收
       </IonButton>
       }
       {formValue.orderStatus === "w_service" && 
       <IonButton onClick={()=>changeOrderStatus("w_delivery")}>
-        Conplete Service
+        巳洗
       </IonButton>
       }
       {formValue.orderStatus === "w_delivery" && 
       <IonButton onClick={()=>changeOrderStatus("complete")}>
-        Complete Delivery
+        巳送
       </IonButton>
       }
         
@@ -234,7 +235,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       
       </IonItem>
 
-      <IonButton onClick={()=>setIsOpen(true)} className="customButton">{getLanguage.language.cls.pickUpDateTimeButton}</IonButton>
+      <IonButton onClick={()=>setIsOpenPick(true)} className="customButton">{getLanguage.language.cls.pickUpDateTimeButton}</IonButton>
       <IonItem className="customItem" lines="none">
       
         <IonInput {...register("pickupDateTime")} className="text" disabled>
@@ -245,12 +246,29 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
       <IonNote>{errors.pickupDateTime?.message}</IonNote>
       {/* <IonDatetimeButton datetime="datetime"></IonDatetimeButton>   */}
       
-      <IonModal isOpen={isOpen}>
+      <IonItem lines="none">
+      <h3 style={{color:"#1E3D59"}}>{getLanguage.language.cls.deliveryDateTimeItem}</h3>
+      
+      </IonItem>
+
+      <IonButton onClick={()=>setIsOpenDelivery(true)} className="customButton">{getLanguage.language.cls.deliveryDateTimeButton}</IonButton>
+      <IonItem className="customItem" lines="none">
+      
+        <IonInput {...register("deliveryDateTime")} className="text" disabled>
+
+      </IonInput>              
+        
+      </IonItem>
+      <IonNote>{errors.deliveryDateTime?.message}</IonNote>
+      {/* <IonDatetimeButton datetime="datetime"></IonDatetimeButton>   */}
+
+
+      <IonModal isOpen={isOpenPick}>
       <IonHeader>
             <IonToolbar>
               <IonTitle>{getLanguage.language.cls.pickUpDateTimeModal.title}</IonTitle>
               <IonButtons slot="end">
-                <IonButton className="customButton" onClick={() => setIsOpen(false)}>{getLanguage.language.cls.pickUpDateTimeModal.btn}</IonButton>
+                <IonButton className="customButton" onClick={() => setIsOpenPick(false)}>{getLanguage.language.cls.pickUpDateTimeModal.btn}</IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -268,6 +286,31 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
           </IonContent>
         
       </IonModal>  
+
+
+      <IonModal isOpen={isOpenDelivery}>
+      <IonHeader>
+            <IonToolbar>
+              <IonTitle>{getLanguage.language.cls.deliveryDateTimeModal.title}</IonTitle>
+              <IonButtons slot="end">
+                <IonButton className="customButton" onClick={() => setIsOpenDelivery(false)}>{getLanguage.language.cls.deliveryDateTimeModal.btn}</IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent className="ion-padding">
+          <IonDatetime min={new Date().toISOString()} id="datetime" presentation="date-time" preferWheel={true} onIonChange={(e)=>{
+          
+          setFormValue(formValue=>{
+            let newFormValue = {...formValue}
+            
+            newFormValue.deliveryDateTime = formatter(new Date(e.target.value as string).toISOString())
+            
+            return newFormValue
+          })
+          }}></IonDatetime>
+          </IonContent>
+        
+      </IonModal>  
       
       
 
@@ -278,7 +321,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
         
         
         <IonItem fill="outline">
-          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonLabel position="floating">{"地址1"}</IonLabel>
           <IonInput className="text" clearInput={true} {...register("district")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
@@ -296,7 +339,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
         <IonNote>{errors.district?.message}</IonNote>   
 
         <IonItem fill="outline">
-          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonLabel position="floating">{"地址2"}</IonLabel>
           <IonInput className="text" clearInput={true} {...register("street")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          
@@ -314,7 +357,7 @@ const PlaceOrder: React.FC<{status:number,cbSubmitForm:(placeOrder:PlaceOrderFor
         <IonNote>{errors.street?.message}</IonNote>   
 
         <IonItem fill="outline">
-          <IonLabel position="floating">{"地址"}</IonLabel>
+          <IonLabel position="floating">{"地址3"}</IonLabel>
           <IonInput className="text" clearInput={true} {...register("building")} aria-label="Address" placeholder={"地址"} onIonBlur={(e)=>{
           
          

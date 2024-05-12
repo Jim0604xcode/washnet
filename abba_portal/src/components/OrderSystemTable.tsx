@@ -240,22 +240,23 @@ let openEditOrderForm = (oid:number,index:number) => {
 let cbEditData = useCallback((data:PlaceOrderType|any,orderId:number)=>{
   // admin edit order status 1
   // console.log('order system table',data,orderId)
-  
+  console.log(data)
   setTData(tData=>{
     let newTData = [...tData]
     
     newTData = newTData.map(obj=>obj.orderId === orderId 
     ? 
     Object.assign(obj,{
-      fullAddress:data.fullAddress,
-      deliveryDateTime:data.deliveryDateTime,
-      deliveryDateTimeUnix:momentUnix(data.deliveryDateTime),
+      orderType:data.orderType,
+      orderStatus:data.orderStatus,
+      pc:data.pc,
       pickupDateTime:data.pickupDateTime,
       pickupDateTimeUnix:momentUnix(data.pickupDateTime),
+      deliveryDateTime:data.deliveryDateTime,
+      deliveryDateTimeUnix:momentUnix(data.deliveryDateTime),
+      tel:data.tel,
+      fullAddress:data.district + data.street + data.building,
       remarks:data.remarks,
-      pc:data.pc,
-      orderStatus:data.orderStatus
-      
     })
     :
     obj

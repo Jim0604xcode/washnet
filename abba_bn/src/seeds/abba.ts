@@ -544,7 +544,19 @@ export async function seed(knex: Knex): Promise<void> {
                     itemTotal:
                         "合共(件):",
                         
+                    deliveryDateTimeItem:
+                        "送衣日期及時段",
+                        
         
+                    deliveryDateTimeButton:
+                        "請選擇送衣日期及時段",
+
+                    deliveryDateTimeModal:{
+                        title:
+                        "請選擇送衣日期及時段",
+                        btn:
+                        "關閉",        
+                    },
                     pickUpDateTimeItem:
                         "收衣日期及時段",
                         
@@ -552,6 +564,7 @@ export async function seed(knex: Knex): Promise<void> {
                     pickUpDateTimeButton:
                         "請選擇收衣日期及時段",
                         
+
         
                     pickUpDateTimeModal:{
                         title:
@@ -615,12 +628,13 @@ export async function seed(knex: Knex): Promise<void> {
                 aos:{
                   header:"訂單系統",
                   search:"搜尋",
-                  tableHeader:["訂單編號","訂單狀態","訂單種類","數量","送衣日期及時段","送衣日期及時段","收衣日期及時段","收衣日期及時段","地址","備註"],
+                  tableHeader:["訂單編號","訂單種類","訂單狀態","數量","收衣日期及時段","收衣日期及時段","送衣日期及時段","送衣日期及時段","電話","地址","備註"],
                   pagination1:"行",
                   pagination2:"共",
                   pagination3:"頁",
                   resetBtn:"重設",
                   addBtn:"新增",
+                  previewBtn:"預覽",
                   closeBtn:"關閉",
                   modalHeaderAdd:"新增訂單",
                   modalHeaderEdit:"修改訂單",
@@ -644,7 +658,8 @@ export async function seed(knex: Knex): Promise<void> {
                   modalHeaderFilter:"過濾",
                 },
                 ats:{
-                  header:"設定"
+                  header:"設定",
+
                 }, 
                 // customerFooterBtn1:"洗衣服務",
                 // customerFooterBtn2:"我的訂單",
