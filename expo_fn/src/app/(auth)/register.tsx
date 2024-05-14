@@ -210,8 +210,8 @@ const RegisterScreen = () => {
                   rules={{
                     required: "須提供密碼",
                     minLength: {
-                      value: 8,
-                      message: "至少8字元",
+                      value: 6,
+                      message: "至少6字元",
                     },
                     maxLength: {
                       value: 16,
