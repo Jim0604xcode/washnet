@@ -14,7 +14,7 @@ import Colors from "@/constants/Colors";
 import { Text, View } from "@/components/Themed";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
-import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import useEditInfo, { EditAPI } from "@/utils/useEditInfo";
 import { useRouter } from "expo-router";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
@@ -105,7 +105,7 @@ export default function AddressDrawer() {
           <View style={styles.contentBox}>
             <View style={styles.numberBox}>
               <View style={styles.iconTextRow}>
-                <FontAwesome
+                <MaterialCommunityIcons
                   name="home"
                   size={20}
                   color={Colors[colorScheme ?? "light"].tint}
@@ -312,7 +312,7 @@ export default function AddressDrawer() {
                 </Text>
               )}
             </View>
-            {editAddress.isPending || editAddress.isSuccess ? (
+            {editAddress.isPending ? (
               <ActivityIndicator
                 style={styles.button}
                 animating={true}

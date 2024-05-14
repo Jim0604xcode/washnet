@@ -8,7 +8,7 @@ type ConfirmMobileDialogProps = {
   visible: boolean;
   onDismiss: () => void;
   onConfirm: () => void;
-  newData: string;
+  newData: string | null;
   editAPI: EditAPI;
 };
 
@@ -47,6 +47,9 @@ const ConfirmEditDialog = ({
             editAPI === 'editUserPassword' ?
             "確認新密碼"
             :
+            editAPI === 'delUser' ?
+            "確定刪除帳戶？"
+            :
             null
           }
         </Dialog.Title>
@@ -63,6 +66,9 @@ const ConfirmEditDialog = ({
               editAPI === 'editUserPassword' ?
               "你的密碼將改為"
               :
+              editAPI === 'delUser' ?
+              "希望你將來能體驗本店更好的服務"
+              :
               null
             }
           </Text>
@@ -71,7 +77,7 @@ const ConfirmEditDialog = ({
           ) : (
             <TextInput
               mode="outlined"
-              defaultValue={newData}
+              defaultValue={newData as string}
               editable={false}
               secureTextEntry={!showNewPassword}
               right={
@@ -100,12 +106,14 @@ const ConfirmEditDialog = ({
           >
             取消
           </Button>
-          <Button icon="check" 
+          <Button icon="check"
             onPress={onConfirm}
             textColor={Colors[colorScheme ?? "light"].tint}
             labelStyle={{ fontSize: 16 }}
           >
-            確認
+            { editAPI === 'delUser' ?
+              "確定" : "確認"
+            }
           </Button>
         </Dialog.Actions>
       </Dialog>

@@ -5,7 +5,7 @@ import { Text, View } from "@/components/Themed";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
-import useEditInfo, { EditedInfo, EditAPI } from "@/utils/useEditInfo";
+import useEditInfo, { EditAPI } from "@/utils/useEditInfo";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
@@ -33,7 +33,7 @@ export default function MobileDrawer() {
 
   const confirmResetMobile = () => {
     setDialogVisible(false);
-    const data = { newMobile };
+    const data: EditedMobileReq = { newMobile };
   
     editMobile.mutate(data, {
       onSuccess: () => {
@@ -152,7 +152,7 @@ export default function MobileDrawer() {
             </Text>
           )}
         </View>
-        {editMobile.isPending || editMobile.isSuccess ? 
+        {editMobile.isPending ? 
         <ActivityIndicator style={styles.button} animating={true} color={Colors[colorScheme ?? "light"].tint}/>
         :
         <Button

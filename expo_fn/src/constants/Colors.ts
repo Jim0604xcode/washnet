@@ -27,7 +27,7 @@ const t30 = '#074D5F';
 export default {
   light: {
     primary: primary,
-    secondary: secondary,
+    secondary: s40,
     tertiary: t90,
     neutral: neutral,
     error: error,
@@ -48,7 +48,7 @@ export default {
   },
   dark: {
     primary: primary,
-    secondary: secondary,
+    secondary: s80,
     tertiary: t30,
     neutral: neutral,
     error: error,

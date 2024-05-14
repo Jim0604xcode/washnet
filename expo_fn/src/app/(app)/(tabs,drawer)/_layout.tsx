@@ -106,7 +106,7 @@ export default function TabLayout() {
          options={{href: null}}
         />
         <Tabs.Screen
-         name='userDeletion'
+         name='deleteUser'
          options={{href: null}}
         />
     </Tabs>

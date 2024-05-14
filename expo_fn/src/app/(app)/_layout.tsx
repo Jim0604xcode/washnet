@@ -4,12 +4,13 @@ import { Drawer } from "expo-router/drawer";
 import {
   DrawerContentScrollView,
   DrawerItem,
+  DrawerItemList,
 } from "@react-navigation/drawer";
 import { useColorScheme, Text } from "react-native";
 import { Link, useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { Divider } from "react-native-paper";
 
@@ -19,13 +20,7 @@ function CustomDrawerContent(props: any) {
   const { authState, logout } = useAuth();
   return (
     <DrawerContentScrollView {...props}
-      style={styles.container}
-      contentContainerStyle={{
-        backgroundColor: Colors[colorScheme ?? 'light'].surfaceContainerHL,
-        flex: 1,
-        gap: 10,
-      }}
-      
+      contentContainerStyle={styles.container}
       >
       <Image
         source={require("@/assets/images/logo.png")}
@@ -52,7 +47,7 @@ function CustomDrawerContent(props: any) {
           fontSize: 18,
         }}
         icon={(color) => (
-          <FontAwesome
+          <MaterialCommunityIcons
             name="whatsapp"
             size={20}
             color={Colors[colorScheme ?? "light"].text}
@@ -69,7 +64,7 @@ function CustomDrawerContent(props: any) {
           fontSize: 18,
         }}
         icon={(color) => (
-          <FontAwesome
+          <MaterialCommunityIcons
             name="home"
             size={20}
             color={Colors[colorScheme ?? "light"].text}
@@ -93,8 +88,8 @@ function CustomDrawerContent(props: any) {
         )}
       />
       <DrawerItem
-        label="刪除用戶"
-        onPress={() => router.push("/userDeletion")}
+        label="刪除帳戶"
+        onPress={() => router.push("/deleteUser")}
         style={styles.drawerItem}
         labelStyle={{
           fontWeight: "bold",
@@ -102,7 +97,7 @@ function CustomDrawerContent(props: any) {
         }}
         icon={(color) => (
           <MaterialCommunityIcons
-            name="delete"
+            name="account-cancel"
             size={20}
             color={Colors[colorScheme ?? "light"].text}
           />
@@ -139,8 +134,6 @@ export default function AppLayout() {
           backgroundColor: Colors[colorScheme ?? "light"].background,
           shadowColor: "transparent",
         },
-        drawerActiveBackgroundColor: 'red'
-        ,
         headerTitle: () => (
           <Image
             source={require("@/assets/images/logo.png")}
@@ -176,6 +169,7 @@ export default function AppLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: 10,
   },
   infoBox: {
     padding: 20,
