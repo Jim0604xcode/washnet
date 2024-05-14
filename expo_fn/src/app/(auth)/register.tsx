@@ -218,8 +218,8 @@ const RegisterScreen = () => {
                       message: "上限16字元",
                     },
                     pattern: {
-                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                      message: "密碼須包括大、小階英文及數字",
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/,
+                      message: "密碼須包括英文字母及數字",
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (

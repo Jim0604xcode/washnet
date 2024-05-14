@@ -270,7 +270,7 @@ export default function PasswordDrawer() {
                 </Text>
               )}
             </View>
-            {editPassword.isPending || editPassword.isSuccess ? (
+            {editPassword.isPending ? (
               <ActivityIndicator
                 style={styles.button}
                 animating={true}

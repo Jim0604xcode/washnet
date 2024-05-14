@@ -8,7 +8,7 @@ interface FetchResponse<T> {
   errMess: string;
 }
 
-export type EditedInfo = EditedMobileReq | EditedAddressReq | EditedPasswordReq;
+export type EditedInfo = EditedMobileReq | EditedAddressReq | EditedPasswordReq | null;
 
 export enum EditAPI {
   MOBILE = 'editUserMobile',
@@ -29,7 +29,7 @@ const useEditInfo = (editType: EditAPI) => {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(formData),
+            body: formData ? JSON.stringify(formData) : null
           });
           const result: FetchResponse<null> = await res.json();
           if (!result.isErr) {
@@ -39,7 +39,7 @@ const useEditInfo = (editType: EditAPI) => {
           };
         } catch (error) {
           // This will automatically be handled by React Query's onError if used
-          throw error; // Re-throw the error to ensure it can be caught by React Query's error handling
+          throw error;
         }
       }
     });
