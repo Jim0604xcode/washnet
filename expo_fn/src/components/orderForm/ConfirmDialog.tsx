@@ -196,16 +196,17 @@ const ConfirmDialog = ({
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
         </Dialog.Content>
-        <Dialog.Actions style={{ justifyContent: "space-between", paddingBottom: 10 }}>
-          <IconButton
-            icon={"close"}
-            iconColor={Colors[colorScheme ?? "light"].outline}
+        <Dialog.Actions style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 10, gap: 10 }}>
+          <Button
+            mode="text"
             onPress={()=>setDialogOpen(false)}
-          />
+            textColor={Colors[colorScheme ?? "light"].outline}
+          >
+            取消
+          </Button>
           <Button
             onPress={handleSubmit}
             textColor={Colors[colorScheme ?? "light"].tint}
-            labelStyle={{ fontSize: 16 }}
             icon="send"
             disabled={submission.isPending}
           >

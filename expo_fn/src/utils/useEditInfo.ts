@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
+import { EditedMobileReq, EditedAddressReq, EditedPasswordReq } from "@/models";
 
 interface FetchResponse<T> {
   data: T;
@@ -7,23 +8,19 @@ interface FetchResponse<T> {
   errMess: string;
 }
 
-export interface EditUserMobile {
-  newMobile: string;
-  password: string;
+export type EditedInfo = EditedMobileReq | EditedAddressReq | EditedPasswordReq;
 
-}
-
-export enum EditType {
+export enum EditAPI {
   MOBILE = 'editUserMobile',
   ADDRESS = 'editUserAddress',
   PASSWORD = 'editUserPassword',
   DELETE = 'delUser'
 };
 
-const useEditUser = (editType: EditType) => {
+const useEditInfo = (editType: EditAPI) => {
     const { authState } = useAuth();
     const edit = useMutation({
-      mutationFn: async (formData: EditUserMobile) => {
+      mutationFn: async (formData: EditedInfo) => {
         try {
           const token = authState?.token;
           const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/${editType}`, {
@@ -49,4 +46,4 @@ const useEditUser = (editType: EditType) => {
     return edit;
   };
 
-export default useEditUser;
+export default useEditInfo;
