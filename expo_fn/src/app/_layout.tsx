@@ -102,7 +102,7 @@ function StackLayout() {
             <MaterialCommunityIcons
               name="basket-check"
               color={Colors[ColorScheme??'light'].background}
-              size={24}
+              size={20}
             />
             <Text style={{color: Colors[ColorScheme ?? 'light'].background,
               fontSize: 18,

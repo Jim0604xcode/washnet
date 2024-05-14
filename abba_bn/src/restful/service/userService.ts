@@ -1,7 +1,7 @@
 import { Knex } from "knex"
 import { knex } from "../../db"
 import { Role } from "../../jwt"
-import { checkPassword } from "../../bcrypt"
+import { checkPassword, hashPassword } from "../../bcrypt"
 type LoginUser = {
     mobile_or_email:string
     password:string
@@ -204,6 +204,16 @@ export class UserService {
             await txn.rollback();
             throw new Error(`${err.message}`);
         }
+    }
+
+    async editUserPassword(userId:string, userData:{currentPassword:string,newPassword:string}){
+        const isVerified = await this.verifyPassword(userId, userData.currentPassword);
+        if (!isVerified) {
+            throw new Error('Wrong password');
+        } else if (isVerified) {
+            userData.newPassword = await hashPassword(userData.newPassword);
+            await this.resetPass(userId,userData.newPassword);
+        };
     }
 
 }

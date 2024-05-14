@@ -76,3 +76,18 @@ export interface UserOrder {
   street: string
   building: string
 }
+
+export type EditedPasswordReq = {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export type EditedMobileReq = {
+  newMobile: string;
+}
+
+export type EditedAddressReq = {
+  newDistrict: string;
+  newStreet: string;
+  newBuilding: string;
+}
