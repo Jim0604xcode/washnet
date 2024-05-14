@@ -12,7 +12,7 @@ import {
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { Text, View } from "@/components/Themed";
-import { Controller, Noop, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import useEditInfo, { EditAPI } from "@/utils/useEditInfo";
@@ -39,15 +39,7 @@ export default function AddressDrawer() {
   const [newDistrict, setNewDistrict] = useState("");
   const [newStreet, setNewStreet] = useState("");
   const [newBuilding, setNewBuilding] = useState("");
-  const editAddress = useEditInfo(EditAPI.ADDRESS);
   const [scroll, setScroll] = useState(false);
-  const setScrollOnBlur = useCallback((onBlur: Noop)=>{
-    onBlur
-    setScroll(false)
-  },[])
-  const setScrollOnFocus = useCallback(()=>{
-    setScroll(true)
-  },[])
 
   const newAddress = useMemo(() => {
     return `${newDistrict} ${newStreet} ${newBuilding}`;
@@ -60,10 +52,12 @@ export default function AddressDrawer() {
     setDialogVisible(true);
   }, []);
 
-  const confirmResetAddress = () => {
+  const editAddress = useEditInfo(EditAPI.ADDRESS);
+
+  const confirmEditAddress = useCallback(() => {
     setDialogVisible(false);
     const data: EditedAddressReq = { newDistrict, newStreet, newBuilding };
-
+  
     editAddress.mutate(data, {
       onSuccess: () => {
         router.push("/laundry");
@@ -75,13 +69,16 @@ export default function AddressDrawer() {
         Alert.alert("唔好意思...", "請稍後再試");
       },
     });
-  };
+    },
+    [newDistrict, newStreet, newBuilding]
+  )
+
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}
@@ -157,8 +154,11 @@ export default function AddressDrawer() {
                     label="地區"
                     placeholder="請填寫地區"
                     value={value}
-                    onBlur={()=>setScrollOnBlur(onBlur)}
-                    onFocus={setScrollOnFocus}
+                    onBlur={()=>{
+                      onBlur();
+                      setScroll(false);
+                    }}
+                    onFocus={()=>setScroll(true)}
                     onChangeText={onChange}
                     autoCapitalize="words"
                     theme={{
@@ -213,8 +213,11 @@ export default function AddressDrawer() {
                     label="街道"
                     placeholder="請填寫街道"
                     value={value}
-                    onBlur={()=>setScrollOnBlur(onBlur)}
-                    onFocus={setScrollOnFocus}
+                    onBlur={()=>{
+                      onBlur();
+                      setScroll(false);
+                    }}
+                    onFocus={()=>setScroll(true)}
                     onChangeText={onChange}
                     autoCapitalize="words"
                     theme={{
@@ -269,8 +272,11 @@ export default function AddressDrawer() {
                     label="大廈"
                     placeholder="請填寫大廈"
                     value={value}
-                    onBlur={()=>setScrollOnBlur(onBlur)}
-                    onFocus={setScrollOnFocus}
+                    onBlur={()=>{
+                      onBlur();
+                      setScroll(false);
+                    }}
+                    onFocus={()=>setScroll(true)}
                     onChangeText={onChange}
                     autoCapitalize="words"
                     theme={{
@@ -331,9 +337,9 @@ export default function AddressDrawer() {
           <ConfirmEditDialog
             visible={isDialogVisible}
             onDismiss={() => setDialogVisible(false)}
-            onConfirm={confirmResetAddress}
+            onConfirm={confirmEditAddress}
             newData={newAddress}
-            editAPI={EditAPI.MOBILE}
+            editAPI={EditAPI.ADDRESS}
           />
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -394,6 +400,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   inputBox: {
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
     gap: 10,
   },

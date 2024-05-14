@@ -1,8 +1,7 @@
-import { setStorageItemAsync, useStorageState } from '@/utils/useStorageState';
+import { setStorageItemAsync } from '@/utils/useStorageState';
 import React from 'react';
 import { Alert } from 'react-native';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../models';
-import { useRouter, useSegments } from 'expo-router';
 
 interface AuthProps {
   authState: { 

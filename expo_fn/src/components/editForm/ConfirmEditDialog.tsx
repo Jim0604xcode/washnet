@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
-import { Button, Dialog, IconButton, Portal, Text } from "react-native-paper";
+import { Button, Dialog, Portal, Text, TextInput } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { EditAPI } from "@/utils/useEditInfo";
 
@@ -20,6 +20,7 @@ const ConfirmEditDialog = ({
   editAPI,
 }: ConfirmMobileDialogProps) => {
   const colorScheme = useColorScheme();
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   return (
     <Portal>
@@ -40,6 +41,12 @@ const ConfirmEditDialog = ({
           {editAPI === 'editUserMobile' ? 
             "確認新號碼"
             :
+            editAPI === 'editUserAddress' ?
+            "確認新地址"
+            :
+            editAPI === 'editUserPassword' ?
+            "確認新密碼"
+            :
             null
           }
         </Dialog.Title>
@@ -50,13 +57,43 @@ const ConfirmEditDialog = ({
             {editAPI === 'editUserMobile' ? 
               "你的註冊電話將改為"
               :
+              editAPI === 'editUserAddress' ?
+              "你的常用地址將改為"
+              :
+              editAPI === 'editUserPassword' ?
+              "你的密碼將改為"
+              :
               null
             }
           </Text>
-          <Text style={styles.dialogInfoBold}>{newData}</Text>
+          { editAPI !== 'editUserPassword' ? (
+            <Text style={styles.dialogInfoBold}>{newData}</Text>
+          ) : (
+            <TextInput
+              mode="outlined"
+              defaultValue={newData}
+              editable={false}
+              secureTextEntry={!showNewPassword}
+              right={
+                <TextInput.Icon
+                  icon={showNewPassword ? "eye-off" : "eye"}
+                  color={Colors[colorScheme ?? "light"].text}
+                  onPress={() => setShowNewPassword(!showNewPassword)}
+                />
+              }
+              style={[
+                styles.input,
+                { 
+                  backgroundColor: Colors[colorScheme ?? "light"].surfaceContainerHL,
+                },
+              ]}
+              textColor={Colors[colorScheme ?? "light"].text}
+              outlineColor={Colors[colorScheme ?? "light"].surfaceContainerHL}
+            />
+          )}
         </Dialog.Content>
         <Dialog.Actions style={styles.dialogActions}>
-        <Button
+          <Button
             mode="text"
             onPress={onDismiss}
             textColor={Colors[colorScheme ?? "light"].outline}
@@ -106,6 +143,13 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingHorizontal: 20,
     gap: 10
+  },
+  input: {
+    paddingLeft: 40,
+    width: "100%",
+    height: 18,
+    textAlign: "center",
+    fontWeight: 'bold',
   },
 });
 
