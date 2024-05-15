@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { IonButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonNote} from "@ionic/react";
+import { IonButton, IonImg, IonInput, IonItem, IonLabel, IonNote} from "@ionic/react";
 import { getEditRegisterFormDefaultValues, getEditRegisterFormYupResolver, EditRegisterFormState } from "../service/FormBuilder";
 import "./BasicForm.scss";
-
+import sweetAlert from 'sweetalert2'
 import { useRecoilValue } from "recoil";
 import { languageState } from "../service/Recoil";
 
@@ -43,6 +43,7 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
         newFormValue.building = json.data.building
         newFormValue.street = json.data.street
         newFormValue.district = json.data.district
+        newFormValue.role = json.data.role
         return newFormValue
       })
       
@@ -95,9 +96,22 @@ const EditCustomer: React.FC<{cbSubmitForm:(data:EditRegisterFormState)=>void,us
       if(!json.isErr){
         
         cbSubmitForm(Object.assign(data,{userId:userId}))  
+        sweetAlert.fire({
+          icon: 'success',
+          title: 'Message',
+          text:'Successfully place new order',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }  
-    } catch (error) {
-      alert('error')
+    } catch (error:any) {
+      sweetAlert.fire({
+        icon: 'info',
+        title: 'Message',
+        text:error.message,
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
     
 

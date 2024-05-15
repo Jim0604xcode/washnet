@@ -86,23 +86,27 @@ class AdminService{
         try {
         let [row] = await txn.select("role").from("users").where("id",userId);
             console.log(row)
-            
-            if(row.role==="admin"){
-                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","staff_meta.work_location as fullAddress","users.status").from("users")
-                .join("staff_meta","staff_meta.staff_id","users.id")
-                .where("users.id",userId)
-                .orderBy("users.created_at","desc")
-                await txn.commit()
+            console.log(userId)
+            if(row.role==="admin" || row.role==="delivery" || row.role==="laundry"){
+                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","staff_meta.work_location as fullAddress","users.status")
+                .from("users")
+                .join("staff_meta",{"staff_meta.staff_id":"users.id"})
+                .where("staff_meta.staff_id",userId)
                 
+                await txn.commit()
+                // console.log(result)
+                Object.assign(result,row)
                 return result
             }
             if(row.role==="customer"){
-                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.full_address as fullAddress","users.status").from("users")
-                .join("customer_meta","customer_meta.customer_id","users.id")
-                .where("users.id",userId)
-                .orderBy("users.created_at","desc")
-                await txn.commit()
+                let [result] = await txn.select("users.display_name as displayName","users.mobile","users.email","customer_meta.full_address as fullAddress","users.status")
+                .from("users")
+                .join("customer_meta", {"customer_meta.customer_id": "users.id"})
+                .where("customer_meta.customer_id",userId)
                 
+                await txn.commit()
+                // console.log(result)
+                Object.assign(result,row)
                 return result
             }
         } catch (err) {
@@ -203,10 +207,21 @@ class AdminService{
             throw new Error(`${err.message}`)
         }
     }
+    async editStaffAddress(userId:string,obj:{work_location:string}){
+        const txn = await this.knex.transaction()
+        try {
+            await txn("staff_meta").update(obj).where("staff_id",userId)
+            await txn.commit()
+            return
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
     async editMessagongToken(userId:string,obj:{cloud_messaging_token:string}){
         const txn = await this.knex.transaction()
         try {
-            await txn("customer_meta").update(obj).where("customer_id",userId)
+            await txn("staff_meta").update(obj).where("staff_id",userId)
             await txn.commit()
             return 
         }catch (err) {
@@ -214,7 +229,21 @@ class AdminService{
             throw new Error(`${err.message}`)
         }
     }
-    async editUser({userId,display_name,mobile,email,full_address}:{userId:string,display_name:string,mobile:string,email:string,full_address:string}){
+    async editStaff({userId,display_name,mobile,email,full_address}:{userId:string,display_name:string,mobile:string,email:string,full_address:string}){
+        const txn = await this.knex.transaction()
+        try {
+            
+            await txn("users").update({"display_name":display_name,"mobile":mobile,"email":email}).where("id",userId) 
+            await txn("staff_meta").update({"work_location":full_address}).where("staff_id",userId)
+            await txn.commit()
+            return 
+            
+        } catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async editCustomer({userId,display_name,mobile,email,full_address}:{userId:string,display_name:string,mobile:string,email:string,full_address:string}){
         const txn = await this.knex.transaction()
         try {
             

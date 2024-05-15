@@ -1,7 +1,7 @@
 import { Knex } from "knex"
 import { knex } from "../../db"
 import { Role } from "../../jwt"
-import { checkPassword, hashPassword } from "../../bcrypt"
+import { checkPassword } from "../../bcrypt"
 type LoginUser = {
     mobile_or_email:string
     password:string
@@ -45,7 +45,18 @@ export class UserService {
             throw new Error(`${err.message}`)
         }
     }
-    async editUser(userId:string,obj:any){
+    async editUserAddress(userId:string,obj:{full_address:string}){
+        const txn = await this.knex.transaction()
+        try {
+            await txn("customer_meta").update(obj).where("customer_id",userId)
+            await txn.commit()
+            return
+        }catch (err) {
+            await txn.rollback();
+            throw new Error(`${err.message}`)
+        }
+    }
+    async editUserMobile(userId:string,obj:{mobile:string}){
         const txn = await this.knex.transaction()
         try {
             await txn("users").update(obj).where("id",userId)
@@ -206,15 +217,15 @@ export class UserService {
         }
     }
 
-    async editUserPassword(userId:string, userData:{currentPassword:string,newPassword:string}){
-        const isVerified = await this.verifyPassword(userId, userData.currentPassword);
-        if (!isVerified) {
-            throw new Error('Wrong password');
-        } else if (isVerified) {
-            userData.newPassword = await hashPassword(userData.newPassword);
-            await this.resetPass(userId,userData.newPassword);
-        };
-    }
+    // async editUserPassword(userId:string, userData:{currentPassword:string,newPassword:string}){
+    //     const isVerified = await this.verifyPassword(userId, userData.currentPassword);
+    //     if (!isVerified) {
+    //         throw new Error('Wrong password');
+    //     } else if (isVerified) {
+    //         userData.newPassword = await hashPassword(userData.newPassword);
+    //         await this.resetPass(userId,userData.newPassword);
+    //     };
+    // }
 
 }
 
