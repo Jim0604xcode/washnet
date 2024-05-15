@@ -6,9 +6,8 @@ import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import useEditInfo, { EditAPI } from "@/utils/useEditInfo";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function DeleteUserDrawer() {
   const colorScheme = useColorScheme();
@@ -57,8 +56,8 @@ export default function DeleteUserDrawer() {
               style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
             >
               請閣下再三考慮是否需要刪除此帳戶。一經刪除，你將
-              <Text style={{fontWeight: 'bold'}}>不能</Text>
-              恢復使用此號碼登入。
+              <Text style={{fontWeight: 'bold'}}>無法恢復使用此號碼</Text>
+              登入。
             </Text>
           </View>
           <View style={[styles.contentBox]}>

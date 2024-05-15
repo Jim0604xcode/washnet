@@ -128,7 +128,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           mobile: mobile,
         })
       } else if (result.isErr){
-        // Alert.alert('請重新註冊');
         throw new Error(result.errMess)
       };
     } catch (err) {
@@ -147,9 +146,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             'Authorization': `Bearer ${token}`,
           },
         });
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
         const result = await res.json();
         if (!result.isErr) {
           setAuthState({

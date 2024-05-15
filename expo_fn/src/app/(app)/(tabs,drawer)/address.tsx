@@ -60,7 +60,7 @@ export default function AddressDrawer() {
   
     editAddress.mutate(data, {
       onSuccess: () => {
-        router.push("/laundry");
+        router.replace("/laundry");
         Alert.alert("更改地址成功");
         console.log("Edited address successfully");
       },

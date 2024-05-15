@@ -54,7 +54,7 @@ export default function PasswordDrawer() {
   
     editPassword.mutate(data, {
       onSuccess: () => {
-        router.push("/laundry");
+        router.replace("/laundry");
         Alert.alert("成功更改密碼");
         console.log("Edited password successfully");
       },
