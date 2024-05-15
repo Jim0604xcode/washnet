@@ -15,45 +15,45 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("users").insert([
         {
             id:'PASxk06xVwXXcK5cH8Wyj5zHoah1',
-            display_name:'test',
-            mobile:'51823007',
-            email: 'test@gmail.com',
+            display_name:'Jim',
+            mobile:'51823008',
+            email: 'logbechan@gmail.com',
             password: '$2a$10$JUN9Uqt7uEiToHKcaIGroO5HNTtrIDOh/WdJbwyW.iAN7j2SIY0Wq',
             role:'admin',
             status:'active'
         },
         {
             id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF3',
-            display_name:'jim',
-            mobile:'51823008',
-            email: 'jim@gmail.com',
+            display_name:'test1',
+            mobile:'51823009',
+            email: 'test1@gmail.com',
             password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
             role:'customer',
             status:'active'
         },
         {
             id:'sadadhCc9kJ1JYeasdadXlYcF3',
-            display_name:'eddie',
-            mobile:'51823009',
-            email: 'eddie@gmail.com',
+            display_name:'test2',
+            mobile:'51823010',
+            email: 'test2@gmail.com',
             password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
             role:'customer',
             status:'non_active'
         },
         {
             id:'sah8gh8fehCc9kJasdadXlYcF3',
-            display_name:'pakhei',
-            mobile:'51823010',
-            email: 'pakhei@gmail.com',
+            display_name:'test3',
+            mobile:'51823011',
+            email: 'test3@gmail.com',
             password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
             role:'delivery',
             status:'active'
         },
         {
             id:'sadadhCc9kJ1JYeasdasgkYcF3',
-            display_name:'mei',
-            mobile:'51823011',
-            email: 'mei@gmail.com',
+            display_name:'test4',
+            mobile:'51823012',
+            email: 'test4@gmail.com',
             password: '$2a$10$m7hvMDhAT0s.huoG4L1X/.QpqiguGHEF5uQ1gThs.HjWerAYNYhtu',        
             role:'laundry',
             status:'active'
@@ -61,10 +61,16 @@ export async function seed(knex: Knex): Promise<void> {
         
     ]);
     
-    await knex("customer_meta").insert([{
-      full_address:'九龍馬頭圍|_|曦景閣(A座)17/F|_|22室',
-      customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3"
-    }])
+    await knex("customer_meta").insert([
+    {
+        full_address:'九龍馬頭圍|_|曦景閣(A座)17/F|_|22室',
+        customer_id:"dKZ7MVCGhCc9kJ1JYeob6qXlYcF3"
+    },
+    {
+        full_address:'九龍馬頭圍|_|曦景閣(A座)17/F|_|22室',
+        customer_id:"sadadhCc9kJ1JYeasdadXlYcF3"
+    },
+    ])
     await knex("staff_meta").insert([
     {
       work_location:"九龍馬頭圍|_|曦景閣(A座)17/F|_|22室",
@@ -981,7 +987,7 @@ export async function seed(knex: Knex): Promise<void> {
                 },
 
                 {
-                    type: 'header',
+                    type: 'paragraph',
                     data: {
                         text: '三步落單',
                         level: 2,
@@ -989,7 +995,7 @@ export async function seed(knex: Knex): Promise<void> {
                 },
 
                 {
-                    type: 'header',
+                    type: 'paragraph',
                     data: {
                         text: '洗衫... 其實唔難👍',
                         level: 2,

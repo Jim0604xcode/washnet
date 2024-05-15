@@ -66,7 +66,7 @@ export class AdminController implements IAdminController{
           
             
             let user = await adminService.getUser(userId)
-            
+            console.log(user)
             res.json({
                 data:{
                     displayName:user.displayName,
@@ -75,6 +75,7 @@ export class AdminController implements IAdminController{
                     district:user.fullAddress.split('|_|')[0],
                     street:user.fullAddress.split('|_|')[1],
                     building:user.fullAddress.split('|_|')[2],
+                    role:user.role
                 },
                 isErr:false,
                 errMess:null
@@ -249,13 +250,25 @@ export class AdminController implements IAdminController{
             }
             let userData = req.body
             let userId = req.params.userId
-            await adminService.editUser({
-                userId:userId,
-                display_name:userData.displayName,
-                mobile:userData.mobile,
-                email:userData.email,
-                full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building,
-            })    
+            if(userData.role==="admin" || userData.role==="delivery" || userData.role==="laundry"){
+                await adminService.editStaff({
+                    userId:userId,
+                    display_name:userData.displayName,
+                    mobile:userData.mobile,
+                    email:userData.email,
+                    full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building,
+                })
+            }
+            if(userData.role==="customer"){
+                await adminService.editCustomer({
+                    userId:userId,
+                    display_name:userData.displayName,
+                    mobile:userData.mobile,
+                    email:userData.email,
+                    full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building,
+                })
+            }
+                
             
             
             res.json({

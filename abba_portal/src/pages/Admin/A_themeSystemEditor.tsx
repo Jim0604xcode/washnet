@@ -11,8 +11,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/navigation';
 import 'swiper/css/zoom';
 import '@ionic/react/css/ionic-swiper.css';
-
-
+import '../../components/Editor.scss';
 import { useRecoilValue } from "recoil";
 import Header from "../../components/Header";
 import { languageState } from "../../service/Recoil";
@@ -53,6 +52,7 @@ const A_themeSystem_editor: React.FC = () => {
 
     const processOutPutData = async () => {
         const outputData = await editor.save()
+        console.log(outputData)
         let pages = 0
         
         const blocks = outputData.blocks
@@ -126,7 +126,9 @@ const A_themeSystem_editor: React.FC = () => {
     }
     const onPreview = async () => {
         const outputData = await processOutPutData()
-        setBlock(()=>{
+        
+        setBlock((block)=>{
+            console.log(block)
             let newData = [...outputData]
             console.log(newData)
             return newData
@@ -204,7 +206,7 @@ const A_themeSystem_editor: React.FC = () => {
                             scrollbar={false}
                             zoom={true}
                         >    
-                            {block.map((obj,p)=>
+                            {block.map((obj:any,p:any)=>
                                 
                                 <SwiperSlide key={p}>
                                     <div>

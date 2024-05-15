@@ -4,10 +4,10 @@ import { eyeOffOutline,eyeOutline } from 'ionicons/icons';
 import { IonButton, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonNote, IonSelect, IonSelectOption } from "@ionic/react";
 import { getRegisterFormDefaultValues, getRegisterFormYupResolver, RegisterFormState } from "../service/FormBuilder";
 import "./BasicForm.scss";
+import sweetAlert from 'sweetalert2'
 
-
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { languageState, roleState } from "../service/Recoil";
+import { useRecoilValue } from "recoil";
+import { languageState } from "../service/Recoil";
 import { getValue } from "../service/LocalStorage";
 
 
@@ -48,10 +48,24 @@ const Register: React.FC<{cbSubmitForm:(data:RegisterFormState)=>void,isAdmin:bo
       
       
       if(!json.isErr){
-        cbSubmitForm(Object.assign(data,{userId:json.data.userId}))    
+        
+        cbSubmitForm(Object.assign(data,{userId:json.data.userId,status:"active"}))    
+        sweetAlert.fire({
+          icon: 'success',
+          title: 'Message',
+          text:'Successfully place new order',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }  
-    } catch (error) {
-      alert('error')
+    } catch (error:any) {
+      sweetAlert.fire({
+        icon: 'info',
+        title: 'Message',
+        text:error.message,
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
   };
   

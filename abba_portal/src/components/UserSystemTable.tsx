@@ -211,21 +211,23 @@ let openEditUserForm = (userId:string,index:number) => {
 }
 let cbEditUser = useCallback((data:any)=>{
   // admin edit user status 1
-  console.log('user system table',data)
+  console.log('edit user system table',data)
   setTData(tData=>{
     let newTData = [...tData]
     newTData = newTData.map(obj=>obj.userId === data.userId ? Object.assign(obj,data): obj)
     return newTData
   })
+  setIsOpenModal(false)
 },[])    
 let cbAddUser = useCallback((data:any)=>{
   // admin open user status 2
-  console.log('user system table',data)
+  console.log('add user system table',data)
   setTData(tData=>{
     let newTData = [...tData]
     newTData.push(data)
     return newTData
   })
+  setIsOpenModal(false)
 },[])    
 
    return (

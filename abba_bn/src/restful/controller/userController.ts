@@ -110,9 +110,9 @@ export class UserController implements IUserController{
     async resetPassword(req:express.Request,res:express.Response){
       try {
         let jwt = res.locals.jwt as JWT
-        console.log(jwt)
+        
         let userData = req.body as {password:string}
-        console.log(userData)
+        
         userData.password = await hashPassword(userData.password)
         await userService.resetPass(jwt.usersId,userData.password)
         
@@ -128,32 +128,32 @@ export class UserController implements IUserController{
         errorHandler(err,req,res)
       }
     }
-    async editUserPassword(req:express.Request,res:express.Response){
-      try {
-        let jwt = res.locals.jwt as JWT
-        let userData = req.body as {currentPassword:string,newPassword:string}
-        if (userData.currentPassword === userData.newPassword){
-          throw new Error('Repeated passwords')
-        } else {
-          await editPasswordSchema.validate(userData.newPassword);
-          await userService.editUserPassword(jwt.usersId, userData);
+    // async editUserPassword(req:express.Request,res:express.Response){
+    //   try {
+    //     let jwt = res.locals.jwt as JWT
+    //     let userData = req.body as {currentPassword:string,newPassword:string}
+    //     if (userData.currentPassword === userData.newPassword){
+    //       throw new Error('Repeated passwords')
+    //     } else {
+    //       await editPasswordSchema.validate(userData.newPassword);
+    //       await userService.editUserPassword(jwt.usersId, userData);
 
-          res.json({
-            data:null,
-            isErr:false,
-            errMess:null
-          });
-        }
+    //       res.json({
+    //         data:null,
+    //         isErr:false,
+    //         errMess:null
+    //       });
+    //     }
 
-      } catch (err) {
-        errorHandler(err,req,res);
-      }
-    };
+    //   } catch (err) {
+    //     errorHandler(err,req,res);
+    //   }
+    // };
     async editUserMobile(req:express.Request,res:express.Response){
       try {
           let jwt = res.locals.jwt as JWT
           let userData = req.body as {newMobile:string}
-          await userService.editUser(jwt.usersId,{mobile:userData.newMobile});
+          await userService.editUserMobile(jwt.usersId,{mobile:userData.newMobile});
 
           res.json({
               data:null,
@@ -170,7 +170,7 @@ export class UserController implements IUserController{
       try {
           let jwt = res.locals.jwt as JWT
           let userData = req.body as {district:string,street:string,building:string}
-          await userService.editUser(jwt.usersId,{full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building})
+          await userService.editUserAddress(jwt.usersId,{full_address:userData.district + '|_|' + userData.street + '|_|' + userData.building})
           
           res.json({
               data:null,

@@ -88,6 +88,7 @@ export const getEditRegisterFormDefaultValues = () => {
     building:"",
     street:"",
     district:"",
+    role:""
     }
 }
 

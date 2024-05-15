@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import OrderSystemTable from "../../components/OrderSystemTable";
-import { IonPage, IonContent, IonHeader, IonMenu, IonSplitPane, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonIcon, IonItem, IonLabel, IonTabButton } from "@ionic/react";
-import { square } from "ionicons/icons";
+import { IonPage, IonContent, IonSplitPane } from "@ionic/react";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../../service/Recoil";
 import AdminMenu from "../../components/AdminMenu";
