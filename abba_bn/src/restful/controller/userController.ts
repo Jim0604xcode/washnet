@@ -152,8 +152,8 @@ export class UserController implements IUserController{
     async editUserMobile(req:express.Request,res:express.Response){
       try {
           let jwt = res.locals.jwt as JWT
-          let userData = req.body as {newMobile:string}
-          await userService.editUserMobile(jwt.usersId,{mobile:userData.newMobile});
+          let userData = req.body as {mobile:string}
+          await userService.editUserMobile(jwt.usersId,{mobile:userData.mobile});
 
           res.json({
               data:null,

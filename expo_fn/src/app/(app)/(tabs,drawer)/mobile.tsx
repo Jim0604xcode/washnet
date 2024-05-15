@@ -18,29 +18,29 @@ export default function MobileDrawer() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({defaultValues: {newMobile: ""}});
+  } = useForm({defaultValues: {mobile: ""}});
   const router = useRouter();
   const [isDialogVisible, setDialogVisible] = useState(false);
-  const [newMobile, setNewMobile] = useState("");
+  const [mobile, setMobile] = useState("");
   const editMobile = useEditInfo(EditAPI.MOBILE);
 
   const showConfirmDialog = useCallback(
     (data: EditedMobileReq) => {
-      setNewMobile(data.newMobile);
+      setMobile(data.mobile);
       setDialogVisible(true);
     },[]
   )
 
   const confirmResetMobile = () => {
     setDialogVisible(false);
-    const data: EditedMobileReq = { newMobile };
+    const data: EditedMobileReq = { mobile };
   
     editMobile.mutate(data, {
       onSuccess: () => {
         setAuthState!({
           isAuthenticated: true,
           token: authState?.token as string,
-          mobile: data.newMobile,
+          mobile: data.mobile,
         });
         router.replace("/laundry");
         Alert.alert("更改號碼成功");
@@ -95,7 +95,7 @@ export default function MobileDrawer() {
         <View style={styles.inner}>
           <Controller
             control={control}
-            name="newMobile"
+            name="mobile"
             rules={{
               required: "須輸入新手機號碼",
               minLength: {
@@ -141,14 +141,14 @@ export default function MobileDrawer() {
               />
             )}
           />
-          {errors.newMobile && (
+          {errors.mobile && (
             <Text
               style={[
                 styles.errorText,
                 { color: Colors[colorScheme ?? "light"].outline },
               ]}
             >
-              {errors.newMobile?.message}
+              {errors.mobile?.message}
             </Text>
           )}
         </View>
@@ -173,7 +173,7 @@ export default function MobileDrawer() {
         visible={isDialogVisible}
         onDismiss={() => setDialogVisible(false)}
         onConfirm={confirmResetMobile}
-        newData={newMobile}
+        newData={mobile}
         editAPI={EditAPI.MOBILE}
       />
     </View>
