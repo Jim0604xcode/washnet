@@ -2,11 +2,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React from "react";
 import { Pressable, Image, View, StyleSheet } from "react-native";
 import { Drawer } from "expo-router/drawer";
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from "@react-navigation/drawer";
+import {DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
 import { useColorScheme, Text } from "react-native";
 import { Link, useNavigation, useRouter, useSegments } from "expo-router";
 import Colors from "@/constants/Colors";
@@ -29,6 +25,7 @@ function CustomDrawerContent(props: any) {
         styles.container,
         { backgroundColor: Colors[colorScheme ?? "light"].surfaceContainerHL },
       ]}
+      scrollEnabled={false}
     >
       <Image
         source={require("@/assets/images/logo.png")}
@@ -77,7 +74,7 @@ function CustomDrawerContent(props: any) {
           <MaterialCommunityIcons name="home" size={20} color={color} />
         )}
       />
-      <DrawerItem
+      {/* <DrawerItem
         label="更改密碼"
         onPress={() => router.push("/(app)/(drawer)/password")}
         focused={segment[2] === "password"}
@@ -92,7 +89,7 @@ function CustomDrawerContent(props: any) {
         icon={({ color }) => (
           <MaterialCommunityIcons name="key" size={20} color={color} />
         )}
-      />
+      /> */}
       <DrawerItem
         label="刪除帳戶"
         onPress={() => router.push("/(app)/(drawer)/deleteUser")}

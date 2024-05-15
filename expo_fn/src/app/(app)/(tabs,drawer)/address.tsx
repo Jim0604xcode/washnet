@@ -29,26 +29,26 @@ export default function AddressDrawer() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      newDistrict: "",
-      newStreet: "",
-      newBuilding: "",
+      district: "",
+      street: "",
+      building: "",
     },
   });
   const router = useRouter();
   const [isDialogVisible, setDialogVisible] = useState(false);
-  const [newDistrict, setNewDistrict] = useState("");
-  const [newStreet, setNewStreet] = useState("");
-  const [newBuilding, setNewBuilding] = useState("");
+  const [district, setDistrict] = useState("");
+  const [street, setStreet] = useState("");
+  const [building, setBuilding] = useState("");
   const [scroll, setScroll] = useState(false);
 
   const newAddress = useMemo(() => {
-    return `${newDistrict} ${newStreet} ${newBuilding}`;
-  }, [newDistrict, newStreet, newBuilding]);
+    return `${district} ${street} ${building}`;
+  }, [district, street, building]);
 
   const showConfirmDialog = useCallback((data: EditedAddressReq) => {
-    setNewDistrict(data.newDistrict);
-    setNewStreet(data.newStreet);
-    setNewBuilding(data.newBuilding);
+    setDistrict(data.district);
+    setStreet(data.street);
+    setBuilding(data.building);
     setDialogVisible(true);
   }, []);
 
@@ -56,7 +56,8 @@ export default function AddressDrawer() {
 
   const confirmEditAddress = useCallback(() => {
     setDialogVisible(false);
-    const data: EditedAddressReq = { newDistrict, newStreet, newBuilding };
+    const data: EditedAddressReq = { district, street, building };
+    console.log(data);
   
     editAddress.mutate(data, {
       onSuccess: () => {
@@ -70,7 +71,7 @@ export default function AddressDrawer() {
       },
     });
     },
-    [newDistrict, newStreet, newBuilding]
+    [district, street, building]
   )
 
 
@@ -136,7 +137,7 @@ export default function AddressDrawer() {
             <View style={styles.inputBox}>
               <Controller
                 control={control}
-                name="newDistrict"
+                name="district"
                 rules={{
                   required: "須提供地區名稱用作收衫送衫",
                   minLength: {
@@ -183,19 +184,19 @@ export default function AddressDrawer() {
                   />
                 )}
               />
-              {errors.newDistrict && (
+              {errors.district && (
                 <Text
                   style={[
                     styles.errorText,
                     { color: Colors[colorScheme ?? "light"].outline },
                   ]}
                 >
-                  {errors.newDistrict?.message}
+                  {errors.district?.message}
                 </Text>
               )}
               <Controller
                 control={control}
-                name="newStreet"
+                name="street"
                 rules={{
                   required: "須提供街道名稱用作收衫送衫",
                   minLength: {
@@ -242,19 +243,19 @@ export default function AddressDrawer() {
                   />
                 )}
               />
-              {errors.newStreet && (
+              {errors.street && (
                 <Text
                   style={[
                     styles.errorText,
                     { color: Colors[colorScheme ?? "light"].outline },
                   ]}
                 >
-                  {errors.newStreet?.message}
+                  {errors.street?.message}
                 </Text>
               )}
               <Controller
                 control={control}
-                name="newBuilding"
+                name="building"
                 rules={{
                   required: "須提供大廈名稱用作收衫送衫",
                   minLength: {
@@ -301,14 +302,14 @@ export default function AddressDrawer() {
                   />
                 )}
               />
-              {errors.newBuilding && (
+              {errors.building && (
                 <Text
                   style={[
                     styles.errorText,
                     { color: Colors[colorScheme ?? "light"].outline },
                   ]}
                 >
-                  {errors.newBuilding?.message}
+                  {errors.building?.message}
                 </Text>
               )}
             </View>

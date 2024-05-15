@@ -77,17 +77,17 @@ export interface UserOrder {
   building: string
 }
 
-export type EditedPasswordReq = {
-  currentPassword: string;
-  newPassword: string;
-}
+// export type EditedPasswordReq = {
+//   currentPassword: string;
+//   newPassword: string;
+// }
 
 export type EditedMobileReq = {
-  newMobile: string;
+  mobile: string;
 }
 
 export type EditedAddressReq = {
-  newDistrict: string;
-  newStreet: string;
-  newBuilding: string;
+  district: string;
+  street: string;
+  building: string;
 }
