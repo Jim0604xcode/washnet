@@ -67,7 +67,7 @@ const ConfirmEditDialog = ({
               "你的密碼將改為"
               :
               editAPI === 'delUser' ?
-              "希望你將來能體驗本店更好的服務"
+              "希望您將來會體驗本店更好的服務"
               :
               null
             }

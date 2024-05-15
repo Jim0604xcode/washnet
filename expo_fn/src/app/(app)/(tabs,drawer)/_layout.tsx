@@ -7,7 +7,7 @@ import { useColorScheme } from '@/components/useColorScheme';
 const tabData = [
   { name: 'laundry', 
     title: '磅洗',
-    icon: (color: string, size: number) => (
+    icon: (color: string) => (
       <MaterialCommunityIcons
         name="scale"
         style={{ marginBottom: -8 }}
@@ -89,7 +89,7 @@ export default function TabLayout() {
           name={tab.name}
           options={{
             title: tab.title,
-            tabBarIcon: ({ color, size }) => (tab.icon(color, size)),
+            tabBarIcon: ({ color }) => (tab.icon(color)),
           }}
         />
       ))}

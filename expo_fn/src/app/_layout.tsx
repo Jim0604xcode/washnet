@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -90,10 +91,12 @@ function StackLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="index" options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(app)" options={{ headerShown: false }} />
-      <Stack.Screen name="orders" options={{
+      <Stack.Screen name="orders" 
+        redirect={authState?.isAuthenticated!==true}
+        options={{
         headerStyle: {
           backgroundColor: Colors[ColorScheme??'light'].tint,
         },

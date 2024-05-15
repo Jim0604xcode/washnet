@@ -26,7 +26,7 @@ const index = () => {
   },[])
 
   const redirectToLogin = React.useCallback(() => {
-    const timeoutId = setTimeout(() => router.push('/login'), 600);
+    const timeoutId = setTimeout(() => router.replace('/login'), 600);
     return () => clearTimeout(timeoutId);
   }, [router]);
 

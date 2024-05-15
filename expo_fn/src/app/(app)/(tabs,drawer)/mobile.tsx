@@ -42,7 +42,7 @@ export default function MobileDrawer() {
           token: authState?.token as string,
           mobile: data.newMobile,
         });
-        router.push("/laundry");
+        router.replace("/laundry");
         Alert.alert("更改號碼成功");
         console.log("Edited mobile successfully");
       },
