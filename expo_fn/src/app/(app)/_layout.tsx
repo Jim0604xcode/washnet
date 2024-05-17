@@ -12,7 +12,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Divider } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@/context/UserContext";
-import { setStorageItemAsync } from "@/utils/useStorageState";
 
 function CustomDrawerContent(props:  DrawerContentComponentProps) {
   const colorScheme = useColorScheme();

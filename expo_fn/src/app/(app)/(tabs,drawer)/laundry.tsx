@@ -8,6 +8,7 @@ import CarouselSlide from '@/components/carousel/CarouselSlide';
 import Pagination from '@/components/carousel/Pagination';
 import OrderForm from '@/components/orderForm/OrderForm';
 import { useEffect, useState } from 'react';
+import { OrderType } from '@/models';
 
 // const carouselData = [
 //   {
@@ -158,7 +159,7 @@ export default function LaundryTab() {
             colorScheme={colorScheme}
           />
         </View>
-        <OrderForm />
+        <OrderForm orderType={OrderType.LAUNDRY}/>
       </ScrollView>
     </View>
   );

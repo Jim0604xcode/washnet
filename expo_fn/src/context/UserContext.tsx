@@ -57,41 +57,43 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   React.useEffect(() => {
     if (userState.lng) {
       i18n.changeLanguage(userState.lng);
-    };
+    }
   }, [userState.lng, i18n]);
 
-
-  const verifyUser = React.useCallback(async (token: string | null) => {
-    if (token === null) {
-      return false;
-    } else {
-      try {
-        const res = await fetch(
-          `${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`,
-          { headers: {Authorization: `Bearer ${token}`} }
-        );
-        const result = await res.json();
-        if (!result.isErr) {
-          setAuthState!({isAuthenticated: true, token: token});
-          setUserState((prevState) => ({
-            mobile: result.data.tel,
-            address: {
-              district: result.data.district,
-              street: result.data.street,
-              building: result.data.building,
-            },
-            lng: prevState.lng, // Keep current language
-          }));
-          return true; // Verification successful
-        } else {
-          throw new Error(result.errMess);
+  const verifyUser = React.useCallback(
+    async (token: string | null) => {
+      if (token === null) {
+        return false;
+      } else {
+        try {
+          const res = await fetch(
+            `${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          const result = await res.json();
+          if (!result.isErr) {
+            setAuthState!({ isAuthenticated: true, token: token });
+            setUserState((prevState) => ({
+              mobile: result.data.tel,
+              address: {
+                district: result.data.district,
+                street: result.data.street,
+                building: result.data.building,
+              },
+              lng: prevState.lng, // Keep current language
+            }));
+            return true; // Verification successful
+          } else {
+            throw new Error(result.errMess);
+          }
+        } catch (error) {
+          console.error(error);
+          return false; // Verification failed
         }
-      } catch (error) {
-        console.error(error);
-        return false; // Verification failed
       }
-    }
-  }, [setAuthState]);
+    },
+    [setAuthState]
+  );
 
   const getUserInfo = React.useCallback(async (token: string | null) => {
     if (token === null) {
@@ -100,7 +102,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const res = await fetch(
           `${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`,
-          { headers: {Authorization: `Bearer ${token}`} }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         const result = await res.json();
         if (!result.isErr) {
@@ -124,13 +126,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  const setLanguage = React.useCallback(async (lng: string) => {
-    setUserState((prevState) => ({
-      ...prevState,
-      lng: lng,
-    }));
-    await setStorageItemAsync('lng', lng);
-  },[setUserState, setStorageItemAsync])
+  const setLanguage = React.useCallback(
+    async (lng: string) => {
+      setUserState((prevState) => ({
+        ...prevState,
+        lng: lng,
+      }));
+      await setStorageItemAsync("lng", lng);
+    },
+    [setUserState, setStorageItemAsync]
+  );
 
   const contextValue = React.useMemo(
     () => ({

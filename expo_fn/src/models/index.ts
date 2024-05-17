@@ -1,6 +1,13 @@
 import { SharedValue } from "react-native-reanimated";
 
-export type OrderType = "pw" | "dc" | "ws" | "lw" | "cs" | "fw";
+export enum OrderType {
+  LAUNDRY = "pw",
+  DRY_CLEANING = "dc",
+  SHOES = "ws",
+  BAGS = "lw",
+  ALTER = "cs",
+  HOME_TEXTILES = "fw",
+}
 
 export type Order = {
   orderType: OrderType;
@@ -11,7 +18,6 @@ export type Order = {
   building: string;
   street: string;
   district: string;
-  fullAddress: string;
   remarks: string;
 };
 

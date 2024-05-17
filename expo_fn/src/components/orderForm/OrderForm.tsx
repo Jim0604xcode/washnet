@@ -1,150 +1,161 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { StyleSheet, View, useColorScheme} from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { StyleSheet, View, useColorScheme } from "react-native";
 import { Button } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { useForm } from "react-hook-form";
-import { Order, FormButtonControls, FormInputFlags } from "@/models";
+import { Order, FormButtonControls, FormInputFlags, OrderType } from "@/models";
 import AddressButton from "@/components/orderForm/AddressButton";
 import PickupButton from "@/components/orderForm/PickupButton";
 import { useSharedValue } from "react-native-reanimated";
 import DeliveryButton from "@/components/orderForm/DeliveryButton";
-import { useAuth } from "@/context/AuthContext";
-import { useTranslation } from 'react-i18next';
-import ConfirmOrderDialog from "@/components/orderForm/ConfirmOrderDialog.tsx";
+import { useTranslation } from "react-i18next";
+import ConfirmOrderDialog from "@/components/orderForm/ConfirmOrderDialog";
+import { useUser } from "@/context/UserContext";
 
-const OrderForm: React.FC = () => {
+type OrderFormProps = {
+  orderType: OrderType;
+}
+
+const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
   const colorScheme = useColorScheme();
-  const { authState } = useAuth();
+  const { userState } = useUser();
   const { t } = useTranslation();
-  const defaultLaundryFormValue: Order = {
-    orderType: "pw",
+
+
+  const defaultValues: Order = {
+    orderType: orderType,
     pc: 1,
     pickupDateTime: "",
     deliveryDateTime: "",
-    tel: authState?.mobile as string,
-    building: "",
-    street: "",
-    district: "",
-    fullAddress: "",
+    tel: userState?.mobile || "",
+    building: userState?.address?.building || "",
+    street: userState?.address?.street || "",
+    district: userState?.address?.district || "",
     remarks: "",
   };
 
-  const [formValue, setFormValue] = useState<Order>(defaultLaundryFormValue);
-  const { register, control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: formValue,
-    values: formValue,
-  });
+  const { control, handleSubmit, watch, reset, setValue } = useForm<Order>({defaultValues});
 
-  const height1 = useSharedValue(80);
+  useEffect(() => {
+    if (userState?.mobile && userState.address) {
+      setValue("tel", userState.mobile || "");
+      setValue("building", userState.address?.building || "");
+      setValue("street", userState.address?.street || "");
+      setValue("district", userState.address?.district || "");
+    }
+  }, [userState?.mobile, userState?.address, setValue]);
+
+  const formValue = watch();
+
+  const height1 = useSharedValue(110);
   const height2 = useSharedValue(80);
   const height3 = useSharedValue(80);
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
-  const formBtnCtrls: FormButtonControls = useMemo(() => ({
-    height1,
-    height2,
-    height3,
-    isOpen1,
-    isOpen2,
-    isOpen3,
-    setIsOpen1,
-    setIsOpen2,
-    setIsOpen3,
-}), [height1, height2, height3, isOpen1, isOpen2, isOpen3]);
+
+  const formBtnCtrls: FormButtonControls = useMemo(
+    () => ({
+      height1,
+      height2,
+      height3,
+      isOpen1,
+      isOpen2,
+      isOpen3,
+      setIsOpen1,
+      setIsOpen2,
+      setIsOpen3,
+    }),
+    [height1, height2, height3, isOpen1, isOpen2, isOpen3]
+  );
 
   const formInputFlags: FormInputFlags = useMemo(() => {
-    const hasAddress: boolean =
-      (formValue.building !== "") &&
-      (formValue.street !== "") &&
-      (formValue.district !== "");
+    const hasAddress =
+      formValue.building !== "" &&
+      formValue.building !== undefined &&
+      formValue.street !== "" &&
+      formValue.street !== undefined &&
+      formValue.district !== "" &&
+      formValue.district !== undefined;
 
-    const hasPickupDateTime: boolean =
-      (formValue.pickupDateTime !== "") &&
-      (formValue.pickupDateTime !== undefined);
+    const hasPickupDateTime =
+      formValue.pickupDateTime !== "" && formValue.pickupDateTime !== undefined;
 
-    const hasDeliveryDateTime: boolean =
-      (formValue.deliveryDateTime !== "") &&
-      (formValue.deliveryDateTime !== undefined);
-    
-    const hasStep123Completed: boolean = 
+    const hasDeliveryDateTime =
+      formValue.deliveryDateTime !== "" &&
+      formValue.deliveryDateTime !== undefined;
+
+    const hasStep123Completed =
       hasAddress && hasPickupDateTime && hasDeliveryDateTime;
+
     return {
       hasAddress,
       hasPickupDateTime,
       hasDeliveryDateTime,
-      hasStep123Completed
+      hasStep123Completed,
     };
-  },[
-      formValue.building,
-      formValue.street,
-      formValue.district,
-      formValue.pickupDateTime,
-      formValue.deliveryDateTime
-    ]
-  );
+  }, [
+    formValue.building,
+    formValue.street,
+    formValue.district,
+    formValue.pickupDateTime,
+    formValue.deliveryDateTime,
+  ]);
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-  const handleDialogOpen = useCallback(() => {
-    if (
-      formInputFlags.hasStep123Completed
-    ) {
+
+  const handleDialogOpen = () => {
+    if (formInputFlags.hasStep123Completed) {
       setDialogIsOpen(true);
     } else {
-      console.warn('Form is not yet completed.')
+      console.warn("Form is not yet completed.");
     }
-  },[formInputFlags.hasStep123Completed]
-  );
-
-  
+  };
 
   return (
     <View style={styles.formBox}>
       <AddressButton
         formBtnCtrls={formBtnCtrls}
         formInputFlags={formInputFlags}
-        register={register}
         formValue={formValue}
-        setFormValue={setFormValue}
+        setFormValue={setValue}
       />
       <PickupButton
         formBtnCtrls={formBtnCtrls}
         formInputFlags={formInputFlags}
-        register={register}
         formValue={formValue}
-        setFormValue={setFormValue}
+        setFormValue={setValue}
       />
       <DeliveryButton
         formBtnCtrls={formBtnCtrls}
         formInputFlags={formInputFlags}
-        register={register}
         formValue={formValue}
-        setFormValue={setFormValue}
+        setFormValue={setValue}
       />
       <Button
         icon="playlist-check"
         mode="contained"
         style={styles.confirmBtn}
         buttonColor={
-          formInputFlags.hasStep123Completed ?
-          Colors[colorScheme ?? "light"].secondary :
-          Colors[colorScheme ?? "light"].text
+          formInputFlags.hasStep123Completed
+            ? Colors[colorScheme ?? "light"].secondary
+            : Colors[colorScheme ?? "light"].text
         }
         labelStyle={{
           color: Colors[colorScheme ?? "light"].background,
         }}
         onPress={handleDialogOpen}
-        >
+      >
         {t("orderForm.confirmOrder")}
       </Button>
       <ConfirmOrderDialog
         dialogOpen={dialogIsOpen}
         setDialogOpen={setDialogIsOpen}
-        register={register}
         formValue={formValue}
-        setFormValue={setFormValue}
-        defaultFormValue={defaultLaundryFormValue}
+        setFormValue={setValue}
+        defaultFormValue={defaultValues}
         formBtnCtrls={formBtnCtrls}
+        reset={reset}
       />
     </View>
   );
@@ -165,5 +176,5 @@ const styles = StyleSheet.create({
   confirmBtn: {
     marginTop: 10,
     width: "100%",
-  }
+  },
 });

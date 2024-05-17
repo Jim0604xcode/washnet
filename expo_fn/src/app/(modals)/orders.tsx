@@ -15,6 +15,7 @@ import { UserOrder } from "@/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import useOrderData, { QueryPeriod } from "@/utils/useOrderData";
 import { useTranslation } from "react-i18next";
+import React from "react";
 
 export default function OrdersModal() {
   const width = Dimensions.get('window').width;
@@ -22,7 +23,9 @@ export default function OrdersModal() {
   const colorScheme = useColorScheme();
   const { authState } = useAuth();
   const { data, isSuccess, isLoading, error } = useOrderData(authState?.token, QueryPeriod.CURRENT);
-
+  React.useEffect(() => {
+    console.log("OrdersModal mounted");
+  }, []);
   return (
     <ScrollView
       style={{width: width}}
