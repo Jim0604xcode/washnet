@@ -19,9 +19,11 @@ import useEditInfo, { EditAPI } from "@/utils/useEditInfo";
 import { useRouter } from "expo-router";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
 import { EditedAddressReq } from "@/models";
+import { useTranslation } from "react-i18next";
 
-export default function AddressDrawer() {
+export default function EditAddressDrawer() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const { authState, setAuthState } = useAuth();
   const {
     control,
@@ -62,12 +64,12 @@ export default function AddressDrawer() {
     editAddress.mutate(data, {
       onSuccess: () => {
         router.replace("/laundry");
-        Alert.alert("更改地址成功");
+        Alert.alert(t("editAddress.success"));
         console.log("Edited address successfully");
       },
       onError: (error) => {
         console.error("Error editing address:", error);
-        Alert.alert("唔好意思...", "請稍後再試");
+        Alert.alert(t("editAddress.error"), t("editAddress.errorText"));
       },
     });
     },
@@ -92,7 +94,7 @@ export default function AddressDrawer() {
                 { color: Colors[colorScheme ?? "light"].tint },
               ]}
             >
-              更改常用地址
+              {t("editAddress.title")}
             </Text>
             <Text
               style={[
@@ -100,7 +102,7 @@ export default function AddressDrawer() {
                 { color: Colors[colorScheme ?? "light"].text },
               ]}
             >
-              請提供準確地址以便收發衣服。
+              {t("editAddress.subtitle")}
             </Text>
           </View>
           <View style={styles.contentBox}>
@@ -117,7 +119,7 @@ export default function AddressDrawer() {
                     { color: Colors[colorScheme ?? "light"].tint },
                   ]}
                 >
-                  現時地址
+                  {t("editAddress.address")}
                 </Text>
               </View>
               <Text
@@ -139,21 +141,21 @@ export default function AddressDrawer() {
                 control={control}
                 name="district"
                 rules={{
-                  required: "須提供地區名稱用作收衫送衫",
+                  required: t("editAddress.distRequired"),
                   minLength: {
                     value: 2,
-                    message: "至少2字元",
+                    message: t("editAddress.minLength"),
                   },
                   maxLength: {
                     value: 30,
-                    message: "上限30字元",
+                    message: t("editAddress.maxLength"),
                   },
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     mode="outlined"
-                    label="地區"
-                    placeholder="請填寫地區"
+                    label={t("editAddress.district")}
+                    placeholder={t("editAddress.distPlaceholder")}
                     value={value}
                     onBlur={()=>{
                       onBlur();
@@ -162,6 +164,7 @@ export default function AddressDrawer() {
                     onFocus={()=>setScroll(true)}
                     onChangeText={onChange}
                     autoCapitalize="words"
+                    maxLength={31}
                     theme={{
                       colors: {
                         onSurfaceVariant:
@@ -198,21 +201,21 @@ export default function AddressDrawer() {
                 control={control}
                 name="street"
                 rules={{
-                  required: "須提供街道名稱用作收衫送衫",
+                  required: t("editAddress.stRequired"),
                   minLength: {
                     value: 2,
-                    message: "至少2字元",
+                    message: t("editAddress.minLength"),
                   },
                   maxLength: {
                     value: 30,
-                    message: "上限30字元",
+                    message: t("editAddress.maxLength"),
                   },
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     mode="outlined"
-                    label="街道"
-                    placeholder="請填寫街道"
+                    label={t("editAddress.street")}
+                    placeholder={t("editAddress.stPlaceholder")}
                     value={value}
                     onBlur={()=>{
                       onBlur();
@@ -221,6 +224,7 @@ export default function AddressDrawer() {
                     onFocus={()=>setScroll(true)}
                     onChangeText={onChange}
                     autoCapitalize="words"
+                    maxLength={31}
                     theme={{
                       colors: {
                         onSurfaceVariant:
@@ -257,21 +261,21 @@ export default function AddressDrawer() {
                 control={control}
                 name="building"
                 rules={{
-                  required: "須提供大廈名稱用作收衫送衫",
+                  required: t("editAddress.bdlgRequired"),
                   minLength: {
                     value: 2,
-                    message: "至少2字元",
+                    message: t("editAddress.minLength"),
                   },
                   maxLength: {
                     value: 30,
-                    message: "上限30字元",
+                    message: t("editAddress.maxLength"),
                   },
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     mode="outlined"
-                    label="大廈"
-                    placeholder="請填寫大廈"
+                    label={t("editAddress.building")}
+                    placeholder={t("editAddress.bdlgPlaceholder")}
                     value={value}
                     onBlur={()=>{
                       onBlur();
@@ -280,6 +284,7 @@ export default function AddressDrawer() {
                     onFocus={()=>setScroll(true)}
                     onChangeText={onChange}
                     autoCapitalize="words"
+                    maxLength={31}
                     theme={{
                       colors: {
                         onSurfaceVariant:
@@ -330,7 +335,7 @@ export default function AddressDrawer() {
                 }}
                 onPress={handleSubmit(showConfirmDialog)}
               >
-                確認更改
+                {t("editAddress.confirm")}
               </Button>
             )}
           </View>

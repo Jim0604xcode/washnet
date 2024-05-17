@@ -3,6 +3,7 @@ import { StyleSheet, useColorScheme } from "react-native";
 import { Button, Dialog, Portal, Text, TextInput } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { EditAPI } from "@/utils/useEditInfo";
+import { useTranslation } from "react-i18next";
 
 type ConfirmMobileDialogProps = {
   visible: boolean;
@@ -20,6 +21,7 @@ const ConfirmEditDialog = ({
   editAPI,
 }: ConfirmMobileDialogProps) => {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation(); 
   const [showNewPassword, setShowNewPassword] = useState(false);
 
   return (
@@ -39,16 +41,16 @@ const ConfirmEditDialog = ({
           ]}
         >
           {editAPI === 'editUserMobile' ? 
-            "確認新號碼"
+            t("editDialog.mobile")
             :
             editAPI === 'editUserAddress' ?
-            "確認新地址"
+            t("editDialog.address")
             :
             editAPI === 'editUserPassword' ?
-            "確認新密碼"
+            t("editDialog.password")
             :
             editAPI === 'delUser' ?
-            "確定刪除帳戶？"
+            t("editDialog.delete")
             :
             null
           }
@@ -58,16 +60,16 @@ const ConfirmEditDialog = ({
               { color: Colors[colorScheme ?? "light"].text }]}
           >
             {editAPI === 'editUserMobile' ? 
-              "你的註冊電話將改為"
+              t("editDialog.mobileText")
               :
               editAPI === 'editUserAddress' ?
-              "你的常用地址將改為"
+              t("editDialog.addressText")
               :
               editAPI === 'editUserPassword' ?
-              "你的密碼將改為"
+              t("editDialog.passwordText")
               :
               editAPI === 'delUser' ?
-              "希望您將來會體驗本店更好的服務"
+              t("editDialog.deleteText")
               :
               null
             }
@@ -104,16 +106,14 @@ const ConfirmEditDialog = ({
             onPress={onDismiss}
             textColor={Colors[colorScheme ?? "light"].outline}
           >
-            取消
+            {t("editDialog.cancel")}
           </Button>
           <Button icon="check"
             onPress={onConfirm}
             textColor={Colors[colorScheme ?? "light"].tint}
             labelStyle={{ fontSize: 16 }}
           >
-            { editAPI === 'delUser' ?
-              "確定" : "確認"
-            }
+            {t("editDialog.confirm")}
           </Button>
         </Dialog.Actions>
       </Dialog>

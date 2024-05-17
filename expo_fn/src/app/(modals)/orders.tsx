@@ -14,9 +14,11 @@ import { ActivityIndicator } from "react-native-paper";
 import { UserOrder } from "@/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import useOrderData, { QueryPeriod } from "@/utils/useOrderData";
+import { useTranslation } from "react-i18next";
 
 export default function OrdersModal() {
   const width = Dimensions.get('window').width;
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const { authState } = useAuth();
   const { data, isSuccess, isLoading, error } = useOrderData(authState?.token, QueryPeriod.CURRENT);
@@ -45,7 +47,7 @@ export default function OrdersModal() {
               color: Colors[colorScheme ?? "light"].secondary,
             }}
           >
-            Error: {error.message}
+            Sorry... {error.message}
           </Text>
         ) : null}
         {isSuccess
@@ -65,37 +67,37 @@ export default function OrdersModal() {
                   {order.orderType === "pw" ? (
                     <MaterialCommunityIcons
                       name="scale"
-                      size={26}
+                      size={20}
                       color={Colors[colorScheme ?? "light"].tint}
                     />
                   ) : order.orderType === "dc" ? (
                     <MaterialIcons
                       name="dry-cleaning"
-                      size={26}
+                      size={20}
                       color={Colors[colorScheme ?? "light"].tint}
                     />
                   ) : order.orderType === "cs" ? (
                     <MaterialCommunityIcons
                       name="scissors-cutting"
-                      size={26}
+                      size={20}
                       color={Colors[colorScheme ?? "light"].tint}
                     />
                   ) : order.orderType === "fw" ? (
                     <MaterialCommunityIcons
-                      name="fire"
-                      size={26}
+                      name="bed"
+                      size={20}
                       color={Colors[colorScheme ?? "light"].tint}
                     />
                   ) : order.orderType === "lw" ? (
                     <MaterialCommunityIcons
-                      name="lightbulb"
-                      size={26}
+                      name="briefcase"
+                      size={20}
                       color={Colors[colorScheme ?? "light"].tint}
                     />
                   ) : order.orderType === "ws" ? (
                     <MaterialCommunityIcons
-                      name="water"
-                      size={26}
+                      name="shoe-sneaker"
+                      size={20}
                       color={Colors[colorScheme ?? "light"].tint}
                     />
                   ) : null}
@@ -106,17 +108,17 @@ export default function OrdersModal() {
                     ]}
                   >
                     {order.orderType === "pw"
-                      ? "磅洗"
+                      ? t('orders.pw')
                       : order.orderType === "dc"
-                      ? "乾洗"
+                      ? t('orders.dc')
                       : order.orderType === "cs"
-                      ? "改衣"
+                      ? t('orders.cs')
                       : order.orderType === "fw"
-                      ? "洗袋"
+                      ? t('orders.fw')
                       : order.orderType === "lw"
-                      ? "洗家具"
+                      ? t('orders.lw')
                       : order.orderType === "ws"
-                      ? "洗鞋"
+                      ? t('orders.ws')
                       : null}
                   </Text>
                 </View>
@@ -132,7 +134,7 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].tint },
                     ]}
                   >
-                    編號：
+                    {t('orders.number')}
                   </Text>
                   {order.orderId}
                 </Text>
@@ -148,7 +150,7 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].tint },
                     ]}
                   >
-                    數量：
+                    {t('orders.quantity')}
                   </Text>
                   {order.pc}
                 </Text>
@@ -164,17 +166,17 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].tint },
                     ]}
                   >
-                    狀態：
+                    {t('orders.status')}
                   </Text>
                   {order.orderStatus === "w_pickup"
-                    ? "等待收衫"
+                    ? t('orders.w_pickup')
                     : order.orderStatus === "w_service"
-                    ? "已收衫"
+                    ? t('orders.w_service')
                     : order.orderStatus === "w_delivery"
-                    ? "等待派送"
+                    ? t('orders.w_delivery')
                     : order.orderStatus === "complete"
-                    ? "已完成"
-                    : "需查找紀錄"}
+                    ? t('orders.complete')
+                    : t('orders.null')}
                 </Text>
                 <View
                   style={styles.labelAndText}
@@ -187,7 +189,7 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].tint },
                     ]}
                   >
-                    地址：
+                    {t('orders.address')}
                   </Text>
                   <Text
                     style={[
@@ -209,7 +211,7 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].tint },
                     ]}
                   >
-                    預計收衫時間：
+                    {t('orders.pickup')}
                   </Text>
                   <Text
                     style={[
@@ -231,7 +233,7 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].tint },
                     ]}
                   >
-                    預計送衫時間：
+                    {t('orders.delivery')}
                   </Text>
                   <Text
                     style={[
@@ -270,10 +272,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     gap: 8,
+    marginBottom: 10,
   },
   type: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "900",
   },
   labelAndText: {
     gap: 4

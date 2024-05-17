@@ -8,6 +8,7 @@ import { useDebounce } from "@/utils/useDebounce";
 import { TextInput } from 'react-native-paper';
 import { UseFormRegister } from 'react-hook-form';
 import { FormButtonControls, FormInputFlags, Order } from '@/models';
+import { useTranslation } from 'react-i18next';
 
 type AddressButtonProps = {
     formBtnCtrls: FormButtonControls;
@@ -25,6 +26,7 @@ const AddressButton: React.FC<AddressButtonProps> = ({
     setFormValue
 }) => {
 const colorScheme = useColorScheme(); 
+const { t } = useTranslation();
 
 const {
   height1,
@@ -89,7 +91,7 @@ const handlePress1 = useDebounce(() => {
               { color: Colors[colorScheme ?? "light"].text },
             ]}
           >
-            填寫地址
+            {t('orderForm.address')}
           </Text>
           <FontAwesome
             name={isOpen1 ? "chevron-up" : "chevron-down"}
@@ -109,8 +111,8 @@ const handlePress1 = useDebounce(() => {
         <View style={styles.inputBox}>
           <TextInput
             mode="outlined"
-            label="地區"
-            placeholder="請填寫地區"
+            label={t('orderForm.district')}
+            placeholder={t('orderForm.distPlaceholder')}
             {...register("district",
               { required: true }
             )}
@@ -134,8 +136,8 @@ const handlePress1 = useDebounce(() => {
           />
           <TextInput
             mode="outlined"
-            label="街道"
-            placeholder="請填寫街道"
+            label={t('orderForm.street')}
+            placeholder={t('orderForm.stPlaceholder')}
             {...register("street",
               { required: true }
             )}
@@ -160,8 +162,8 @@ const handlePress1 = useDebounce(() => {
           />
           <TextInput
             mode="outlined"
-            label="大廈"
-            placeholder="請填寫大廈名稱"
+            label={t('orderForm.building')}
+            placeholder={t('orderForm.bdlgPlaceholder')}
             {...register("building",
               { required: true }
             )}

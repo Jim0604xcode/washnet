@@ -2,6 +2,7 @@ import { setStorageItemAsync } from '@/utils/useStorageState';
 import React from 'react';
 import { Alert } from 'react-native';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../models';
+import { useTranslation } from 'react-i18next';
 
 interface AuthProps {
   authState: { 
@@ -45,7 +46,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       mobile: null,
       token: null
     })
-
+  const { t } = useTranslation();
+  
   const login = React.useCallback(async (mobile: string, password: string) => {
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/login`, {
@@ -78,7 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "An unknown error occurred";
-      Alert.alert("唔好意思...", "請稍後再試");
+      Alert.alert(t('auth.error'), t('auth.errorText'));
       console.error(errorMessage);
     }
   }, []);
@@ -131,7 +133,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error(result.errMess)
       };
     } catch (err) {
-      Alert.alert('請重新註冊');
+      Alert.alert(t('auth.error'), t('auth.errorText'));
       console.error('Cannot register for now due to', err)
     }
   },[])

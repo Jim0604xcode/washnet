@@ -1,7 +1,6 @@
 import { Link } from "expo-router";
 import React, { Suspense, useState } from "react";
 import {
-  Alert,
   Dimensions,
   Image,
   Keyboard,
@@ -20,10 +19,12 @@ import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
 import { StatusBar } from "expo-status-bar";
+import { useTranslation } from "react-i18next";
 
 const LoginScreen = () => {
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
@@ -67,9 +68,9 @@ const LoginScreen = () => {
       </Suspense>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.intro}>
-          <Text style={styles.text}>一個電話</Text>
-          <Text style={styles.text}>三步落單</Text>
-          <Text style={styles.subText}>幫你收衫 洗衫 送衫 👍</Text>
+          <Text style={styles.text}>{t("login.title1")}</Text>
+          <Text style={styles.text}>{t("login.title2")}</Text>
+          <Text style={styles.subText}>{t("login.subtitle")}</Text>
         </View>
       </TouchableWithoutFeedback>
       <KeyboardAvoidingView
@@ -80,8 +81,8 @@ const LoginScreen = () => {
           <View style={styles.inner}>
             <TextInput
               mode="flat"
-              label="手機號碼"
-              placeholder="請輸入手機號碼"
+              label={t("login.mobile")}
+              placeholder={t("login.mbPlaceholder")}
               value={mobile}
               onChangeText={handleMobileChange}
               keyboardType="numeric"
@@ -100,8 +101,8 @@ const LoginScreen = () => {
             />
             <TextInput
               mode="flat"
-              label="密碼"
-              placeholder="請輸入密碼"
+              label={t("login.password")}
+              placeholder={t("login.pwPlaceholder")}
               value={password}
               onChangeText={handlePasswordChange}
               autoComplete="password"
@@ -137,7 +138,7 @@ const LoginScreen = () => {
                       textColor={Colors.light.text}
                       labelStyle={{ fontSize: 12 }}
                     >
-                      註冊
+                      {t("login.register")}
                     </Button>
                   )}
                 </Pressable>
@@ -157,7 +158,7 @@ const LoginScreen = () => {
                     textColor={Colors.light.text}
                     labelStyle={{ fontSize: 12 }}
                   >
-                    忘記密碼
+                    {t("login.forget")}
                   </Button>
                 )}
               </Pressable>
@@ -180,7 +181,7 @@ const LoginScreen = () => {
         labelStyle={{ fontSize: 16 }}
         onPress={handleLogin}
       >
-        登入
+        {t("login.login")}
       </Button>
     </SafeAreaView>
   );
