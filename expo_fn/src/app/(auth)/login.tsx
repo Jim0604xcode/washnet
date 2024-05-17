@@ -14,7 +14,7 @@ import {
   useColorScheme,
 } from "react-native";
 import Colors from "@/constants/Colors";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
@@ -149,33 +149,35 @@ const LoginScreen = () => {
                   )}
                 </Pressable>
               </Link>
-              <Pressable>
-                {({ pressed }) => (
-                  <Button
-                    style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
-                    mode="text"
-                    icon={() => (
-                      <FontAwesome
-                        name="question-circle"
-                        size={12}
-                        color={Colors.light.text}
-                      />
-                    )}
-                    textColor={Colors.light.text}
-                    labelStyle={{ fontSize: 12 }}
-                  >
-                    {t("login.forget")}
-                  </Button>
-                )}
-              </Pressable>
+              <Link href="/reset" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Button
+                      style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
+                      mode="text"
+                      icon={() => (
+                        <FontAwesome
+                          name="question-circle"
+                          size={12}
+                          color={Colors.light.text}
+                        />
+                      )}
+                      textColor={Colors.light.text}
+                      labelStyle={{ fontSize: 12 }}
+                    >
+                      {t("login.forget")}
+                    </Button>
+                  )}
+                </Pressable>
+              </Link>
               <Pressable onPress={toggleLanguage}>
                 {({ pressed }) => (
                   <Button
                     style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
                     mode="text"
                     icon={() => (
-                      <FontAwesome5
-                        name="globe"
+                      <MaterialIcons
+                        name="translate"
                         size={12}
                         color={Colors.light.text}
                       />

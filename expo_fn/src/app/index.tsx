@@ -43,16 +43,14 @@ const index = () => {
       .catch(err => {
         console.error('Verification failed:', err);
       });
-    } else {
-      return redirectToLogin();
-    }
-  }, [token, redirectToLogin]);
+    };
+  }, [token, redirectToLogin, loadingToken, verifyUser]);
 
   React.useEffect(() => {
     if (!loadingLng && lng !== null){
       setLanguage!(lng);
-    };
-  }, [setLanguage, lng])
+    }
+  }, [setLanguage, loadingLng, lng])
   
   return (
     <SafeAreaView
