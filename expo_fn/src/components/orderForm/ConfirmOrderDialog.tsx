@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 import {
   Button,
   Dialog,
-  IconButton,
   Portal,
   TextInput,
 } from "react-native-paper";
