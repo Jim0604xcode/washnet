@@ -10,10 +10,8 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
-import { View, Text } from 'react-native';
 import '@/languages/i18n'
+import { UserProvider, useUser } from '@/context/UserContext';
 const queryClient = new QueryClient();
 
 export {
@@ -60,13 +58,15 @@ function RootLayoutNav() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <PaperProvider>
-            <SafeAreaProvider>
-                <StackLayout/>
-            </SafeAreaProvider>
-          </PaperProvider>
-        </ThemeProvider>
+        <UserProvider>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <PaperProvider>
+              <SafeAreaProvider>
+                  <StackLayout/>
+              </SafeAreaProvider>
+            </PaperProvider>
+          </ThemeProvider>
+        </UserProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
@@ -76,6 +76,8 @@ function StackLayout() {
   const { authState } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+  const { getUserInfo } = useUser();
+
 
   useEffect(() => {
     const firstSegment = segments.length > 0 ? segments[0] : null;
@@ -86,6 +88,7 @@ function StackLayout() {
       router.replace('/login');
     } else if (isAuthenticated && !inProtected) {
       router.replace('/laundry');
+      getUserInfo!(authState.token);
     }
   }, [authState?.isAuthenticated])
 

@@ -1,5 +1,5 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, Image, View, StyleSheet, ScrollViewProps, ScrollView, Switch } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import {DrawerContentComponentProps, DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
@@ -11,22 +11,41 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { Divider } from "react-native-paper";
 import { useTranslation } from "react-i18next";
+import { useUser } from "@/context/UserContext";
+import { setStorageItemAsync } from "@/utils/useStorageState";
 
 function CustomDrawerContent(props:  DrawerContentComponentProps) {
   const colorScheme = useColorScheme();
-  const { authState, logout } = useAuth();
+  const { logout } = useAuth();
+  const { userState, setUserState, setLanguage } = useUser();
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const segment = useSegments();
   const [isCn, setIsCn] = React.useState(true);
 
-
-  const onToggleSwitch = () => {
+  const onToggleSwitch = useCallback(async() => {
     setIsCn(!isCn);
-    i18n.changeLanguage(isCn ? 'eng' : 'cn');
-  };
+    // i18n.changeLanguage(i18n.language === "cn" ? 'eng' : 'cn');
+    setLanguage!(isCn ? 'eng' : 'cn');
+  },[setIsCn, setLanguage, isCn]);
 
+  useEffect(() => {
+    if (i18n.language === 'cn') {
+      setIsCn(true);
+    } else if (i18n.language === 'eng') {
+      setIsCn(false);
+    };
+  }, [])
 
+  const handleLogout = useCallback(()=>{
+      logout!();
+      setUserState!({
+        mobile: null,
+        address: null,
+        lng: null
+      })
+  },[])
+  
   return (
     <DrawerContentScrollView
       {...props}
@@ -36,20 +55,41 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
       ]}
       scrollEnabled={false}
     >
-
       <View style={styles.infoBox}>
         <Image
           source={require("@/assets/images/logo.png")}
-          style={{ width: 150, height: 42 }}
+          style={styles.img}
         />
         <Text
-          style={[
-            styles.infoText,
+          style={[styles.infoText, 
             { color: Colors[colorScheme ?? "light"].tint },
           ]}
         >
-          {authState?.mobile}
+          {userState?.mobile}
         </Text>
+        <View style={styles.address}>
+          <Text
+            style={[styles.infoText, 
+              { color: Colors[colorScheme ?? "light"].tint },
+            ]}
+          >
+            {userState?.address?.district}{", "}
+          </Text>
+          <Text
+            style={[styles.infoText, 
+              { color: Colors[colorScheme ?? "light"].tint },
+            ]}
+          >
+            {userState?.address?.street}{", "}
+          </Text>
+          <Text
+            style={[styles.infoText, 
+              { color: Colors[colorScheme ?? "light"].tint },
+            ]}
+          >
+            {userState?.address?.building}
+          </Text>
+        </View>
       </View>
       <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
       <DrawerItem
@@ -121,7 +161,7 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
       <View style={styles.bottomBox}>
         <DrawerItem
           label={t('drawer.logout')}
-          onPress={logout!}
+          onPress={handleLogout}
           style={styles.drawerItem}
           labelStyle={styles.drawerLabel}
           activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
@@ -210,10 +250,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 20,
+    paddingHorizontal: 20,
+  },
+  img: { 
+    width: 150,
+    height: 42,
   },
   infoText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
+  },
+  address: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   drawerItem: {
     paddingLeft: 20,
