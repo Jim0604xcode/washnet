@@ -45,13 +45,13 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
         <Text
           style={[
             styles.infoText,
-            { color: Colors[colorScheme ?? "light"].secondary },
+            { color: Colors[colorScheme ?? "light"].tint },
           ]}
         >
           {authState?.mobile}
         </Text>
       </View>
-      <Divider style={styles.divider}/>
+      <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
       <DrawerItem
         label={t('drawer.mobile')}
         onPress={() => router.push("/editMobile")}
@@ -117,7 +117,7 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
           />
         )}
       />
-      <Divider style={styles.divider} />
+      <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
       <View style={styles.bottomBox}>
         <DrawerItem
           label={t('drawer.logout')}
@@ -132,21 +132,21 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
           )}
         />
         <View style={styles.switchBox}>
-          <Text style={[styles.drawerLabel, {
-            color: isCn ? Colors[colorScheme ?? "light"].outline : Colors[colorScheme ?? "light"].tert
+          <Text style={[styles.switchLabel, {
+            color: isCn ? Colors[colorScheme ?? "light"].outline : Colors[colorScheme ?? "light"].text,
           }]}>English</Text>
           <Switch style={styles.switch}
             thumbColor={Colors[colorScheme??'light'].surfaceContainerHL}
             trackColor={{
-              false: Colors[colorScheme ?? "light"].tert,
+              false: Colors[colorScheme ?? "light"].p80,
               true: Colors[colorScheme ?? "light"].tint 
             }}
-            ios_backgroundColor={Colors[colorScheme ?? "light"].tert}
+            ios_backgroundColor={Colors[colorScheme ?? "light"].p80}
             value={isCn}
             onValueChange={onToggleSwitch}
           />
-          <Text style={[styles.drawerLabel,{
-            color: isCn ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].outline
+          <Text style={[styles.switchLabel,{
+            color: isCn ? Colors[colorScheme ?? "light"].text : Colors[colorScheme ?? "light"].outline,
           }]}>中文</Text>
         </View>
       </View>
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: "700",
   },
   drawerItem: {
     paddingLeft: 20,
@@ -233,7 +233,10 @@ const styles = StyleSheet.create({
     gap: 10
   },
   switch: {
-    marginLeft: 0,
     alignSelf: 'center',
+  },
+  switchLabel: {
+    fontSize: 14,
+    fontWeight: '700',
   }
 });
