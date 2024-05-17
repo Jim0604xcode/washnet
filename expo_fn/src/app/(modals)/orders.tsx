@@ -15,6 +15,7 @@ import { UserOrder } from "@/models";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import useOrderData, { QueryPeriod } from "@/utils/useOrderData";
 import { useTranslation } from "react-i18next";
+import React from "react";
 
 export default function OrdersModal() {
   const width = Dimensions.get('window').width;

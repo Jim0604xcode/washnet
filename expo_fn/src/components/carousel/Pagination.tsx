@@ -4,15 +4,16 @@ import Colors from "@/constants/Colors";
 import PaginationDot from "@/components/carousel/PaginationDot";
 
 type PaginationProps = {
-  carouselData: {
-    title?: string;
-    subtitle?: string;
-    info: string;
-    info2: string;
-    info3: string;
-    info4: string;
-    image?: string;
-  }[];
+  // carouselData: {
+  //   title?: string;
+  //   subtitle?: string;
+  //   info: string;
+  //   info2: string;
+  //   info3: string;
+  //   info4: string;
+  //   image?: string;
+  // }[];
+  carouselData: any[];
   progressValue: SharedValue<number>;
   colorScheme: ColorSchemeName;
 };

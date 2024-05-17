@@ -1,7 +1,7 @@
 const primary = '#6BFFB8';
 const secondary = '#4E6356';
 const tertiary = '#7CFEF0';
-const neutral = '#F5F5F5';
+const offWhite = '#F5F5F5';
 const error = '#FF5449';
 const surface = '#F4FBF3';
 const surfaceContainer = '#E8F0E8';
@@ -31,14 +31,14 @@ export default {
     primary: primary,
     secondary: s40,
     tertiary: t90,
-    neutral: neutral,
+    neutral: offWhite,
     error: error,
     onPrimary: p10,
     surface: surface,
     surfaceContainer: surfaceContainer,
     surfaceContainerHL: surfaceContainerLow,
     text: onSurface,
-    background: neutral,
+    background: offWhite,
     outline: outline,
     tint: p40,
     tabIconDefault: nv80,
@@ -53,7 +53,7 @@ export default {
     primary: primary,
     secondary: s80,
     tertiary: t30,
-    neutral: neutral,
+    neutral: offWhite,
     error: error,
     onPrimary: p10,
     surface: surfaceDark,

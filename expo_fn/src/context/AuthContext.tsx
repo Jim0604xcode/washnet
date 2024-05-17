@@ -8,12 +8,12 @@ interface AuthProps {
   authState: { 
     isAuthenticated: boolean | null, 
     token: string | null,
-    mobile: string | null,
+    // mobile: string | null,
   };
   setAuthState: React.Dispatch<React.SetStateAction<{
     isAuthenticated: boolean | null;
     token: string | null;
-    mobile: string | null;
+    // mobile: string | null;
 }>>
   login: (mobile: string, password: string) => Promise<any>;
   logout: () => void;
@@ -40,10 +40,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [authState, setAuthState] = React.useState<{
     isAuthenticated: boolean | null,
     token: string | null,
-    mobile: string | null,
+    // mobile: string | null,
   }>({
       isAuthenticated: null,
-      mobile: null,
+      // mobile: null,
       token: null
     })
   const { t } = useTranslation();
@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
-          mobile: mobile,
+          // mobile: mobile,
         });
       } else {
         throw new Error(result.errMess as string);
@@ -87,7 +87,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = React.useCallback(async() => {
     await setStorageItemAsync(`${process.env.EXPO_PUBLIC_API_KEY}`, null)
-    setAuthState({isAuthenticated: false, mobile: null, token: null})
+    setAuthState({
+      isAuthenticated: false,
+      // mobile: null,
+      token: null
+    })
   },[]);
 
   const register = React.useCallback(async({
@@ -127,7 +131,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
-          mobile: mobile,
+          // mobile: mobile,
         })
       } else if (result.isErr){
         throw new Error(result.errMess)
@@ -153,7 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setAuthState({
             isAuthenticated: true,
             token: token,
-            mobile: result.data.tel,
+            // mobile: result.data.tel,
           });
           return true;  // Verification successful
         } else {

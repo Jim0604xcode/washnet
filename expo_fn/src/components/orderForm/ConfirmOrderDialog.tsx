@@ -8,29 +8,29 @@ import {
 } from "react-native-paper";
 import { Text } from "@/components/Themed"
 import Colors from "@/constants/Colors";
-import { UseFormRegister } from "react-hook-form";
 import { FetchOrder, FormButtonControls, Order } from "@/models";
 import useSubmitForm from "@/utils/useSubmitForm";
 import { useTranslation } from "react-i18next";
+import { UseFormReset, UseFormSetValue } from "react-hook-form";
 
 type ConfirmOrderDialogProps = {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  register: UseFormRegister<Order>;
   formValue: Order;
-  setFormValue: React.Dispatch<React.SetStateAction<Order>>;
+  setFormValue: UseFormSetValue<Order>;
   defaultFormValue: Order;
   formBtnCtrls: FormButtonControls;
+  reset: UseFormReset<Order>;
 };
 
 const ConfirmOrderDialog = ({
   dialogOpen,
   setDialogOpen,
-  register,
   formValue,
   setFormValue,
   defaultFormValue,
   formBtnCtrls,
+  reset
 }: ConfirmOrderDialogProps) => {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
@@ -44,17 +44,18 @@ const ConfirmOrderDialog = ({
   }
 
   const handlePcBlur = () => {
-    setFormValue((prev) => ({
-      ...prev,
-      pc: Number(pc)
-    }));
+    setFormValue('pc', Number(pc))
+    // setFormValue((prev) => ({
+    //   ...prev,
+    //   pc: Number(pc)
+    // }));
   };
 
   const handleRemarksBlur = () => {
-    setFormValue((prev) => ({
-      ...prev,
-      remarks: remarks
-    }));
+    // setFormValue((prev) => ({
+    //   ...prev,
+    //   remarks: remarks
+    // }));
   };
   const {
     height1,
@@ -87,10 +88,10 @@ const ConfirmOrderDialog = ({
     submission.mutate(fetchFormValue, {
       onSuccess: () => {
         console.log('Form submitted successfully');
-        setFormValue(defaultFormValue);
+        reset(defaultFormValue);
         setPc("1");
         setRemarks("");
-        height1.value = (80)
+        height1.value = (110)
         setIsOpen1(false)
         height2.value = (80)
         setIsOpen2(false)
@@ -140,7 +141,7 @@ const ConfirmOrderDialog = ({
             <Text style={styles.dialogInfoLabel}>
               {t('orderDialog.address')}
             </Text>
-            {formValue.fullAddress}
+            {formValue.district}, {formValue.street}, {formValue.building}
           </Text>
           <Text style={[
             styles.dialogInfo,
@@ -161,7 +162,6 @@ const ConfirmOrderDialog = ({
             {formValue.deliveryDateTime}
           </Text>
           <TextInput
-            {...register("pc", { required: true })}
             onChangeText={handlePcChange}
             onBlur={handlePcBlur}
             value={pc}
@@ -179,7 +179,6 @@ const ConfirmOrderDialog = ({
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
           <TextInput
-            {...register("remarks")}
             onChangeText={setRemarks}
             onBlur={handleRemarksBlur}
             defaultValue={remarks}
