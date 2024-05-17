@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 import {
   Button,
   Dialog,
-  IconButton,
   Portal,
   TextInput,
 } from "react-native-paper";
@@ -12,8 +11,9 @@ import Colors from "@/constants/Colors";
 import { UseFormRegister } from "react-hook-form";
 import { FetchOrder, FormButtonControls, Order } from "@/models";
 import useSubmitForm from "@/utils/useSubmitForm";
+import { useTranslation } from "react-i18next";
 
-type ConfirmDialogProps = {
+type ConfirmOrderDialogProps = {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   register: UseFormRegister<Order>;
@@ -23,7 +23,7 @@ type ConfirmDialogProps = {
   formBtnCtrls: FormButtonControls;
 };
 
-const ConfirmDialog = ({
+const ConfirmOrderDialog = ({
   dialogOpen,
   setDialogOpen,
   register,
@@ -31,8 +31,9 @@ const ConfirmDialog = ({
   setFormValue,
   defaultFormValue,
   formBtnCtrls,
-}: ConfirmDialogProps) => {
+}: ConfirmOrderDialogProps) => {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   const [remarks, setRemarks] = useState("");
   const [pc, setPc] = useState("1");
@@ -89,18 +90,12 @@ const ConfirmDialog = ({
         setFormValue(defaultFormValue);
         setPc("1");
         setRemarks("");
-        if (isOpen1) {
-          height1.value = (80)
-          setIsOpen1(false)
-        };
-        if (isOpen2) {
-          height2.value = (80)
-          setIsOpen2(false)
-        };
-        if (isOpen3) {
-          height3.value = (80)
-          setIsOpen3(false)
-        };
+        height1.value = (80)
+        setIsOpen1(false)
+        height2.value = (80)
+        setIsOpen2(false)
+        height3.value = (80)
+        setIsOpen3(false)
         setDialogOpen(false);
       },
       onError: (error) => {
@@ -108,7 +103,7 @@ const ConfirmDialog = ({
         alert(`請稍後再試`)
       },
     });
-  }, [formValue, pc, remarks])
+  }, [formValue, pc, remarks, isOpen1, isOpen2, isOpen3])
 
   return (
     <Portal>
@@ -126,35 +121,43 @@ const ConfirmDialog = ({
             { color: Colors[colorScheme ?? "light"].tint },
           ]}
         >
-          請確認訂單
+          {t('orderDialog.confirmOrder')}
         </Dialog.Title>
         <Dialog.Content style={styles.dialogContent}>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
             ]}>
-            <Text style={styles.dialogInfoLabel}>電話：</Text>
+            <Text style={styles.dialogInfoLabel}>
+              {t('orderDialog.tel')}
+            </Text>
             {formValue.tel}
           </Text>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
           ]}>
-            <Text style={styles.dialogInfoLabel}>地址：</Text>
+            <Text style={styles.dialogInfoLabel}>
+              {t('orderDialog.address')}
+            </Text>
             {formValue.fullAddress}
           </Text>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
           ]}>
-            <Text style={styles.dialogInfoLabel}>收衫時間：</Text>
+            <Text style={styles.dialogInfoLabel}>
+              {t('orderDialog.pickup')}
+            </Text>
             {formValue.pickupDateTime}
           </Text>
           <Text style={[
             styles.dialogInfo,
             { color: Colors[colorScheme ?? "light"].text }
           ]}>
-            <Text style={styles.dialogInfoLabel}>送衫時間：</Text>
+            <Text style={styles.dialogInfoLabel}>
+              {t('orderDialog.delivery')}
+            </Text>
             {formValue.deliveryDateTime}
           </Text>
           <TextInput
@@ -163,8 +166,8 @@ const ConfirmDialog = ({
             onBlur={handlePcBlur}
             value={pc}
             mode="outlined"
-            label="衣服袋數"
-            placeholder="需要清洗幾袋衣服？"
+            label={t('orderDialog.pc')}
+            placeholder={t('orderDialog.pcPlaceholder')}
             inputMode="numeric"
             keyboardType="numeric"
             maxLength={2}
@@ -181,8 +184,8 @@ const ConfirmDialog = ({
             onBlur={handleRemarksBlur}
             defaultValue={remarks}
             mode="outlined"
-            label="備註（選填）"
-            placeholder="有其他事項需要本店注意嗎？"
+            label={t('orderDialog.remarks')}
+            placeholder={t('orderDialog.remarksPlaceholder')}
             blurOnSubmit
             multiline            
             numberOfLines={2}
@@ -196,13 +199,18 @@ const ConfirmDialog = ({
             activeOutlineColor={Colors[colorScheme ?? "light"].tint}
           />
         </Dialog.Content>
-        <Dialog.Actions style={{ justifyContent: "flex-end", alignItems: "center", paddingBottom: 10, gap: 10 }}>
+        <Dialog.Actions style={{ 
+          justifyContent: "flex-end",
+          alignItems: "center",
+          paddingBottom: 10,
+          gap: 10 }}
+        >
           <Button
             mode="text"
             onPress={()=>setDialogOpen(false)}
             textColor={Colors[colorScheme ?? "light"].outline}
           >
-            取消
+            {t('orderDialog.cancel')}
           </Button>
           <Button
             onPress={handleSubmit}
@@ -210,7 +218,8 @@ const ConfirmDialog = ({
             icon="send"
             disabled={submission.isPending}
           >
-            {submission.isPending? '發送中':'發送訂單'}
+            {submission.isPending? t('orderDialog.sending'):
+            t('orderDialog.send')}
           </Button>
         </Dialog.Actions>
       </Dialog>
@@ -218,7 +227,7 @@ const ConfirmDialog = ({
   );
 };
 
-export default ConfirmDialog;
+export default ConfirmOrderDialog;
 
 const styles = StyleSheet.create({
   dialogBox: {

@@ -22,6 +22,8 @@ const p10 = '#002112';
 const s40 = '#486553';
 const s80 = '#8F9E8F';
 const t90 = '#B5EBFF';
+const t80 = '#97CFE4';
+const t40 = '#2B6578';
 const t30 = '#074D5F';
 
 export default {
@@ -45,6 +47,7 @@ export default {
     p30: p30,
     s40: s40,
     s80: s80,
+    tert: t40,
   },
   dark: {
     primary: primary,
@@ -66,5 +69,6 @@ export default {
     p30: p30,
     s40: s40,
     s80: s80,
+    tert: t80,
   },
 };

@@ -13,6 +13,7 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { View, Text } from 'react-native';
+import '@/languages/i18n'
 const queryClient = new QueryClient();
 
 export {
@@ -75,7 +76,6 @@ function StackLayout() {
   const { authState } = useAuth();
   const segments = useSegments();
   const router = useRouter();
-  const ColorScheme = useColorScheme();
 
   useEffect(() => {
     const firstSegment = segments.length > 0 ? segments[0] : null;
@@ -84,7 +84,7 @@ function StackLayout() {
 
     if (!isAuthenticated && inProtected) {
       router.replace('/login');
-    } else if (isAuthenticated) {
+    } else if (isAuthenticated && !inProtected) {
       router.replace('/laundry');
     }
   }, [authState?.isAuthenticated])
@@ -94,28 +94,7 @@ function StackLayout() {
       <Stack.Screen name="index" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(app)" options={{ headerShown: false }} />
-      <Stack.Screen name="orders" 
-        redirect={authState?.isAuthenticated!==true}
-        options={{
-        headerStyle: {
-          backgroundColor: Colors[ColorScheme??'light'].tint,
-        },
-        headerTitle: ()=>(
-          <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center', columnGap: 8}}>
-            <MaterialCommunityIcons
-              name="basket-check"
-              color={Colors[ColorScheme??'light'].background}
-              size={20}
-            />
-            <Text style={{color: Colors[ColorScheme ?? 'light'].background,
-              fontSize: 18,
-              fontWeight: 'bold',
-            }}>
-              現時訂單
-            </Text>
-          </View>
-          ),
-        presentation: 'modal' }} />
+      <Stack.Screen name="(modals)" options={{ headerShown: false, presentation: 'modal' }} />
     </Stack>
   );
 }

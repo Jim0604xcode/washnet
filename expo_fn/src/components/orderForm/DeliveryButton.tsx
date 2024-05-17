@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { IconButton } from 'react-native-paper';
 import { parseAndAddDays } from '@/utils/parseAndAddDays';
+import { useTranslation } from 'react-i18next';
 
 type DeliveryButtoProps = {
     formBtnCtrls: FormButtonControls;
@@ -27,7 +28,8 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
     formValue,
     setFormValue
 }) => {
-  const colorScheme = useColorScheme(); 
+  const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const {
     height1,
     height2,
@@ -135,7 +137,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
                 { color: Colors[colorScheme ?? "light"].text },
               ]}
             >
-              送回衣服時間
+              {t('orderForm.delivery')}
             </Text>
             <FontAwesome
               name={isOpen3 ? "chevron-up" : "chevron-down"}
@@ -162,10 +164,10 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           minimumDate={dayAfterPickup ?? dayAfterTomorrow}
           accentColor={Colors[colorScheme?? 'light'].tint}
           textColor={Colors[colorScheme?? 'light'].text}
-          positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
-          neutralButton={{label: '重設', textColor: Colors[colorScheme?? 'light'].outline}}
-          negativeButton={{label: '取消', textColor: Colors[colorScheme?? 'light'].outline}}
-          locale='zh'
+          positiveButton={{label: t('orderForm.confirm'), textColor: Colors[colorScheme?? 'light'].tint}}
+          neutralButton={{label: t('orderForm.reset'), textColor: Colors[colorScheme?? 'light'].outline}}
+          negativeButton={{label: t('orderForm.cancel'), textColor: Colors[colorScheme?? 'light'].outline}}
+          locale={t('orderForm.locale')}
         />
         <RNDateTimePicker
           mode="time"
@@ -174,9 +176,9 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           onChange={setTime}
           accentColor={Colors[colorScheme?? 'light'].tint}
           textColor={Colors[colorScheme?? 'light'].text}
-          positiveButton={{label: '確定', textColor: Colors[colorScheme?? 'light'].tint}}
-          neutralButton={{label: '重設', textColor: Colors[colorScheme?? 'light'].outline}}
-          negativeButton={{label: '取消', textColor: Colors[colorScheme?? 'light'].outline}}
+          positiveButton={{label: t('orderForm.confirm'), textColor: Colors[colorScheme?? 'light'].tint}}
+          neutralButton={{label: t('orderForm.reset'), textColor: Colors[colorScheme?? 'light'].outline}}
+          negativeButton={{label: t('orderForm.cancel'), textColor: Colors[colorScheme?? 'light'].outline}}
           minuteInterval={30}
         />
         <IconButton 

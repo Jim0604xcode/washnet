@@ -9,38 +9,38 @@ import Pagination from '@/components/carousel/Pagination';
 import OrderForm from '@/components/orderForm/OrderForm';
 import { useEffect, useState } from 'react';
 
-const carouselData = [
-  {
-    title: '磅洗服務',
-    info: '○ 自選時間上門收衫送衫',
-    info2: '○ 只需兩天送達',
-    info3: '○ 另設加急服務',
-    info4: '○ $8/磅（免運費）',
-    image: require('@/assets/images/drawing-1.png'),
-  },
-  {
-    subtitle: '輕鬆洗衫｜每磅$8｜零煩惱',
-    info: '○ 只需兩個工作天即可送回乾淨衣服',
-    info2: '○ 特快洗衫只需一個工作天',
-    info3: '○ （星期六、日及公眾假期前夕不適用）',
-    info4: '○ 最低消費$160，不足10磅以10磅計算',
-  },
-  {
-    subtitle: '磅洗類別',
-    info: '○ 普通衣物不包厚毛巾、浴袍、毛毯、被子等',
-    info2: '○ 以上厚重布料需額外處理並收取附加費',
-    info3: '○ 窗簾、梳化袋、毛公仔 等請選擇其他清洗',
-    info4: '○ 歡迎與我們聯絡了解詳情',
-  }
-]
+// const carouselData = [
+//   {
+//     title: '磅洗服務',
+//     info: '○ 自選時間上門收衫送衫',
+//     info2: '○ 只需兩天送達',
+//     info3: '○ 另設加急服務',
+//     info4: '○ $8/磅（免運費）',
+//     image: require('@/assets/images/drawing-1.png'),
+//   },
+//   {
+//     subtitle: '輕鬆洗衫｜每磅$8｜零煩惱',
+//     info: '○ 只需兩個工作天即可送回乾淨衣服',
+//     info2: '○ 特快洗衫只需一個工作天',
+//     info3: '○ （星期六、日及公眾假期前夕不適用）',
+//     info4: '○ 最低消費$160，不足10磅以10磅計算',
+//   },
+//   {
+//     subtitle: '磅洗類別',
+//     info: '○ 普通衣物不包厚毛巾、浴袍、毛毯、被子等',
+//     info2: '○ 以上厚重布料需額外處理並收取附加費',
+//     info3: '○ 窗簾、梳化袋、毛公仔 等請選擇其他清洗',
+//     info4: '○ 歡迎與我們聯絡了解詳情',
+//   }
+// ]
 
 export default function LaundryTab() {
-  const [block,setBlock] = useState<any[]>([])
+  const [block, setBlock] = useState<any[]>([])
 
   useEffect(()=>{
     const main = async () =>{
       try {
-        let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/pw`)
+        let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/ws`)
         let json = await res.json()
         if(!json.isErr){
           json.data.blocks = await JSON.parse(json.data.blocks)

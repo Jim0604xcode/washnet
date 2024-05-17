@@ -22,9 +22,11 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 
 const RegisterScreen = () => {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const width = Dimensions.get("window").width;
   const { register } = useAuth();
   const {
@@ -104,15 +106,15 @@ const RegisterScreen = () => {
     >
       <StatusBar style="dark" />
       <View style={styles.intro}>
-        <Text style={styles.title}>註冊用戶</Text>
+        <Text style={styles.title}>{t('register.title')}</Text>
         <Text style={styles.content}>
-          {"我們將以 "}
+          {t('register.subtitle1')}
           <FontAwesome
             name="whatsapp"
             size={18}
-            color={Colors[colorScheme ?? "light"].text}
+            color={Colors.light.text}
           />
-          {" WhatsApp聯絡閣下號碼"}
+          {t('register.subtitle2')}
         </Text>
       </View>
       <KeyboardAvoidingView
@@ -128,7 +130,7 @@ const RegisterScreen = () => {
               buttons={[
                 {
                   value: "login",
-                  label: "登入資料",
+                  label: t('register.segment1'),
                   icon: "login",
                   onPress: () => {
                     leftIn();
@@ -136,7 +138,7 @@ const RegisterScreen = () => {
                 },
                 {
                   value: "address",
-                  label: "收發地址",
+                  label: t('register.segment2'),
                   icon: "map-marker",
                   onPress: () => {
                     rightIn();
@@ -159,25 +161,25 @@ const RegisterScreen = () => {
                   control={control}
                   name="mobile"
                   rules={{
-                    required: "須提供手機號碼",
+                    required: t('register.mbRequired'),
                     minLength: {
                       value: 8,
-                      message: "須8位數香港號碼",
+                      message: t('register.mbLength'),
                     },
                     maxLength: {
                       value: 8,
-                      message: "須8位數香港號碼",
+                      message: t('register.mbLength'),
                     },
                     pattern: {
                       value: /^[0-9]+$/,
-                      message: "只接受手機號碼",
+                      message: t('register.mbPattern'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="手機號碼"
-                      placeholder="需要聯絡閣下收衫送衫"
+                      label={t('register.mobile')}
+                      placeholder={t('register.mbPlaceholder')}
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
@@ -208,25 +210,25 @@ const RegisterScreen = () => {
                   control={control}
                   name="password"
                   rules={{
-                    required: "須提供密碼",
+                    required: t('register.pwRequired'),
                     minLength: {
                       value: 6,
-                      message: "至少6字元",
+                      message: t('register.pwMinLength'),
                     },
                     maxLength: {
                       value: 16,
-                      message: "上限16字元",
+                      message: t('register.pwMaxLength'),
                     },
                     pattern: {
                       value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/,
-                      message: "密碼須包括英文字母及數字",
+                      message: t('register.pwPattern'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="密碼"
-                      placeholder="請輸入密碼"
+                      label={t('register.password')}
+                      placeholder={t('register.pwPlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -259,15 +261,15 @@ const RegisterScreen = () => {
                   control={control}
                   name="confirmPassword"
                   rules={{
-                    required: "須確認密碼",
+                    required: t('register.cfpwRequired'),
                     validate: (value) =>
-                      value === getValues("password") || "密碼不符",
+                      value === getValues("password") || t('register.cfpwValidate'),
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="確認密碼"
-                      placeholder="請再次輸入密碼"
+                      label={t('register.cfPassword')}
+                      placeholder={t('register.cfpwPlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -300,17 +302,17 @@ const RegisterScreen = () => {
                   control={control}
                   name="email"
                   rules={{
-                    required: "須提供電郵",
+                    required: t('register.emRequired'),
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "不符電郵格式",
+                      message: t('register.emPattern'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="電郵"
-                      placeholder="用作重設密碼"
+                      label={t('register.email')}
+                      placeholder={t('register.emPlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -345,21 +347,21 @@ const RegisterScreen = () => {
                   control={control}
                   name="displayName"
                   rules={{
-                    required: "請讓本店知道閣下稱呼",
+                    required: t('register.nameRequired'),
                     minLength: {
                       value: 2,
-                      message: "至少2字元",
+                      message: t('register.nameMinLength'),
                     },
                     maxLength: {
                       value: 16,
-                      message: "上限16字元",
+                      message: t('register.nameMaxLength'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="稱呼"
-                      placeholder="請問如何稱呼閣下？"
+                      label={t('register.name')}
+                      placeholder={t('register.namePlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
@@ -391,25 +393,25 @@ const RegisterScreen = () => {
                   control={control}
                   name="district"
                   rules={{
-                    required: "須提供地區用作收衫送衫",
+                    required: t('register.distRequired'),
                     minLength: {
                       value: 2,
-                      message: "至少2字元",
+                      message: t('register.distMinLength'),
                     },
                     maxLength: {
                       value: 30,
-                      message: "上限30字元",
+                      message: t('register.distMaxLength'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="地區"
-                      placeholder="收衫送衫地址"
+                      label={t('register.district')}
+                      placeholder={t('register.distPlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
-                      maxLength={30}
+                      maxLength={31}
                       autoCapitalize="words"
                       theme={{
                         colors: { onSurfaceVariant: Colors.light.outline },
@@ -436,25 +438,25 @@ const RegisterScreen = () => {
                   control={control}
                   name="street"
                   rules={{
-                    required: "須提供街道名稱用作收衫送衫",
+                    required: t('register.stRequired'),
                     minLength: {
                       value: 2,
-                      message: "至少2字元",
+                      message: t('register.stMinLength'),
                     },
                     maxLength: {
                       value: 30,
-                      message: "上限30字元",
+                      message: t('register.stMaxLength'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="街道"
-                      placeholder="用作收衫送衫地址"
+                      label={t('register.street')}
+                      placeholder={t('register.stPlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
-                      maxLength={30}
+                      maxLength={31}
                       autoCapitalize="words"
                       theme={{
                         colors: { onSurfaceVariant: Colors.light.outline },
@@ -479,26 +481,26 @@ const RegisterScreen = () => {
                   control={control}
                   name="building"
                   rules={{
-                    required: "須提供大廈名稱用作收衫送衫",
+                    required: t('register.bdlgRequired'),
                     minLength: {
                       value: 2,
-                      message: "至少2字元",
+                      message: t('register.bdlgMinLength'),
                     },
                     maxLength: {
                       value: 30,
-                      message: "上限30字元",
+                      message: t('register.bdlgMaxLength'),
                     },
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
                       mode="flat"
-                      label="大廈"
-                      placeholder="用作收衫送衫地址"
+                      label={t('register.building')}
+                      placeholder={t('register.bdlgPlaceholder')}
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
                       autoCapitalize="words"
-                      maxLength={30}
+                      maxLength={31}
                       theme={{
                         colors: { onSurfaceVariant: Colors.light.outline },
                       }}
@@ -540,8 +542,8 @@ const RegisterScreen = () => {
         !dirtyFields.district ||
         !dirtyFields.street ||
         !dirtyFields.building)
-          ? "下一步"
-          : "註冊"}
+          ? t('register.next')
+          : t('register.register')}
       </Button>
     </View>
   );

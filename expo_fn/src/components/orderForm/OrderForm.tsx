@@ -8,13 +8,14 @@ import AddressButton from "@/components/orderForm/AddressButton";
 import PickupButton from "@/components/orderForm/PickupButton";
 import { useSharedValue } from "react-native-reanimated";
 import DeliveryButton from "@/components/orderForm/DeliveryButton";
-import ConfirmDialog from "@/components/orderForm/ConfirmDialog";
 import { useAuth } from "@/context/AuthContext";
-
+import { useTranslation } from 'react-i18next';
+import ConfirmOrderDialog from "@/components/orderForm/ConfirmOrderDialog.tsx";
 
 const OrderForm: React.FC = () => {
   const colorScheme = useColorScheme();
   const { authState } = useAuth();
+  const { t } = useTranslation();
   const defaultLaundryFormValue: Order = {
     orderType: "pw",
     pc: 1,
@@ -95,6 +96,8 @@ const OrderForm: React.FC = () => {
   },[formInputFlags.hasStep123Completed]
   );
 
+  
+
   return (
     <View style={styles.formBox}>
       <AddressButton
@@ -132,9 +135,9 @@ const OrderForm: React.FC = () => {
         }}
         onPress={handleDialogOpen}
         >
-        確認訂單
+        {t("orderForm.confirmOrder")}
       </Button>
-      <ConfirmDialog
+      <ConfirmOrderDialog
         dialogOpen={dialogIsOpen}
         setDialogOpen={setDialogIsOpen}
         register={register}

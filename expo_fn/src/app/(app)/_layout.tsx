@@ -1,22 +1,31 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import React from "react";
-import { Pressable, Image, View, StyleSheet } from "react-native";
+import { Pressable, Image, View, StyleSheet, ScrollViewProps, ScrollView, Switch } from "react-native";
 import { Drawer } from "expo-router/drawer";
-import {DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
+import {DrawerContentComponentProps, DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
 import { useColorScheme, Text } from "react-native";
-import { Link, useNavigation, useRouter, useSegments } from "expo-router";
+import { Link, useRouter, useSegments } from "expo-router";
 import Colors from "@/constants/Colors";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
-import { Divider, Switch } from "react-native-paper";
+import { Divider } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
-function CustomDrawerContent(props: any) {
-  const router = useRouter();
+function CustomDrawerContent(props:  DrawerContentComponentProps) {
   const colorScheme = useColorScheme();
   const { authState, logout } = useAuth();
-  const navigator = useNavigation();
+  const { t, i18n } = useTranslation();
+  const router = useRouter();
   const segment = useSegments();
+  const [isCn, setIsCn] = React.useState(true);
+
+
+  const onToggleSwitch = () => {
+    setIsCn(!isCn);
+    i18n.changeLanguage(isCn ? 'eng' : 'cn');
+  };
+
 
   return (
     <DrawerContentScrollView
@@ -27,51 +36,52 @@ function CustomDrawerContent(props: any) {
       ]}
       scrollEnabled={false}
     >
-      <Image
-        source={require("@/assets/images/logo.png")}
-        style={{ width: 150, height: 42, alignSelf: "center" }}
-      />
+
       <View style={styles.infoBox}>
+        <Image
+          source={require("@/assets/images/logo.png")}
+          style={{ width: 150, height: 42 }}
+        />
         <Text
           style={[
             styles.infoText,
-            { color: Colors[colorScheme ?? "light"].text },
+            { color: Colors[colorScheme ?? "light"].secondary },
           ]}
         >
           {authState?.mobile}
         </Text>
       </View>
-      <Divider />
+      <Divider style={styles.divider}/>
       <DrawerItem
-        label="更改註冊電話"
-        onPress={() => router.push("/(app)/(drawer)/mobile")}
-        focused={segment[2] === "mobile"}
+        label={t('drawer.mobile')}
+        onPress={() => router.push("/editMobile")}
+        focused={segment[2] === "editMobile"}
         style={styles.drawerItem}
-        labelStyle={{
-          fontWeight: "bold",
-          fontSize: 18,
-        }}
+        labelStyle={styles.drawerLabel}
         activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
         activeTintColor={Colors[colorScheme ?? "light"].background}
         inactiveTintColor={Colors[colorScheme ?? "light"].text}
         icon={({ color }) => (
-          <MaterialCommunityIcons name="whatsapp" size={20} color={color} />
+          <MaterialCommunityIcons 
+            name="whatsapp"
+            size={26}
+            color={color}/>
         )}
       />
       <DrawerItem
-        label="更改常用地址"
-        onPress={() => router.push("/(app)/(drawer)/address")}
-        focused={segment[2] === "address"}
+        label={t('drawer.address')}
+        onPress={() => router.push("/editAddress")}
+        focused={segment[2] === "editAddress"}
         style={styles.drawerItem}
-        activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
+                activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
         activeTintColor={Colors[colorScheme ?? "light"].background}
         inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        labelStyle={{
-          fontWeight: "bold",
-          fontSize: 18,
-        }}
+        labelStyle={styles.drawerLabel}
         icon={({ color }) => (
-          <MaterialCommunityIcons name="home" size={20} color={color} />
+          <MaterialCommunityIcons
+            name="home"
+            size={26}
+            color={color} />
         )}
       />
       {/* <DrawerItem
@@ -91,42 +101,55 @@ function CustomDrawerContent(props: any) {
         )}
       /> */}
       <DrawerItem
-        label="刪除帳戶"
-        onPress={() => router.push("/(app)/(drawer)/deleteUser")}
+        label={t('drawer.delete')}
+        onPress={() => router.push("/deleteUser")}
         focused={segment[2] === "deleteUser"}
         style={styles.drawerItem}
         activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
         activeTintColor={Colors[colorScheme ?? "light"].background}
         inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        labelStyle={{
-          fontWeight: "bold",
-          fontSize: 18,
-        }}
+        labelStyle={styles.drawerLabel}
         icon={({ color }) => (
           <MaterialCommunityIcons
             name="account-cancel"
-            size={20}
+            size={26}
             color={color}
           />
         )}
       />
-      <Divider style={{ marginTop: 40 }} />
-      <Switch style={styles.switch} value={true} color={Colors[colorScheme??'light'].secondary}/>
-      <DrawerItem
-        label="登出"
-        onPress={logout!}
-        style={styles.drawerItem}
-        labelStyle={{
-          fontWeight: "bold",
-          fontSize: 18,
-        }}
-        activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
-        activeTintColor={Colors[colorScheme ?? "light"].background}
-        inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        icon={({ color }) => (
-          <MaterialCommunityIcons name="logout" size={20} color={color} />
-        )}
-      />
+      <Divider style={styles.divider} />
+      <View style={styles.bottomBox}>
+        <DrawerItem
+          label={t('drawer.logout')}
+          onPress={logout!}
+          style={styles.drawerItem}
+          labelStyle={styles.drawerLabel}
+          activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
+          activeTintColor={Colors[colorScheme ?? "light"].background}
+          inactiveTintColor={Colors[colorScheme ?? "light"].text}
+          icon={({ color }) => (
+            <MaterialCommunityIcons name="logout" size={20} color={color} />
+          )}
+        />
+        <View style={styles.switchBox}>
+          <Text style={[styles.drawerLabel, {
+            color: isCn ? Colors[colorScheme ?? "light"].outline : Colors[colorScheme ?? "light"].tert
+          }]}>English</Text>
+          <Switch style={styles.switch}
+            thumbColor={Colors[colorScheme??'light'].surfaceContainerHL}
+            trackColor={{
+              false: Colors[colorScheme ?? "light"].tert,
+              true: Colors[colorScheme ?? "light"].tint 
+            }}
+            ios_backgroundColor={Colors[colorScheme ?? "light"].tert}
+            value={isCn}
+            onValueChange={onToggleSwitch}
+          />
+          <Text style={[styles.drawerLabel,{
+            color: isCn ? Colors[colorScheme ?? "light"].tint : Colors[colorScheme ?? "light"].outline
+          }]}>中文</Text>
+        </View>
+      </View>
     </DrawerContentScrollView>
   );
 }
@@ -178,20 +201,39 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 10,
   },
+  bottomBox: {
+    justifyContent: "space-between",
+    paddingBottom: 60,
+    flex: 1,
+  },
   infoBox: {
-    padding: 20,
     alignItems: "center",
     justifyContent: "center",
-    gap: 10,
+    gap: 20,
   },
   infoText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "500",
   },
   drawerItem: {
     paddingLeft: 20,
   },
+  drawerLabel: {
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  divider: {
+    marginHorizontal: 20,
+    marginTop: 20,
+  },
+  switchBox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10
+  },
   switch: {
-    marginLeft: 20,
+    marginLeft: 0,
+    alignSelf: 'center',
   }
 });

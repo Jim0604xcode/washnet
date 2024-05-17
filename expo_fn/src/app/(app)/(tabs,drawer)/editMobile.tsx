@@ -10,9 +10,11 @@ import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
 import { EditedMobileReq } from "@/models";
+import { useTranslation } from "react-i18next";
 
-export default function MobileDrawer() {
+export default function EditMobileDrawer() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const { authState, setAuthState } = useAuth();
   const {
     control,
@@ -43,12 +45,12 @@ export default function MobileDrawer() {
           mobile: data.mobile,
         });
         router.replace("/laundry");
-        Alert.alert("更改號碼成功");
+        Alert.alert(t("editMobile.success"));
         console.log("Edited mobile successfully");
       },
       onError: (error) => {
         console.error("Error editing mobile:", error);
-        Alert.alert('唔好意思...','請稍後再試');
+        Alert.alert(t("editMobile.error"),t("editMobile.errorText"));
       },
     });
   };
@@ -59,14 +61,14 @@ export default function MobileDrawer() {
         <Text
           style={[styles.title, { color: Colors[colorScheme ?? "light"].tint }]}
         >
-          更改註冊電話
+          {t("editMobile.title")}
         </Text>
         <Text
           style={[styles.info, { color: Colors[colorScheme ?? "light"].text }]}
         >
-          請確保你的新號碼能以
+          {t("editMobile.subtitle1")}
           <Text style={{ fontWeight: "700" }}>WhatsApp</Text>
-          通訊。
+          {t("editMobile.subtitle2")}
         </Text>
       </View>
       <View style={[styles.contentBox]}>
@@ -80,7 +82,7 @@ export default function MobileDrawer() {
             <Text style={[styles.numberBold,
               {color: Colors[colorScheme ?? "light"].tint}]}
             >
-              現時號碼
+              {t("editMobile.number")}
             </Text>
             </View>
           <Text style={[styles.numberBold, {color: Colors[colorScheme ?? "light"].tint}]}>
@@ -97,25 +99,25 @@ export default function MobileDrawer() {
             control={control}
             name="mobile"
             rules={{
-              required: "須輸入新手機號碼",
+              required: t("editMobile.required"),
               minLength: {
                 value: 8,
-                message: "須8位數香港號碼",
+                message: t("editMobile.length"),
               },
               maxLength: {
                 value: 8,
-                message: "須8位數香港號碼",
+                message: t("editMobile.length"),
               },
               pattern: {
                 value: /^[0-9]+$/,
-                message: "只接受手機號碼",
+                message: t("editMobile.pattern"),
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 mode="outlined"
-                label="新手機號碼"
-                placeholder="請輸入新號碼"
+                label={t("editMobile.label")}
+                placeholder={t("editMobile.placeholder")}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -165,7 +167,7 @@ export default function MobileDrawer() {
           }}
           onPress={handleSubmit(showConfirmDialog)}
         >
-          確認更改
+          {t("editMobile.confirm")}
         </Button>
         }
       </View>
