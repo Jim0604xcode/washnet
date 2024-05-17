@@ -1,6 +1,6 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, Image, View, StyleSheet, ScrollViewProps, ScrollView, Switch } from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Pressable, Image, View, StyleSheet, Switch } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import {DrawerContentComponentProps, DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
 import { useColorScheme, Text } from "react-native";
@@ -24,7 +24,6 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
 
   const onToggleSwitch = useCallback(async() => {
     setIsCn(!isCn);
-    // i18n.changeLanguage(i18n.language === "cn" ? 'eng' : 'cn');
     setLanguage!(isCn ? 'eng' : 'cn');
   },[setIsCn, setLanguage, isCn]);
 
@@ -66,29 +65,32 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
         >
           {userState?.mobile}
         </Text>
-        <View style={styles.address}>
-          <Text
-            style={[styles.infoText, 
-              { color: Colors[colorScheme ?? "light"].tint },
-            ]}
-          >
-            {userState?.address?.district}{", "}
-          </Text>
-          <Text
-            style={[styles.infoText, 
-              { color: Colors[colorScheme ?? "light"].tint },
-            ]}
-          >
-            {userState?.address?.street}{", "}
-          </Text>
-          <Text
-            style={[styles.infoText, 
-              { color: Colors[colorScheme ?? "light"].tint },
-            ]}
-          >
-            {userState?.address?.building}
-          </Text>
-        </View>
+        {(userState?.address) ? (
+          <View style={styles.address}>
+            <Text
+              style={[styles.infoText, 
+                { color: Colors[colorScheme ?? "light"].tint },
+              ]}
+            >
+              {userState?.address?.district}{", "}
+            </Text>
+            <Text
+              style={[styles.infoText, 
+                { color: Colors[colorScheme ?? "light"].tint },
+              ]}
+            >
+              {userState?.address?.street}{", "}
+            </Text>
+            <Text
+              style={[styles.infoText, 
+                { color: Colors[colorScheme ?? "light"].tint },
+              ]}
+            >
+              {userState?.address?.building}
+            </Text>
+          </View>
+          ) : ( <Text>👋</Text>)
+          }
       </View>
       <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
       <DrawerItem

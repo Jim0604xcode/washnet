@@ -78,35 +78,34 @@ function StackLayout() {
   const router = useRouter();
   const { getUserInfo } = useUser();
 
-
   useEffect(() => {
+    const firstSegment = segments.length > 0 ? segments[0] : null;
+    const isAuthenticated = authState?.isAuthenticated;
+    const inProtected = firstSegment === '(app)';
 
-      const firstSegment = segments.length > 0 ? segments[0] : null;
-      const isAuthenticated = authState?.isAuthenticated;
-      const inProtected = firstSegment === '(app)';
+    if (!isAuthenticated && inProtected) {
+      router.replace('/login');
+    } else if (isAuthenticated && !inProtected) {
+      router.replace('/laundry');
+    }
 
-      if (!isAuthenticated && inProtected) {
-        router.replace('/login');
-      } else if (isAuthenticated && !inProtected) {
-        router.replace('/laundry');
-      }
-
-      // // Fetch user info after setting the initial route
-      // if (isAuthenticated && authState.token) {
-      //   await getUserInfo!(authState.token);
-      // }
-
-
-  }, [authState?.isAuthenticated, segments]);
+    if (isAuthenticated && authState.token) {
+      getUserInfo!(authState.token)
+        .then(() => {
+          console.log('User info fetched');
+        })
+        .catch((error) => {
+          console.error('Error fetching user info:', error);
+        });
+    }
+  }, [authState?.isAuthenticated, authState?.token, getUserInfo])
 
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="(app)" options={{ headerShown: false }} />
-      <Stack.Screen name="(modals)" options={{ headerShown: true, presentation: 'modal' }} />
-      <Stack.Screen name="mod" options={{ headerShown: true, presentation: 'modal' }} />
-
+      <Stack.Screen name="(modals)" options={{ headerShown: false, presentation: 'modal' }} />
     </Stack>
   );
 }

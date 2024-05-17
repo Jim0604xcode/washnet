@@ -35,7 +35,6 @@ const index = () => {
     if (!loadingToken){
       verifyUser!(token)
       .then((isVerified) => {
-        // console.log(lng);
         console.log('Verified:', isVerified);
         if (!isVerified) {
           return redirectToLogin();
@@ -50,27 +49,10 @@ const index = () => {
   }, [token, redirectToLogin]);
 
   React.useEffect(() => {
-    if (!loadingLng && lng){
+    if (!loadingLng && lng !== null){
       setLanguage!(lng);
     };
   }, [setLanguage, lng])
-
-  // React.useEffect(() => {
-  //   if (token){
-  //     verify!(token)
-  //     .then((isVerified) => {
-  //       console.log('Verification:', isVerified);
-  //       if (!isVerified) {
-  //         return redirectToLogin();
-  //       }
-  //     })
-  //     .catch(err => {
-  //       console.error('Verification failed:', err);
-  //     });
-  //   } else {
-  //     return redirectToLogin();
-  //   }
-  // }, [token, redirectToLogin]);
   
   return (
     <SafeAreaView

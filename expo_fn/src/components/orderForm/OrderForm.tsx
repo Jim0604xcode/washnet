@@ -21,7 +21,6 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
   const { userState } = useUser();
   const { t } = useTranslation();
 
-
   const defaultValues: Order = {
     orderType: orderType,
     pc: 1,

@@ -92,12 +92,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       }
     },
-    [setAuthState]
+    [setAuthState, setUserState]
   );
 
   const getUserInfo = React.useCallback(async (token: string | null) => {
     if (token === null) {
-      return false;
+      return;
     } else {
       try {
         const res = await fetch(
@@ -115,16 +115,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             },
             lng: prevState.lng, // Keep current language
           }));
-          return true; // Verification successful
         } else {
           throw new Error(result.errMess);
         }
       } catch (error) {
         console.error(error);
-        return false; // Verification failed
       }
     }
-  }, []);
+  }, [setUserState]);
 
   const setLanguage = React.useCallback(
     async (lng: string) => {

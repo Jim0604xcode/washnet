@@ -23,9 +23,7 @@ export default function OrdersModal() {
   const colorScheme = useColorScheme();
   const { authState } = useAuth();
   const { data, isSuccess, isLoading, error } = useOrderData(authState?.token, QueryPeriod.CURRENT);
-  React.useEffect(() => {
-    console.log("OrdersModal mounted");
-  }, []);
+
   return (
     <ScrollView
       style={{width: width}}
