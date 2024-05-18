@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   bottomBox: {
     justifyContent: "space-between",
     paddingBottom: 60,
-    flex: 1,
+    flex: 0.5,
   },
   infoBox: {
     alignItems: "center",
@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flexWrap: 'wrap',
     width: '100%',
   },
   itemBox: {

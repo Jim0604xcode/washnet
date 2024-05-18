@@ -54,7 +54,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
 
   if (isOpen1) {
     hasAddress ? 
-    (height1.value = withSpring(110, { damping: 14 }))
+    (height1.value = withSpring(120, { damping: 14 }))
   : (height1.value = withSpring(80, { damping: 14 }));
     setIsOpen1(false);
   }
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   info: {
-    fontSize: 18,
+    fontSize: 16,
   },
   dateTimeInput: {
     width: '100%',

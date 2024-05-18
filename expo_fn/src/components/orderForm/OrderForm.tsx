@@ -46,7 +46,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
 
   const formValue = watch();
 
-  const height1 = useSharedValue(110);
+  const height1 = useSharedValue(120);
   const height2 = useSharedValue(80);
   const height3 = useSharedValue(80);
   const [isOpen1, setIsOpen1] = useState(false);
@@ -137,8 +137,8 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
         style={styles.confirmBtn}
         buttonColor={
           formInputFlags.hasStep123Completed
-            ? Colors[colorScheme ?? "light"].secondary
-            : Colors[colorScheme ?? "light"].text
+            ? Colors[colorScheme ?? "light"].text
+            : Colors[colorScheme ?? "light"].secondary
         }
         labelStyle={{
           color: Colors[colorScheme ?? "light"].background,
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   confirmBtn: {
-    marginTop: 10,
     width: "100%",
   },
 });

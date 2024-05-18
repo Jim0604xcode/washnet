@@ -8,12 +8,10 @@ interface AuthProps {
   authState: { 
     isAuthenticated: boolean | null, 
     token: string | null,
-    // mobile: string | null,
   };
   setAuthState: React.Dispatch<React.SetStateAction<{
     isAuthenticated: boolean | null;
     token: string | null;
-    // mobile: string | null;
 }>>
   login: (mobile: string, password: string) => Promise<any>;
   logout: () => void;
@@ -27,7 +25,7 @@ interface AuthProps {
     street,
     building,
   }: RegisterRequest) => Promise<any>;
-  verify: (token: string | null) => Promise<any>;
+  // verify: (token: string | null) => Promise<any>;
 };
 
 const AuthContext = React.createContext<Partial<AuthProps>>({});
@@ -40,10 +38,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [authState, setAuthState] = React.useState<{
     isAuthenticated: boolean | null,
     token: string | null,
-    // mobile: string | null,
   }>({
       isAuthenticated: null,
-      // mobile: null,
       token: null
     })
   const { t } = useTranslation();
@@ -51,9 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = React.useCallback(async (mobile: string, password: string) => {
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/login`, {
-        headers: {
-          "Content-type": "application/json",
-        },
+        headers: {"Content-type": "application/json"},
         method: "POST",
         body: JSON.stringify({
           mobileOrEmail: mobile,
@@ -72,24 +66,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
-          // mobile: mobile,
         });
       } else {
         throw new Error(result.errMess as string);
       };
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+      console.error('Login failed: ', error);
       Alert.alert(t('auth.error'), t('auth.errorText'));
-      console.error(errorMessage);
+
     }
   }, []);
 
   const logout = React.useCallback(async() => {
-    await setStorageItemAsync(`${process.env.EXPO_PUBLIC_API_KEY}`, null)
+    // Leaving token in case users forget password
+    // await setStorageItemAsync(`${process.env.EXPO_PUBLIC_API_KEY}`, null)
     setAuthState({
       isAuthenticated: false,
-      // mobile: null,
       token: null
     })
   },[]);
@@ -106,9 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }: RegisterRequest) => {
     try {
       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/register`,{
-        headers:{
-          "Content-type": "application/json",
-        },
+        headers:{"Content-type": "application/json"},
         method:"POST",
         body:JSON.stringify({
           displayName,
@@ -131,44 +121,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthState({
           isAuthenticated: true,
           token: result.data.token,
-          // mobile: mobile,
         })
       } else if (result.isErr){
         throw new Error(result.errMess)
       };
     } catch (err) {
       Alert.alert(t('auth.error'), t('auth.errorText'));
-      console.error('Cannot register for now due to', err)
+      console.error('Registration failed: ', err)
     }
   },[])
 
-  const verify = React.useCallback(async (token: string | null) => {
-    if (token === null) {
-      return false;
-    } else {
-      try {
-        const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        const result = await res.json();
-        if (!result.isErr) {
-          setAuthState({
-            isAuthenticated: true,
-            token: token,
-            // mobile: result.data.tel,
-          });
-          return true;  // Verification successful
-        } else {
-          throw new Error(result.errMess);
-        }
-      } catch (error) {
-        console.error('Error verifying:', error);
-        return false;  // Verification failed
-      }
-    }
-  }, []);
+  // const verify = React.useCallback(async (token: string | null) => {
+  //   if (token === null) {
+  //     return false;
+  //   } else {
+  //     try {
+  //       const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/getPickUpAddressAndMobile`, {
+  //         headers: {'Authorization': `Bearer ${token}`},
+  //       });
+  //       const result = await res.json();
+  //       if (!result.isErr) {
+  //         setAuthState({
+  //           isAuthenticated: true,
+  //           token: token,
+  //         });
+  //         return true;  // Verification successful
+  //       } else {
+  //         throw new Error(result.errMess);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error verifying:', error);
+  //       return false;  // Verification failed
+  //     }
+  //   }
+  // }, []);
   
   const contextValue = React.useMemo(() => ({
     authState,
@@ -176,8 +162,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     login: login,
     logout: logout,
     register: register,
-    verify : verify
-  }), [authState, login, register, logout, verify])
+    // verify : verify
+  // }), [authState, login, register, logout, verify])
+}), [authState, login, register, logout])
 
   return (
     <AuthContext.Provider value={contextValue}>
