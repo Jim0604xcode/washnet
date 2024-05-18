@@ -149,7 +149,7 @@ const LoginScreen = () => {
                   )}
                 </Pressable>
               </Link>
-              <Link href="/reset" asChild>
+              <Link href="/forgot" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <Button
