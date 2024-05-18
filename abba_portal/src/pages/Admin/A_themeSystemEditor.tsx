@@ -243,11 +243,11 @@ const A_themeSystem_editor: React.FC = () => {
                             
                             <IonGrid>  
                                 <IonRow>
-                                    <IonCol size="6">
+                                    <IonCol style={{textAlign:"center"}} size-md="6" size="12">
                                         <IonButton onClick={onPreview}>{getLanguage.language.aos.previewBtn}</IonButton>
 
                                     </IonCol>
-                                    <IonCol size="6">
+                                    <IonCol style={{textAlign:"center"}} size-md="6" size="12">
                                         <IonButton onClick={onSave}>{getLanguage.language.aos.addBtn}</IonButton>
 
                                     </IonCol>
