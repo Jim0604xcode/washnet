@@ -45,7 +45,7 @@ const handlePress1 = useDebounce(() => {
     height1.value = withSpring(350, { damping: 15 });
   } else if (isOpen1 === true) {
     hasAddress ? 
-      (height1.value = withSpring(110, { damping: 15 }))
+      (height1.value = withSpring(120, { damping: 15 }))
     : (height1.value = withSpring(80, { damping: 15 }));
   }
   setIsOpen1(!isOpen1);
@@ -114,10 +114,12 @@ const handlePress1 = useDebounce(() => {
             label={t('orderForm.district')}
             placeholder={t('orderForm.distPlaceholder')}
             value={formValue.district}
+            maxLength={30}
             onChangeText={(value: string) => {
               setFormValue("district", value)
             }}
             autoCapitalize='words'
+
             style={{
                 backgroundColor: hasAddress ? Colors[colorScheme ?? "light"].tertiary
                   : Colors[colorScheme ?? "light"].surfaceContainer,
@@ -131,6 +133,7 @@ const handlePress1 = useDebounce(() => {
             label={t('orderForm.street')}
             placeholder={t('orderForm.stPlaceholder')}
             value={formValue.street}
+            maxLength={30}
             onChangeText={(value: string) => {
               setFormValue("street", value)
             }}
@@ -149,6 +152,7 @@ const handlePress1 = useDebounce(() => {
             label={t('orderForm.building')}
             placeholder={t('orderForm.bdlgPlaceholder')}
             value={formValue.building}
+            maxLength={30}
             onChangeText={(value: string) => {
               setFormValue("building", value)
             }}
@@ -204,6 +208,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   info: {
-    fontSize: 18,
+    fontSize: 16,
   },
 })

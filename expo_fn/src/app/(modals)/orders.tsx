@@ -180,7 +180,6 @@ export default function OrdersModal() {
                     : t('orders.null')}
                 </Text>
                 <View
-                  style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerHL}
                 >
@@ -198,11 +197,10 @@ export default function OrdersModal() {
                       { color: Colors[colorScheme ?? "light"].text },
                     ]}
                   >
-                    {order.district} {order.street} {order.building}
+                    {order.district}{", "}{order.street}{", "}{order.building}
                   </Text>
                 </View>
                 <View
-                  style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerHL}
                 >
@@ -224,7 +222,6 @@ export default function OrdersModal() {
                   </Text>
                 </View>
                 <View
-                  style={styles.labelAndText}
                   lightColor={Colors.light.surfaceContainer}
                   darkColor={Colors.dark.surfaceContainerHL}
                 >
@@ -279,11 +276,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
   },
-  labelAndText: {
-    gap: 4
-  },
   text: {
     fontSize: 16,
+    lineHeight: 20
   },
   label: {
     fontWeight: "bold",

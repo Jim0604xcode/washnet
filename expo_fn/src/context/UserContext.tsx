@@ -54,12 +54,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const { setAuthState } = useAuth();
   const { i18n } = useTranslation();
 
-  React.useEffect(() => {
-    if (userState.lng) {
-      i18n.changeLanguage(userState.lng);
-    }
-  }, [userState.lng, i18n]);
-
   const verifyUser = React.useCallback(
     async (token: string | null) => {
       if (token === null) {
@@ -74,13 +68,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           if (!result.isErr) {
             setAuthState!({ isAuthenticated: true, token: token });
             setUserState((prevState) => ({
+              ...prevState,
               mobile: result.data.tel,
               address: {
                 district: result.data.district,
                 street: result.data.street,
                 building: result.data.building,
               },
-              lng: prevState.lng, // Keep current language
             }));
             return true; // Verification successful
           } else {
@@ -107,13 +101,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         const result = await res.json();
         if (!result.isErr) {
           setUserState((prevState) => ({
+            ...prevState,
             mobile: result.data.tel,
             address: {
               district: result.data.district,
               street: result.data.street,
               building: result.data.building,
             },
-            lng: prevState.lng, // Keep current language
+            // lng: prevState.lng, // Keep current language
           }));
         } else {
           throw new Error(result.errMess);
@@ -124,16 +119,22 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [setUserState]);
 
-  const setLanguage = React.useCallback(
-    async (lng: string) => {
-      setUserState((prevState) => ({
-        ...prevState,
-        lng: lng,
-      }));
-      await setStorageItemAsync("lng", lng);
-    },
-    [setUserState, setStorageItemAsync]
-  );
+  const setLanguage = React.useCallback(async (userLng: string) => {
+    if (userLng === null) {
+      return;
+    }
+    setUserState((prevState) => ({
+      ...prevState,
+      lng: userLng,
+    }));
+    await setStorageItemAsync("lng", userLng);
+  },[setUserState, setStorageItemAsync]);
+
+  React.useEffect(() => {
+    if (userState.lng) {
+      i18n.changeLanguage(userState.lng);
+    }
+  }, [userState.lng, i18n]);
 
   const contextValue = React.useMemo(
     () => ({
