@@ -9,11 +9,13 @@ import useEditInfo, { EditAPI } from "@/utils/useEditInfo";
 import React, { useState } from "react";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
 import { useTranslation } from "react-i18next";
+import { useUser } from "@/context/UserContext";
 
 export default function DeleteUserDrawer() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
-  const { authState, logout } = useAuth();
+  const { logout } = useAuth();
+  const { userState } = useUser();
   const {
     control,
     handleSubmit,
@@ -50,7 +52,7 @@ export default function DeleteUserDrawer() {
         <View style={styles.touchableContainer}>
           <View style={styles.titleBox}>
             <Text
-              style={[styles.title, { color: Colors[colorScheme ?? "light"].tint }]}
+              style={[styles.title, { color: Colors[colorScheme ?? "light"].secondary }]}
             >
               {t("deleteUser.title")}
             </Text>
@@ -68,16 +70,16 @@ export default function DeleteUserDrawer() {
                 <MaterialCommunityIcons
                   name="account-cancel"
                   size={20}
-                  color={Colors[colorScheme ?? "light"].tint}
+                  color={Colors[colorScheme ?? "light"].secondary}
                 />   
                 <Text style={[styles.numberBold,
-                  {color: Colors[colorScheme ?? "light"].tint}]}
+                  {color: Colors[colorScheme ?? "light"].secondary}]}
                 >
                   {t("deleteUser.current")}
                 </Text>
               </View>
-              <Text style={[styles.numberBold, {color: Colors[colorScheme ?? "light"].tint}]}>
-                {authState?.mobile}
+              <Text style={[styles.numberBold, {color: Colors[colorScheme ?? "light"].secondary}]}>
+                {userState?.mobile}
               </Text>
             </View>
             <Entypo
@@ -113,12 +115,12 @@ export default function DeleteUserDrawer() {
                       styles.input,
                       {
                         backgroundColor:
-                          Colors[colorScheme ?? "light"].background,
+                          Colors[colorScheme ?? "light"].surfaceContainerHL,
                         borderColor: Colors[colorScheme ?? "light"].outline,
                       },
                     ]}
                     outlineColor={Colors[colorScheme ?? "light"].outline}
-                    activeOutlineColor={Colors[colorScheme ?? "light"].error}
+                    activeOutlineColor={Colors[colorScheme ?? "light"].secondary}
                     placeholderTextColor={Colors[colorScheme ?? "light"].outline}
                   />
                 )}

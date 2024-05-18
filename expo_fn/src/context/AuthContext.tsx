@@ -78,8 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const logout = React.useCallback(async() => {
-    // Leaving token in case users forget password
-    // await setStorageItemAsync(`${process.env.EXPO_PUBLIC_API_KEY}`, null)
+    await setStorageItemAsync(`${process.env.EXPO_PUBLIC_API_KEY}`, null)
     setAuthState({
       isAuthenticated: false,
       token: null

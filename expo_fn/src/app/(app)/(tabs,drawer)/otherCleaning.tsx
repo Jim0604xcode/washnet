@@ -6,112 +6,232 @@ import Carousel from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
 import CarouselSlide from '@/components/carousel/CarouselSlide';
 import Pagination from '@/components/carousel/Pagination';
-import OrderForm from '@/components/orderForm/OrderForm';
 import { useEffect, useState } from 'react';
 import { OrderType } from '@/models';
-
-// const carouselData = [
-//   {
-//     title: '磅洗服務',
-//     info: '○ 自選時間上門收衫送衫',
-//     info2: '○ 只需兩天送達',
-//     info3: '○ 另設加急服務',
-//     info4: '○ $8/磅（免運費）',
-//     image: require('@/assets/images/drawing-1.png'),
-//   },
-//   {
-//     subtitle: '輕鬆洗衫｜每磅$8｜零煩惱',
-//     info: '○ 只需兩個工作天即可送回乾淨衣服',
-//     info2: '○ 特快洗衫只需一個工作天',
-//     info3: '○ （星期六、日及公眾假期前夕不適用）',
-//     info4: '○ 最低消費$160，不足10磅以10磅計算',
-//   },
-//   {
-//     subtitle: '磅洗類別',
-//     info: '○ 普通衣物不包厚毛巾、浴袍、毛毯、被子等',
-//     info2: '○ 以上厚重布料需額外處理並收取附加費',
-//     info3: '○ 窗簾、梳化袋、毛公仔 等請選擇其他清洗',
-//     info4: '○ 歡迎與我們聯絡了解詳情',
-//   }
-// ]
+import OtherOrderForm from '@/components/orderForm/OtherOrderForm';
 
 export default function OtherCleaningTab() {
   const [block, setBlock] = useState<any[]>([])
 
-  useEffect(()=>{
-    const main = async () =>{
-      try {
-        let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/fw`)
-        let json = await res.json()
-        if(!json.isErr){
-          json.data.blocks = await JSON.parse(json.data.blocks)
-          // console.log(json.data.blocks)
-          let pages = 0
-           
-          const data = [...json.data.blocks]
-          let header:string = data.filter(obj=>obj.type==="header")[0].data.text
-          data.forEach((obj:any,index:number)=>{
-            if(obj.type==="header"){
-              Object.assign(obj,{page:pages})
+  const lwBlock = React.useMemo(async()=>{
+    try {
+      let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/lw`)
+      let json = await res.json()
+      if(!json.isErr){
+        json.data.blocks = await JSON.parse(json.data.blocks)
+        // console.log(json.data.blocks)
+        let pages = 0
+         
+        const data = [...json.data.blocks]
+        let header:string = data.filter(obj=>obj.type==="header")[0].data.text
+        data.forEach((obj:any,index:number)=>{
+          if(obj.type==="header"){
+            Object.assign(obj,{page:pages})
+          }
+          if(obj.type==="list" || obj.type==="checklist"){
+            pages = pages + Math.ceil(obj.data.items.length / 4)
+            Object.assign(obj,{page:pages})
+          }
+          if(obj.type==="paragraph"){
+            pages++
+            Object.assign(obj,{page:pages})
+          }
+        })
+        // console.log(pages)
+        // console.log(data)
+        let newData:any = []
+        data.forEach((obj:any,p:number)=>{
+          
+            if(obj.type==="list"){
+              if(p>0){
+                for(let x=1;x<=obj.page-data[p-1].page;x++){
+                  // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
+                  newData.push({
+                    title:header,
+                    infos: obj.data.items.slice((x*4)-4,x*4),
+                    type:"list"
+                  })
+                }  
+              }
             }
-            if(obj.type==="list" || obj.type==="checklist"){
-              pages = pages + Math.ceil(obj.data.items.length / 4)
-              Object.assign(obj,{page:pages})
+            if(obj.type==="checklist"){
+              if(p>0){
+                for(let x=1;x<=obj.page-data[p-1].page;x++){
+                  // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
+                  newData.push({
+                    title:header,
+                    infos: obj.data.items.slice(0,4),
+                    type:"checklist"
+                  })
+
+                }  
+              }
             }
             if(obj.type==="paragraph"){
-              pages++
-              Object.assign(obj,{page:pages})
+              newData.push({
+                title:header,
+                infos: obj.data.text,
+                type:"paragraph"
+              })
             }
-          })
-          // console.log(pages)
-          // console.log(data)
-          let newData:any = []
-          data.forEach((obj:any,p:number)=>{
-            
-              if(obj.type==="list"){
-                if(p>0){
-                  for(let x=1;x<=obj.page-data[p-1].page;x++){
-                    // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
-                    newData.push({
-                      title:header,
-                      infos: obj.data.items.slice((x*4)-4,x*4),
-                      type:"list"
-                    })
-                  }  
-                }
-              }
-              if(obj.type==="checklist"){
-                if(p>0){
-                  for(let x=1;x<=obj.page-data[p-1].page;x++){
-                    // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
-                    newData.push({
-                      title:header,
-                      infos: obj.data.items.slice(0,4),
-                      type:"checklist"
-                    })
-
-                  }  
-                }
-              }
-              if(obj.type==="paragraph"){
-                newData.push({
-                  title:header,
-                  infos: obj.data.text,
-                  type:"paragraph"
-                })
-              }
-            p++
-          })
-          // console.log(newData)
-          setBlock(newData)
-          console.log(newData)
-        }
-      } catch (error:any) {
-        console.log(error.message)
+          p++
+        })
+        // console.log(newData)
+        return newData
       }
+    } catch (error:any) {
+      console.log(error.message)
     }
-    main()
   },[])
+
+  const fwBlock = React.useMemo(async()=>{
+    try {
+      let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/fw`)
+      let json = await res.json()
+      if(!json.isErr){
+        json.data.blocks = await JSON.parse(json.data.blocks)
+        // console.log(json.data.blocks)
+        let pages = 0
+          
+        const data = [...json.data.blocks]
+        let header:string = data.filter(obj=>obj.type==="header")[0].data.text
+        data.forEach((obj:any,index:number)=>{
+          if(obj.type==="header"){
+            Object.assign(obj,{page:pages})
+          }
+          if(obj.type==="list" || obj.type==="checklist"){
+            pages = pages + Math.ceil(obj.data.items.length / 4)
+            Object.assign(obj,{page:pages})
+          }
+          if(obj.type==="paragraph"){
+            pages++
+            Object.assign(obj,{page:pages})
+          }
+        })
+        // console.log(pages)
+        // console.log(data)
+        let newData:any = []
+        data.forEach((obj:any,p:number)=>{
+          
+            if(obj.type==="list"){
+              if(p>0){
+                for(let x=1;x<=obj.page-data[p-1].page;x++){
+                  // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
+                  newData.push({
+                    title:header,
+                    infos: obj.data.items.slice((x*4)-4,x*4),
+                    type:"list"
+                  })
+                }  
+              }
+            }
+            if(obj.type==="checklist"){
+              if(p>0){
+                for(let x=1;x<=obj.page-data[p-1].page;x++){
+                  // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
+                  newData.push({
+                    title:header,
+                    infos: obj.data.items.slice(0,4),
+                    type:"checklist"
+                  })
+
+                }  
+              }
+            }
+            if(obj.type==="paragraph"){
+              newData.push({
+                title:header,
+                infos: obj.data.text,
+                type:"paragraph"
+              })
+            }
+          p++
+        })
+        // console.log(newData)
+        return newData
+      }
+    } catch (error:any) {
+      console.log(error.message)
+    }
+  },[])
+
+  const wsBlock = React.useMemo(async()=>{
+    try {
+      let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/ws`)
+      let json = await res.json()
+      if(!json.isErr){
+        json.data.blocks = await JSON.parse(json.data.blocks)
+        // console.log(json.data.blocks)
+        let pages = 0
+          
+        const data = [...json.data.blocks]
+        let header:string = data.filter(obj=>obj.type==="header")[0].data.text
+        data.forEach((obj:any,index:number)=>{
+          if(obj.type==="header"){
+            Object.assign(obj,{page:pages})
+          }
+          if(obj.type==="list" || obj.type==="checklist"){
+            pages = pages + Math.ceil(obj.data.items.length / 4)
+            Object.assign(obj,{page:pages})
+          }
+          if(obj.type==="paragraph"){
+            pages++
+            Object.assign(obj,{page:pages})
+          }
+        })
+        // console.log(pages)
+        // console.log(data)
+        let newData:any = []
+        data.forEach((obj:any,p:number)=>{
+          
+            if(obj.type==="list"){
+              if(p>0){
+                for(let x=1;x<=obj.page-data[p-1].page;x++){
+                  // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
+                  newData.push({
+                    title:header,
+                    infos: obj.data.items.slice((x*4)-4,x*4),
+                    type:"list"
+                  })
+                }  
+              }
+            }
+            if(obj.type==="checklist"){
+              if(p>0){
+                for(let x=1;x<=obj.page-data[p-1].page;x++){
+                  // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
+                  newData.push({
+                    title:header,
+                    infos: obj.data.items.slice(0,4),
+                    type:"checklist"
+                  })
+
+                }  
+              }
+            }
+            if(obj.type==="paragraph"){
+              newData.push({
+                title:header,
+                infos: obj.data.text,
+                type:"paragraph"
+              })
+            }
+          p++
+        })
+        // console.log(newData)
+        return newData
+      }
+    } catch (error:any) {
+      console.log(error.message)
+    }
+  },[])
+    
+  useEffect(()=>{
+    Promise.all([lwBlock, fwBlock, wsBlock]).then(res=>{
+      const allArrays = res[0].concat(res[1],res[2])
+      setBlock(allArrays)
+    }).catch(err=>console.log(err.message))
+  },[fwBlock, wsBlock, lwBlock]);
 
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
@@ -148,10 +268,11 @@ export default function OtherCleaningTab() {
             onProgressChange={(_, absoluteProgress) =>
               (progressValue.value = absoluteProgress)
             }
-            
+            defaultIndex={0}
             renderItem={({ index }) => (
               <CarouselSlide data={block[index]} />
             )}
+
           />
           <Pagination 
             carouselData={block}
@@ -159,7 +280,12 @@ export default function OtherCleaningTab() {
             colorScheme={colorScheme}
           />
         </View>
-        <OrderForm orderType={OrderType.BAGS || OrderType.SHOES || OrderType.HOME_TEXTILES}/>
+        <OtherOrderForm orderType={[
+            OrderType.BAGS,
+            OrderType.HOME_TEXTILES,
+            OrderType.SHOES
+          ]}
+        />
       </ScrollView>
     </View>
   );
