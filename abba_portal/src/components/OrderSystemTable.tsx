@@ -274,7 +274,7 @@ let cbEditData = useCallback((data:PlaceOrderType|any,orderId:number)=>{
 
       
     
-
+    <div style={{minHeight:"20px"}}></div>
 
 
     <IonItem fill="outline">
@@ -397,12 +397,12 @@ let cbEditData = useCallback((data:PlaceOrderType|any,orderId:number)=>{
     </table>
     <IonRow>
       
-      <IonCol size="9">
+      <IonCol size-md="9" size="12">
         
         <Pagination cbPagination={cbPagination} numOfPage={pageObj.numOfPage} curPage={pageObj.curPage} />
         
       </IonCol>
-      <IonCol size="3">
+      <IonCol size-md="3" size="12">
         <div style={{textAlign:"end"}}>
         <IonNote>{pageObj.numOfRow}{getLanguage.language.aos.pagination1}{getLanguage.language.aos.pagination2}{pageObj.numOfPage}{getLanguage.language.aos.pagination3}</IonNote>
         </div>

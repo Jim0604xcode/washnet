@@ -33,10 +33,17 @@ export class UserService {
             throw new Error(`${err.message}`)
         }
     }
-    async forgetPass(userId:string){
+    async forgetPass(mobileOrEmail:string){
         const txn = await this.knex.transaction()
         try {
-            let result = await txn.select("email").from("users").where("id",userId).andWhere("status","active")
+            let result = await txn.select("id as userId","role","email").from("users")
+            .where("mobile",mobileOrEmail)
+            .andWhere("status","active")
+            .orWhere("email",mobileOrEmail)
+            .andWhere("status","active")
+            if(result.length === 0){
+                throw new Error('Not exist this user')
+            }
             
             await txn.commit()
             return result[0]

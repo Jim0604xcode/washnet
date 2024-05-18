@@ -26,7 +26,9 @@ export class UserRoutes extends Routes{
         this.routes.put('/editUserAddress',isLoggedInAPI,controller.editUserAddress)
         this.routes.put('/delUser',isLoggedInAPI,controller.deleteUser)
         this.routes.get('/checkResetPasswordToken',isLoggedInAPI,controller.checkResetPasswordToken)
-        this.routes.post('/forgetPassword',isLoggedInAPI,controller.forgetPassword)
+
+        this.routes.post('/forgetPassword',controller.forgetPassword)
+        // this.routes.get('/oauth2callback',controller.authCodeCallback)
         this.routes.post('/resetPassword',isLoggedInAPI,controller.resetPassword)
         
     }

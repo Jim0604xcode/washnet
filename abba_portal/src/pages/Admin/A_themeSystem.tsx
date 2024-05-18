@@ -47,11 +47,11 @@ const A_themeSystem: React.FC = () => {
         title:"家居用品",
         key:"fw"
       },
-      {
-        id:7,
-        title:"主頁推廣",
-        key:"pm"
-      },
+      // {
+      //   id:7,
+      //   title:"主頁推廣",
+      //   key:"pm"
+      // },
     ]
     
     

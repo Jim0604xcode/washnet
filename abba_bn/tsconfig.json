@@ -6,7 +6,7 @@
         "outDir":"./build",
         "rootDir": "./src",
         "sourceMap": true,
-        "allowJs": false,
+        "allowJs": true,
         "jsx": "react",
         "esModuleInterop":true,
         "moduleResolution": "node",
