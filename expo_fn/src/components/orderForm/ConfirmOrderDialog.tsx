@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -96,10 +97,11 @@ const ConfirmOrderDialog = ({
         height3.value = 80;
         setIsOpen3(false);
         setDialogOpen(false);
+        Alert.alert('成功落單👌')
       },
       onError: (error) => {
         console.error("Error submitting form:", error, fetchFormValue);
-        alert(`請稍後再試`);
+        Alert.alert(`請稍後再試`);
       },
     });
   }, [formValue, pc, remarks, isOpen1, isOpen2, isOpen3]);

@@ -133,7 +133,7 @@ export default function EditMobileDrawer() {
                   styles.input,
                   {
                     backgroundColor:
-                      Colors[colorScheme ?? "light"].surfaceContainer,
+                      Colors[colorScheme ?? "light"].surfaceContainerHL,
                     borderColor: Colors[colorScheme ?? "light"].outline,
                   },
                 ]}

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View, useColorScheme } from "react-native";
-import { Button, SegmentedButtons, Surface, shadow } from "react-native-paper";
+import { Button, SegmentedButtons } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { useForm } from "react-hook-form";
 import { Order, FormButtonControls, FormInputFlags, OrderType } from "@/models";
@@ -13,16 +13,16 @@ import ConfirmOrderDialog from "@/components/orderForm/ConfirmOrderDialog";
 import { useUser } from "@/context/UserContext";
 
 type OrderFormProps = {
-  orderType: OrderType
-}
-
-const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
+  orderType: OrderType[];
+};
+const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
   const colorScheme = useColorScheme();
   const { userState } = useUser();
   const { t } = useTranslation();
+  const [service, setService] = useState("lw");
 
   const defaultValues: Order = {
-    orderType: orderType,
+    orderType: orderType[0],
     pc: 1,
     pickupDateTime: "",
     deliveryDateTime: "",
@@ -33,7 +33,9 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
     remarks: "",
   };
 
-  const { control, handleSubmit, watch, reset, setValue } = useForm<Order>({defaultValues});
+  const { control, handleSubmit, watch, reset, setValue } = useForm<Order>({
+    defaultValues,
+  });
 
   useEffect(() => {
     if (userState?.mobile && userState?.address) {
@@ -113,6 +115,51 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
 
   return (
     <View style={styles.formBox}>
+      <SegmentedButtons
+        style={[
+          styles.serviceBtn,
+          {
+            backgroundColor: Colors[colorScheme ?? "light"].surfaceContainer,
+            borderColor: Colors[colorScheme ?? "light"].background,
+          },
+        ]}
+        theme={{
+          colors: {
+            secondaryContainer: Colors[colorScheme ?? "light"].tertiary,
+            onSecondaryContainer: Colors[colorScheme ?? "light"].text,
+            onSurface: Colors[colorScheme ?? "light"].secondary,
+            outline: Colors[colorScheme ?? "light"].secondary,
+          },
+        }}
+        value={service}
+        onValueChange={setService}
+        buttons={[
+          { value: "lw",
+            label: t("orderForm.lw"),
+            icon: "briefcase",
+            onPress: () => {
+              setValue("orderType", OrderType.BAGS);
+              // setService("lw");
+            }        
+          },
+          { value: "fw",
+            label: t("orderForm.fw"),
+            icon: "bed",
+            onPress: () => {
+              setValue("orderType", OrderType.HOME_TEXTILES);
+              // setService("fw");
+            }
+          },
+          { value: "ws",
+            label: t("orderForm.ws"),
+            icon: "shoe-sneaker",
+            onPress: () => {
+              setValue("orderType", OrderType.SHOES);
+              // setService("ws");
+            }
+          },
+        ]}
+      />
       <AddressButton
         formBtnCtrls={formBtnCtrls}
         formInputFlags={formInputFlags}
@@ -160,7 +207,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
   );
 };
 
-export default OrderForm;
+export default OtherOrderForm;
 
 const styles = StyleSheet.create({
   formBox: {
@@ -174,5 +221,9 @@ const styles = StyleSheet.create({
   },
   confirmBtn: {
     width: "100%",
-  }
+  },
+  serviceBtn: {
+    width: "100%",
+    borderRadius: 50,
+  },
 });

@@ -1,11 +1,13 @@
 import Colors from "@/constants/Colors";
+import { FontAwesome } from "@expo/vector-icons";
 import { Stack, Link } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Image, Pressable } from "react-native";
+import { Image, Pressable, View, Text, useColorScheme } from "react-native";
 import { IconButton } from "react-native-paper";
 
 export default function AuthLayout() {
+  const colorScheme = useColorScheme();
   const { t } = useTranslation();
 
   return (
@@ -60,48 +62,31 @@ export default function AuthLayout() {
           },
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerTitle: t("forgot.header"),
-          headerLeft: () => (
-            <Link href="/login" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <IconButton
-                    icon={"arrow-left"}
-                    iconColor={Colors.light.text}
-                    style={{ marginTop: 0, opacity: pressed ? 0.5 : 1 }}
-                    size={28}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="reset"
-        options={{
-          presentation: "modal",
-          headerTintColor: Colors.light.text,
-          headerStyle: {
-            backgroundColor: Colors.light.primary,
-          },
-          headerTitleAlign: "center",
-          headerShadowVisible: false,
-          headerTitle: t("reset.title"),
-          headerLeft: () => (
-            <Link href="/login" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <IconButton
-                    icon={"arrow-left"}
-                    iconColor={Colors.light.text}
-                    style={{ marginTop: 0, opacity: pressed ? 0.5 : 1 }}
-                    size={28}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          headerTitle: () => (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                columnGap: 8,
+              }}
+            >
+              <FontAwesome
+                name="question-circle"
+                size={20}
+                color={Colors.light.text}
+              />
+              <Text
+                style={{
+                  color: Colors.light.text,
+                  fontSize: 18,
+                  fontWeight: "bold",
+                }}
+              >
+                {t("forgot.header")}
+              </Text>
+            </View>
+          )
         }}
       />
     </Stack>
