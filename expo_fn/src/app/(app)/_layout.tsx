@@ -1,6 +1,6 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import React from "react";
-import { Pressable, Image, View, StyleSheet, ScrollViewProps, ScrollView, Switch } from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Pressable, Image, View, StyleSheet, Switch } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import {DrawerContentComponentProps, DrawerContentScrollView, DrawerItem} from "@react-navigation/drawer";
 import { useColorScheme, Text } from "react-native";
@@ -11,22 +11,39 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { Divider } from "react-native-paper";
 import { useTranslation } from "react-i18next";
+import { useUser } from "@/context/UserContext";
 
 function CustomDrawerContent(props:  DrawerContentComponentProps) {
   const colorScheme = useColorScheme();
-  const { authState, logout } = useAuth();
-  const { t, i18n } = useTranslation();
+  const { logout } = useAuth();
+  const { userState, setUserState, setLanguage } = useUser();
+  const { t , i18n } = useTranslation();
   const router = useRouter();
   const segment = useSegments();
   const [isCn, setIsCn] = React.useState(true);
 
-
-  const onToggleSwitch = () => {
+  const onToggleSwitch = useCallback(async() => {
     setIsCn(!isCn);
-    i18n.changeLanguage(isCn ? 'eng' : 'cn');
-  };
+    setLanguage!(isCn ? 'eng' : 'cn');
+  },[setIsCn, setLanguage, isCn]);
 
+  useEffect(() => {
+    if (i18n.language === 'cn') {
+      setIsCn(true);
+    } else if (i18n.language === 'eng') {
+      setIsCn(false);
+    };
+  }, [])
 
+  const handleLogout = useCallback(()=>{
+      logout!();
+      setUserState!({
+        mobile: null,
+        address: null,
+        lng: null
+      })
+  },[])
+  
   return (
     <DrawerContentScrollView
       {...props}
@@ -36,92 +53,118 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
       ]}
       scrollEnabled={false}
     >
-
       <View style={styles.infoBox}>
         <Image
           source={require("@/assets/images/logo.png")}
-          style={{ width: 150, height: 42 }}
+          style={styles.img}
         />
         <Text
-          style={[
-            styles.infoText,
+          style={[styles.infoText, 
             { color: Colors[colorScheme ?? "light"].tint },
           ]}
         >
-          {authState?.mobile}
+          {userState?.mobile}
         </Text>
+        {(userState?.address) ? (
+          <View style={styles.address}>
+            <Text
+              style={[styles.infoText, 
+                { color: Colors[colorScheme ?? "light"].tint },
+              ]}
+            >
+              {userState?.address?.district}{", "}
+            </Text>
+            <Text
+              style={[styles.infoText, 
+                { color: Colors[colorScheme ?? "light"].tint },
+              ]}
+            >
+              {userState?.address?.street}{", "}
+            </Text>
+            <Text
+              style={[styles.infoText, 
+                { color: Colors[colorScheme ?? "light"].tint },
+              ]}
+            >
+              {userState?.address?.building}
+            </Text>
+          </View>
+          ) : ( <Text>👋</Text>)
+          }
       </View>
       <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
-      <DrawerItem
-        label={t('drawer.mobile')}
-        onPress={() => router.push("/editMobile")}
-        focused={segment[2] === "editMobile"}
-        style={styles.drawerItem}
-        labelStyle={styles.drawerLabel}
-        activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
-        activeTintColor={Colors[colorScheme ?? "light"].background}
-        inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        icon={({ color }) => (
-          <MaterialCommunityIcons 
-            name="whatsapp"
-            size={26}
-            color={color}/>
-        )}
-      />
-      <DrawerItem
-        label={t('drawer.address')}
-        onPress={() => router.push("/editAddress")}
-        focused={segment[2] === "editAddress"}
-        style={styles.drawerItem}
-                activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
-        activeTintColor={Colors[colorScheme ?? "light"].background}
-        inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        labelStyle={styles.drawerLabel}
-        icon={({ color }) => (
-          <MaterialCommunityIcons
-            name="home"
-            size={26}
-            color={color} />
-        )}
-      />
-      {/* <DrawerItem
-        label="更改密碼"
-        onPress={() => router.push("/(app)/(drawer)/password")}
-        focused={segment[2] === "password"}
-        style={styles.drawerItem}
-        activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
-        activeTintColor={Colors[colorScheme ?? "light"].background}
-        inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        labelStyle={{
-          fontWeight: "bold",
-          fontSize: 18,
-        }}
-        icon={({ color }) => (
-          <MaterialCommunityIcons name="key" size={20} color={color} />
-        )}
-      /> */}
-      <DrawerItem
-        label={t('drawer.delete')}
-        onPress={() => router.push("/deleteUser")}
-        focused={segment[2] === "deleteUser"}
-        style={styles.drawerItem}
-        activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
-        activeTintColor={Colors[colorScheme ?? "light"].background}
-        inactiveTintColor={Colors[colorScheme ?? "light"].text}
-        labelStyle={styles.drawerLabel}
-        icon={({ color }) => (
-          <MaterialCommunityIcons
-            name="account-cancel"
-            size={26}
-            color={color}
-          />
-        )}
-      />
+      <View style={styles.itemBox}>
+        <DrawerItem
+          label={t('drawer.mobile')}
+          onPress={() => router.push("/editMobile")}
+          focused={segment[2] === "editMobile"}
+          style={styles.drawerItem}
+          labelStyle={styles.drawerLabel}
+          activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
+          activeTintColor={Colors[colorScheme ?? "light"].background}
+          inactiveTintColor={Colors[colorScheme ?? "light"].text}
+          icon={({ color }) => (
+            <MaterialCommunityIcons 
+              name="whatsapp"
+              size={26}
+              color={color}/>
+          )}
+        />
+        <DrawerItem
+          label={t('drawer.address')}
+          onPress={() => router.push("/editAddress")}
+          focused={segment[2] === "editAddress"}
+          style={styles.drawerItem}
+                  activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
+          activeTintColor={Colors[colorScheme ?? "light"].background}
+          inactiveTintColor={Colors[colorScheme ?? "light"].text}
+          labelStyle={styles.drawerLabel}
+          icon={({ color }) => (
+            <MaterialCommunityIcons
+              name="home"
+              size={26}
+              color={color} />
+          )}
+        />
+        {/* <DrawerItem
+          label="更改密碼"
+          onPress={() => router.push("/(app)/(drawer)/password")}
+          focused={segment[2] === "password"}
+          style={styles.drawerItem}
+          activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
+          activeTintColor={Colors[colorScheme ?? "light"].background}
+          inactiveTintColor={Colors[colorScheme ?? "light"].text}
+          labelStyle={{
+            fontWeight: "bold",
+            fontSize: 18,
+          }}
+          icon={({ color }) => (
+            <MaterialCommunityIcons name="key" size={20} color={color} />
+          )}
+        /> */}
+        <DrawerItem
+          label={t('drawer.delete')}
+          onPress={() => router.push("/deleteUser")}
+          focused={segment[2] === "deleteUser"}
+          style={styles.drawerItem}
+          activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
+          activeTintColor={Colors[colorScheme ?? "light"].background}
+          inactiveTintColor={Colors[colorScheme ?? "light"].text}
+          labelStyle={styles.drawerLabel}
+          icon={({ color }) => (
+            <MaterialCommunityIcons
+              name="account-cancel"
+              size={26}
+              color={color}
+            />
+          )}
+        />
+      </View>
       <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
       <View style={styles.bottomBox}>
         <DrawerItem
           label={t('drawer.logout')}
-          onPress={logout!}
+          onPress={handleLogout}
           style={styles.drawerItem}
           labelStyle={styles.drawerLabel}
           activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
@@ -204,16 +247,32 @@ const styles = StyleSheet.create({
   bottomBox: {
     justifyContent: "space-between",
     paddingBottom: 60,
-    flex: 1,
+    flex: 0.5,
   },
   infoBox: {
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     gap: 20,
+    paddingHorizontal: 20,
+    flex: 0.5
+  },
+  img: { 
+    width: 150,
+    height: 42,
   },
   infoText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
+  },
+  address: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    width: '100%',
+  },
+  itemBox: {
+    flex: 1,
   },
   drawerItem: {
     paddingLeft: 20,

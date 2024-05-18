@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useCallback, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -14,20 +14,26 @@ import {
   useColorScheme,
 } from "react-native";
 import Colors from "@/constants/Colors";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { ActivityIndicator, Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/context/AuthContext";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
+import { useUser } from "@/context/UserContext";
 
 const LoginScreen = () => {
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
+  const { setLanguage } = useUser();
+
+  const toggleLanguage = useCallback(async() => {
+    setLanguage!(i18n.language === "cn" ? 'eng' : 'cn');
+  },[i18n.language]);
 
   const handleMobileChange = (value: string) => {
     const filteredValue: string = value.replace(/[^0-9]/g, "");
@@ -143,14 +149,35 @@ const LoginScreen = () => {
                   )}
                 </Pressable>
               </Link>
-              <Pressable>
+              <Link href="/forgot" asChild>
+                <Pressable>
+                  {({ pressed }) => (
+                    <Button
+                      style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
+                      mode="text"
+                      icon={() => (
+                        <FontAwesome
+                          name="question-circle"
+                          size={12}
+                          color={Colors.light.text}
+                        />
+                      )}
+                      textColor={Colors.light.text}
+                      labelStyle={{ fontSize: 12 }}
+                    >
+                      {t("login.forget")}
+                    </Button>
+                  )}
+                </Pressable>
+              </Link>
+              <Pressable onPress={toggleLanguage}>
                 {({ pressed }) => (
                   <Button
                     style={[styles.textBtn, { opacity: pressed ? 0.5 : 1 }]}
                     mode="text"
                     icon={() => (
-                      <FontAwesome
-                        name="question-circle"
+                      <MaterialIcons
+                        name="translate"
                         size={12}
                         color={Colors.light.text}
                       />
@@ -158,7 +185,7 @@ const LoginScreen = () => {
                     textColor={Colors.light.text}
                     labelStyle={{ fontSize: 12 }}
                   >
-                    {t("login.forget")}
+                    {i18n.language === 'cn' ? 'English' : '中文'}
                   </Button>
                 )}
               </Pressable>
@@ -191,7 +218,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     padding: 20,
   },
   logo: {
@@ -240,10 +267,11 @@ const styles = StyleSheet.create({
     width: 280,
     flexDirection: "row",
     justifyContent: "center",
-    gap: 20,
+    alignItems: "center",
+    // backgroundColor: 'red'
   },
   textBtn: {
-    width: 100,
+    width: 90,
   },
   button: {
     width: 280,

@@ -11,11 +11,12 @@ import { useCallback, useState } from "react";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
 import { EditedMobileReq } from "@/models";
 import { useTranslation } from "react-i18next";
+import { useUser } from "@/context/UserContext";
 
 export default function EditMobileDrawer() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
-  const { authState, setAuthState } = useAuth();
+  const { userState, setUserState } = useUser();
   const {
     control,
     handleSubmit,
@@ -39,11 +40,10 @@ export default function EditMobileDrawer() {
   
     editMobile.mutate(data, {
       onSuccess: () => {
-        setAuthState!({
-          isAuthenticated: true,
-          token: authState?.token as string,
+        setUserState!((prev) => ({
+          ...prev,
           mobile: data.mobile,
-        });
+        }))
         router.replace("/laundry");
         Alert.alert(t("editMobile.success"));
         console.log("Edited mobile successfully");
@@ -86,7 +86,7 @@ export default function EditMobileDrawer() {
             </Text>
             </View>
           <Text style={[styles.numberBold, {color: Colors[colorScheme ?? "light"].tint}]}>
-            {authState?.mobile as string}
+            {userState?.mobile as string}
           </Text>
         </View>
         <Entypo

@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
 import { useDebounce } from "@/utils/useDebounce";
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { FormButtonControls, FormInputFlags, Order } from '@/models';
 import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -16,15 +16,13 @@ import { useTranslation } from 'react-i18next';
 type DeliveryButtoProps = {
     formBtnCtrls: FormButtonControls;
     formInputFlags: FormInputFlags;
-    register:  UseFormRegister<Order>
     formValue: Order
-    setFormValue: React.Dispatch<React.SetStateAction<Order>>
+    setFormValue: UseFormSetValue<Order>;
 };
 
 const DeliveryButton: React.FC<DeliveryButtoProps> = ({
     formBtnCtrls,
     formInputFlags,
-    register,
     formValue,
     setFormValue
 }) => {
@@ -56,7 +54,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
 
   if (isOpen1) {
     hasAddress ? 
-    (height1.value = withSpring(110, { damping: 14 }))
+    (height1.value = withSpring(120, { damping: 14 }))
   : (height1.value = withSpring(80, { damping: 14 }));
     setIsOpen1(false);
   }
@@ -87,7 +85,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
         .hour(dayjs(deliveryTime).hour())
         .minute(dayjs(deliveryTime).minute())
         .format('YYYY-MM-DD ddd h:mm A');
-      setFormValue(prev => ({ ...prev, deliveryDateTime: combinedDateTime }));
+      setFormValue('deliveryDateTime', combinedDateTime);
     }
   };
 
@@ -101,13 +99,13 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
         .minute(dayjs(currentTime).minute())
         .format('YYYY-MM-DD ddd h:mm A');
 
-      setFormValue(prev => ({ ...prev, deliveryDateTime: combinedDateTime }));
-    }
+        setFormValue('deliveryDateTime', combinedDateTime);
+      }
   };
 
   const clearDateTime = useCallback(
     () => {
-      setFormValue(prev => ({ ...prev, deliveryDateTime: "" }));
+      setFormValue('deliveryDateTime', '');
     },
     [setFormValue],
   );
@@ -153,9 +151,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           </Text>
         </TouchableOpacity>
 
-      <View style={[styles.dateTimeInput, {opacity: isOpen3 ? 1 : 0}]}
-        {...register("deliveryDateTime", {required: true})}
-      >
+      <View style={[styles.dateTimeInput, {opacity: isOpen3 ? 1 : 0}]}>
         <RNDateTimePicker
           mode="date"
           disabled={!isOpen3}
@@ -225,7 +221,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   info: {
-    fontSize: 18,
+    fontSize: 16,
   },
   dateTimeInput: {
     width: '100%',

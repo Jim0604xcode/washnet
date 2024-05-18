@@ -8,6 +8,7 @@ import CarouselSlide from '@/components/carousel/CarouselSlide';
 import Pagination from '@/components/carousel/Pagination';
 import OrderForm from '@/components/orderForm/OrderForm';
 import { useEffect, useState } from 'react';
+import { OrderType } from '@/models';
 
 // const carouselData = [
 //   {
@@ -40,7 +41,7 @@ export default function LaundryTab() {
   useEffect(()=>{
     const main = async () =>{
       try {
-        let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/ws`)
+        let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/pw`)
         let json = await res.json()
         if(!json.isErr){
           json.data.blocks = await JSON.parse(json.data.blocks)
@@ -158,7 +159,7 @@ export default function LaundryTab() {
             colorScheme={colorScheme}
           />
         </View>
-        <OrderForm />
+        <OrderForm orderType={OrderType.LAUNDRY}/>
       </ScrollView>
     </View>
   );

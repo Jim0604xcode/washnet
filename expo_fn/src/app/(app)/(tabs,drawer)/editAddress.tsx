@@ -20,11 +20,12 @@ import { useRouter } from "expo-router";
 import ConfirmEditDialog from "@/components/editForm/ConfirmEditDialog";
 import { EditedAddressReq } from "@/models";
 import { useTranslation } from "react-i18next";
+import { useUser } from "@/context/UserContext";
 
 export default function EditAddressDrawer() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
-  const { authState, setAuthState } = useAuth();
+  const { userState, setUserState } = useUser();
   const {
     control,
     handleSubmit,
@@ -44,7 +45,7 @@ export default function EditAddressDrawer() {
   const [scroll, setScroll] = useState(false);
 
   const newAddress = useMemo(() => {
-    return `${district} ${street} ${building}`;
+    return `${district}, ${street}, ${building}`;
   }, [district, street, building]);
 
   const showConfirmDialog = useCallback((data: EditedAddressReq) => {
@@ -65,7 +66,10 @@ export default function EditAddressDrawer() {
       onSuccess: () => {
         router.replace("/laundry");
         Alert.alert(t("editAddress.success"));
-        console.log("Edited address successfully");
+        setUserState!((prev) => ({
+          ...prev,
+          address: { district, street, building },
+        }))
       },
       onError: (error) => {
         console.error("Error editing address:", error);
@@ -128,7 +132,9 @@ export default function EditAddressDrawer() {
                   { color: Colors[colorScheme ?? "light"].tint },
                 ]}
               >
-                {authState?.mobile as string}
+                {userState?.address?.district}{", "}
+                {userState?.address?.street}{", "}
+                {userState?.address?.building}
               </Text>
             </View>
             <Entypo

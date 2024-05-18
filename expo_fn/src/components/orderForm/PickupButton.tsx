@@ -10,7 +10,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import Animated, { withSpring } from "react-native-reanimated";
 import { useDebounce } from "@/utils/useDebounce";
-import { UseFormRegister } from "react-hook-form";
 import { FormButtonControls, FormInputFlags, Order } from "@/models";
 import dayjs from "dayjs";
 import RNDateTimePicker, {
@@ -19,19 +18,18 @@ import RNDateTimePicker, {
 import { IconButton } from "react-native-paper";
 import { parseAndAddDays } from "@/utils/parseAndAddDays";
 import { useTranslation } from "react-i18next";
+import { UseFormSetValue } from "react-hook-form";
 
 type PickupButtonProps = {
   formBtnCtrls: FormButtonControls;
   formInputFlags: FormInputFlags;
-  register: UseFormRegister<Order>;
   formValue: Order;
-  setFormValue: React.Dispatch<React.SetStateAction<Order>>;
+  setFormValue: UseFormSetValue<Order>;
 };
 
 const PickupButton: React.FC<PickupButtonProps> = ({
   formBtnCtrls,
   formInputFlags,
-  register,
   formValue,
   setFormValue,
 }) => {
@@ -63,7 +61,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
 
     if (isOpen1 === true) {
       hasAddress
-        ? (height1.value = withSpring(110, { damping: 14 }))
+        ? (height1.value = withSpring(120, { damping: 14 }))
         : (height1.value = withSpring(80, { damping: 14 }));
       setIsOpen1(false);
     }
@@ -106,7 +104,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           .hour(dayjs(pickupTime).hour())
           .minute(dayjs(pickupTime).minute())
           .format("YYYY-MM-DD ddd h:mm A");
-        setFormValue((prev) => ({ ...prev, pickupDateTime: combinedDateTime }));
+        setFormValue('pickupDateTime', combinedDateTime );
       }
     },
     [pickupDate, pickupTime, setFormValue]
@@ -129,8 +127,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
         .hour(dayjs(currentTime).hour())
         .minute(dayjs(currentTime).minute())
         .format("YYYY-MM-DD ddd h:mm A");
-
-      setFormValue((prev) => ({ ...prev, pickupDateTime: combinedDateTime }));
+        setFormValue('pickupDateTime', combinedDateTime );
     }
   };
 
@@ -141,7 +138,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
   }, []);
 
   const clearDateTime = useCallback(() => {
-    setFormValue((prev) => ({ ...prev, pickupDateTime: "" }));
+    setFormValue('pickupDateTime', "");
   }, [setFormValue]);
 
   return (
@@ -188,7 +185,6 @@ const PickupButton: React.FC<PickupButtonProps> = ({
 
       <View
         style={[styles.dateTimeInput, { opacity: isOpen2 ? 1 : 0 }]}
-        {...register("pickupDateTime", { required: true })}
       >
         <RNDateTimePicker
           mode="date"
@@ -275,7 +271,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   info: {
-    fontSize: 18,
+    fontSize: 16,
   },
   dateTimeInput: {
     width: "100%",

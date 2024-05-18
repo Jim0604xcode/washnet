@@ -6,22 +6,20 @@ import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
 import { useDebounce } from "@/utils/useDebounce";
 import { TextInput } from 'react-native-paper';
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { FormButtonControls, FormInputFlags, Order } from '@/models';
 import { useTranslation } from 'react-i18next';
 
 type AddressButtonProps = {
     formBtnCtrls: FormButtonControls;
     formInputFlags: FormInputFlags;
-    register:  UseFormRegister<Order>
     formValue: Order
-    setFormValue: React.Dispatch<React.SetStateAction<Order>>
+    setFormValue: UseFormSetValue<Order>
 };
 
 const AddressButton: React.FC<AddressButtonProps> = ({
     formBtnCtrls,
     formInputFlags,
-    register,
     formValue,
     setFormValue
 }) => {
@@ -47,7 +45,7 @@ const handlePress1 = useDebounce(() => {
     height1.value = withSpring(350, { damping: 15 });
   } else if (isOpen1 === true) {
     hasAddress ? 
-      (height1.value = withSpring(110, { damping: 15 }))
+      (height1.value = withSpring(120, { damping: 15 }))
     : (height1.value = withSpring(80, { damping: 15 }));
   }
   setIsOpen1(!isOpen1);
@@ -104,7 +102,9 @@ const handlePress1 = useDebounce(() => {
           lightColor={ Colors.light.outline }
           darkColor={ Colors.dark.outline }
         >
-          {hasAddress ? formValue.fullAddress : null}
+          {hasAddress ? 
+          `${formValue.district}, ${formValue.street}, ${formValue.building}`
+           : null}
         </Text>
       </TouchableOpacity>
       { isOpen1 ? (
@@ -113,19 +113,13 @@ const handlePress1 = useDebounce(() => {
             mode="outlined"
             label={t('orderForm.district')}
             placeholder={t('orderForm.distPlaceholder')}
-            {...register("district",
-              { required: true }
-            )}
             value={formValue.district}
-            onChangeText={(v: string) => {
-              setFormValue((formValue) => {
-                let newFormValue = { ...formValue };
-                newFormValue.district = v;
-                newFormValue.fullAddress = `${v} ${formValue.street} ${formValue.building}`;
-                return newFormValue;
-              });
+            maxLength={30}
+            onChangeText={(value: string) => {
+              setFormValue("district", value)
             }}
             autoCapitalize='words'
+
             style={{
                 backgroundColor: hasAddress ? Colors[colorScheme ?? "light"].tertiary
                   : Colors[colorScheme ?? "light"].surfaceContainer,
@@ -138,17 +132,10 @@ const handlePress1 = useDebounce(() => {
             mode="outlined"
             label={t('orderForm.street')}
             placeholder={t('orderForm.stPlaceholder')}
-            {...register("street",
-              { required: true }
-            )}
             value={formValue.street}
-            onChangeText={(v: string) => {
-              setFormValue((formValue) => {
-                let newFormValue = { ...formValue };
-                newFormValue.street = v;
-                newFormValue.fullAddress = `${formValue.district} ${v} ${formValue.building}`;
-                return newFormValue;
-              });
+            maxLength={30}
+            onChangeText={(value: string) => {
+              setFormValue("street", value)
             }}
             autoCapitalize='words'
             autoComplete='street-address'
@@ -164,17 +151,10 @@ const handlePress1 = useDebounce(() => {
             mode="outlined"
             label={t('orderForm.building')}
             placeholder={t('orderForm.bdlgPlaceholder')}
-            {...register("building",
-              { required: true }
-            )}
             value={formValue.building}
-            onChangeText={(v: string) => {
-              setFormValue((formValue) => {
-                const newFormValue = { ...formValue };
-                newFormValue.building = v;
-                newFormValue.fullAddress = `${formValue.district} ${formValue.street} ${v}`;
-                return newFormValue;
-              });
+            maxLength={30}
+            onChangeText={(value: string) => {
+              setFormValue("building", value)
             }}
             autoCapitalize='words'
             style={{
@@ -228,6 +208,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   info: {
-    fontSize: 18,
+    fontSize: 16,
   },
 })

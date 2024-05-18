@@ -4,16 +4,17 @@ import { StyleSheet, useColorScheme } from "react-native";
 import Colors from "@/constants/Colors";
 import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@/context/AuthContext";
 import { useStorageState } from "@/utils/useStorageState";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
+import { useUser } from "@/context/UserContext";
 
 const index = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
-  const [[_, token]] = useStorageState(`${process.env.EXPO_PUBLIC_API_KEY}`); 
-  const {verify} = useAuth();
+  const [[loadingToken, token]] = useStorageState(`${process.env.EXPO_PUBLIC_API_KEY}`);
+  const [[loadingLng, lng]] = useStorageState('lng');
+  const { verifyUser, setLanguage } = useUser();
   const sv = useSharedValue(0.8);
 
   const animation = useAnimatedStyle(
@@ -31,10 +32,10 @@ const index = () => {
   }, [router]);
 
   React.useEffect(() => {
-    if (token){
-      verify!(token)
-      .then(isVerified => {
-        console.log('Verification:', isVerified);
+    if (!loadingToken){
+      verifyUser!(token)
+      .then((isVerified) => {
+        console.log('Verified:', isVerified);
         if (!isVerified) {
           return redirectToLogin();
         }
@@ -42,10 +43,14 @@ const index = () => {
       .catch(err => {
         console.error('Verification failed:', err);
       });
-    } else {
-      return redirectToLogin();
+    };
+  }, [token, redirectToLogin, loadingToken, verifyUser]);
+
+  React.useEffect(() => {
+    if (!loadingLng && lng !== null){
+      setLanguage!(lng);
     }
-  }, [token, redirectToLogin]);
+  }, [setLanguage, loadingLng, lng])
   
   return (
     <SafeAreaView
