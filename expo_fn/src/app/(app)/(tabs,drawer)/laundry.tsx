@@ -133,7 +133,7 @@ export default function LaundryTab() {
           <Carousel
             loop
             width={width}
-            height={width / 2}
+            height={width/2}
             autoPlay={true}
             autoPlayInterval={8000}
             data={block}

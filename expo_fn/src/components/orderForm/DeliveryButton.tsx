@@ -6,7 +6,7 @@ import Colors from "@/constants/Colors";
 import Animated, { withSpring } from 'react-native-reanimated';
 import { useDebounce } from "@/utils/useDebounce";
 import { UseFormSetValue } from 'react-hook-form';
-import { FormButtonControls, FormInputFlags, Order } from '@/models';
+import { FormButtonControls, FormInputFlags, Order, OtherOrders } from '@/models';
 import dayjs from 'dayjs';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { IconButton } from 'react-native-paper';
@@ -16,8 +16,8 @@ import { useTranslation } from 'react-i18next';
 type DeliveryButtoProps = {
     formBtnCtrls: FormButtonControls;
     formInputFlags: FormInputFlags;
-    formValue: Order
-    setFormValue: UseFormSetValue<Order>;
+    formValue: Order | OtherOrders;
+    setFormValue: UseFormSetValue<Order> | UseFormSetValue<OtherOrders>
 };
 
 const DeliveryButton: React.FC<DeliveryButtoProps> = ({

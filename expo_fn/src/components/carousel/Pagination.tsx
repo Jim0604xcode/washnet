@@ -43,9 +43,10 @@ const Pagination: React.FC<PaginationProps> = ({
 const styles = StyleSheet.create({
   paginationBox: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    width: 46,
+    gap: 8,
+    width: 120,
   },
 });
 

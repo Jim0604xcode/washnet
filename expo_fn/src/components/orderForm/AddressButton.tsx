@@ -7,14 +7,14 @@ import Animated, { withSpring } from 'react-native-reanimated';
 import { useDebounce } from "@/utils/useDebounce";
 import { TextInput } from 'react-native-paper';
 import { UseFormSetValue } from 'react-hook-form';
-import { FormButtonControls, FormInputFlags, Order } from '@/models';
+import { FormButtonControls, FormInputFlags, Order, OtherOrders } from '@/models';
 import { useTranslation } from 'react-i18next';
 
 type AddressButtonProps = {
     formBtnCtrls: FormButtonControls;
     formInputFlags: FormInputFlags;
-    formValue: Order
-    setFormValue: UseFormSetValue<Order>
+    formValue: Order | OtherOrders
+    setFormValue: UseFormSetValue<Order> | UseFormSetValue<OtherOrders>
 };
 
 const AddressButton: React.FC<AddressButtonProps> = ({
@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   inputBox: {
     width: '100%',
     gap: 20,
+    marginTop: 10,
   },
   info: {
     fontSize: 16,
