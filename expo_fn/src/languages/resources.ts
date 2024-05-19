@@ -146,6 +146,9 @@ export const resources = {
         send: "發送訂單",
         sending: "發送中",
         cancel: "取消",
+        success: "成功落單👌",
+        error: "唔好意思...",
+        errorText: "請稍後再試。",
       },
       orders: {
         pw: "磅洗",
@@ -377,6 +380,9 @@ export const resources = {
         send: "Send",
         sending: "Sending",
         cancel: "Cancel",
+        success: "Order Placed👌",
+        error: "Sorry...",
+        errorText: "Please try again later",
       },
       orders: {
         pw: "Laundry",

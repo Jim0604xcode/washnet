@@ -27,6 +27,7 @@ export default function ForgotModal() {
 
       const result = await response.json();
       if (!result.isErr) {
+        console.log(result)
         Alert.alert(t("forgot.sent"));
       } else {
         Alert.alert(t("forgot.error"),t("forgot.errorText"));

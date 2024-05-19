@@ -29,11 +29,11 @@ export default function OtherCleaningTab() {
         ]);
 
         if (!lwData.isErr && !fwData.isErr && !wsData.isErr) {
-          const lwBlocks = parseBlocks(lwData.data.blocks);
-          const fwBlocks = parseBlocks(fwData.data.blocks);
-          const wsBlocks = parseBlocks(wsData.data.blocks);
+          const lwBlock = parseBlock(lwData.data.blocks);
+          const fwBlock = parseBlock(fwData.data.blocks);
+          const wsBlock = parseBlock(wsData.data.blocks);
 
-          const allBlocks = [...lwBlocks, ...fwBlocks, ...wsBlocks];
+          const allBlocks = lwBlock.concat(fwBlock, wsBlock);
           setBlock(allBlocks);
         } else {
           throw new Error('Error fetching data');
@@ -46,8 +46,8 @@ export default function OtherCleaningTab() {
     fetchData();
   }, []);
 
-  const parseBlocks = (blocksData: any) => {
-    const data = JSON.parse(blocksData);
+  const parseBlock = (blockData: any) => {
+    const data = JSON.parse(blockData);
     let pages = 0;
     let header = data.filter((obj: any) => obj.type === 'header')[0]?.data.text;
     data.forEach((obj: any, index: number) => {
@@ -100,226 +100,6 @@ export default function OtherCleaningTab() {
     return newData;
   };
 
-  // const lwBlock = React.useMemo(async()=>{
-  //   try {
-  //     let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/lw`)
-  //     let json = await res.json()
-  //     if(!json.isErr){
-  //       json.data.blocks = await JSON.parse(json.data.blocks)
-  //       // console.log(json.data.blocks)
-  //       let pages = 0
-         
-  //       const data = [...json.data.blocks]
-  //       let header:string = data.filter(obj=>obj.type==="header")[0].data.text
-  //       data.forEach((obj:any,index:number)=>{
-  //         if(obj.type==="header"){
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //         if(obj.type==="list" || obj.type==="checklist"){
-  //           pages = pages + Math.ceil(obj.data.items.length / 4)
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //         if(obj.type==="paragraph"){
-  //           pages++
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //       })
-  //       // console.log(pages)
-  //       // console.log(data)
-  //       let newData:any = []
-  //       data.forEach((obj:any,p:number)=>{
-          
-  //           if(obj.type==="list"){
-  //             if(p>0){
-  //               for(let x=1;x<=obj.page-data[p-1].page;x++){
-  //                 // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
-  //                 newData.push({
-  //                   title:header,
-  //                   infos: obj.data.items.slice((x*4)-4,x*4),
-  //                   type:"list"
-  //                 })
-  //               }  
-  //             }
-  //           }
-  //           if(obj.type==="checklist"){
-  //             if(p>0){
-  //               for(let x=1;x<=obj.page-data[p-1].page;x++){
-  //                 // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
-  //                 newData.push({
-  //                   title:header,
-  //                   infos: obj.data.items.slice(0,4),
-  //                   type:"checklist"
-  //                 })
-
-  //               }  
-  //             }
-  //           }
-  //           if(obj.type==="paragraph"){
-  //             newData.push({
-  //               title:header,
-  //               infos: obj.data.text,
-  //               type:"paragraph"
-  //             })
-  //           }
-  //         p++
-  //       })
-  //       // console.log(newData)
-  //       return newData
-  //     }
-  //   } catch (error:any) {
-  //     console.log(error.message)
-  //   }
-  // },[])
-
-  // const fwBlock = React.useMemo(async()=>{
-  //   try {
-  //     let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/fw`)
-  //     let json = await res.json()
-  //     if(!json.isErr){
-  //       json.data.blocks = await JSON.parse(json.data.blocks)
-  //       // console.log(json.data.blocks)
-  //       let pages = 0
-          
-  //       const data = [...json.data.blocks]
-  //       let header:string = data.filter(obj=>obj.type==="header")[0].data.text
-  //       data.forEach((obj:any,index:number)=>{
-  //         if(obj.type==="header"){
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //         if(obj.type==="list" || obj.type==="checklist"){
-  //           pages = pages + Math.ceil(obj.data.items.length / 4)
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //         if(obj.type==="paragraph"){
-  //           pages++
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //       })
-  //       // console.log(pages)
-  //       // console.log(data)
-  //       let newData:any = []
-  //       data.forEach((obj:any,p:number)=>{
-          
-  //           if(obj.type==="list"){
-  //             if(p>0){
-  //               for(let x=1;x<=obj.page-data[p-1].page;x++){
-  //                 // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
-  //                 newData.push({
-  //                   title:header,
-  //                   infos: obj.data.items.slice((x*4)-4,x*4),
-  //                   type:"list"
-  //                 })
-  //               }  
-  //             }
-  //           }
-  //           if(obj.type==="checklist"){
-  //             if(p>0){
-  //               for(let x=1;x<=obj.page-data[p-1].page;x++){
-  //                 // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
-  //                 newData.push({
-  //                   title:header,
-  //                   infos: obj.data.items.slice(0,4),
-  //                   type:"checklist"
-  //                 })
-
-  //               }  
-  //             }
-  //           }
-  //           if(obj.type==="paragraph"){
-  //             newData.push({
-  //               title:header,
-  //               infos: obj.data.text,
-  //               type:"paragraph"
-  //             })
-  //           }
-  //         p++
-  //       })
-  //       // console.log(newData)
-  //       return newData
-  //     }
-  //   } catch (error:any) {
-  //     console.log(error.message)
-  //   }
-  // },[])
-
-  // const wsBlock = React.useMemo(async()=>{
-  //   try {
-  //     let res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/theme/getEditor/ws`)
-  //     let json = await res.json()
-  //     if(!json.isErr){
-  //       json.data.blocks = await JSON.parse(json.data.blocks)
-  //       // console.log(json.data.blocks)
-  //       let pages = 0
-          
-  //       const data = [...json.data.blocks]
-  //       let header:string = data.filter(obj=>obj.type==="header")[0].data.text
-  //       data.forEach((obj:any,index:number)=>{
-  //         if(obj.type==="header"){
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //         if(obj.type==="list" || obj.type==="checklist"){
-  //           pages = pages + Math.ceil(obj.data.items.length / 4)
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //         if(obj.type==="paragraph"){
-  //           pages++
-  //           Object.assign(obj,{page:pages})
-  //         }
-  //       })
-  //       // console.log(pages)
-  //       // console.log(data)
-  //       let newData:any = []
-  //       data.forEach((obj:any,p:number)=>{
-          
-  //           if(obj.type==="list"){
-  //             if(p>0){
-  //               for(let x=1;x<=obj.page-data[p-1].page;x++){
-  //                 // console.log('list',obj.data.items.slice((x*4)-4,x*4),x)
-  //                 newData.push({
-  //                   title:header,
-  //                   infos: obj.data.items.slice((x*4)-4,x*4),
-  //                   type:"list"
-  //                 })
-  //               }  
-  //             }
-  //           }
-  //           if(obj.type==="checklist"){
-  //             if(p>0){
-  //               for(let x=1;x<=obj.page-data[p-1].page;x++){
-  //                 // console.log('ck',obj.data.items.slice((x*4)-4,x*4),x)
-  //                 newData.push({
-  //                   title:header,
-  //                   infos: obj.data.items.slice(0,4),
-  //                   type:"checklist"
-  //                 })
-
-  //               }  
-  //             }
-  //           }
-  //           if(obj.type==="paragraph"){
-  //             newData.push({
-  //               title:header,
-  //               infos: obj.data.text,
-  //               type:"paragraph"
-  //             })
-  //           }
-  //         p++
-  //       })
-  //       // console.log(newData)
-  //       return newData
-  //     }
-  //   } catch (error:any) {
-  //     console.log(error.message)
-  //   }
-  // },[])
-    
-  // useEffect(()=>{
-  //   Promise.all([lwBlock, fwBlock, wsBlock]).then(res=>{
-  //     const allArrays = res[0].concat(res[1],res[2])
-  //     setBlock(allArrays)
-  //   }).catch(err=>console.log(err.message))
-  // },[fwBlock, wsBlock, lwBlock]);
-
   const width = Dimensions.get('window').width;
   const colorScheme = useColorScheme();
   const progressValue = useSharedValue<number>(0);
@@ -327,11 +107,9 @@ export default function OtherCleaningTab() {
   return (
     <View style={[styles.container,{width: width}]}>
       <ScrollView 
-          contentContainerStyle={{
-          alignItems: 'center',
-          gap: 20,
+          contentContainerStyle={[styles.scrollBox, {
           backgroundColor: Colors[colorScheme ?? 'light'].background,
-        }}
+        }]}
         keyboardDismissMode = 'on-drag'
         keyboardShouldPersistTaps = 'handled'
         contentInsetAdjustmentBehavior = 'always'
@@ -378,17 +156,19 @@ export default function OtherCleaningTab() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
+  scrollBox: {
+    alignItems: 'center',
+    gap: 40,
+  },
   carouselBox: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    flex: 1,
     width: '100%',
   },
 });

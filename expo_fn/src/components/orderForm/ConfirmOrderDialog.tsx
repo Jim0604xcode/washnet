@@ -12,7 +12,7 @@ import React, { useCallback, useState } from "react";
 import { Button, Dialog, Portal, TextInput } from "react-native-paper";
 import { Text } from "@/components/Themed";
 import Colors from "@/constants/Colors";
-import { FetchOrder, FormButtonControls, Order } from "@/models";
+import { FormButtonControls, Order, OtherOrders } from "@/models";
 import useSubmitForm from "@/utils/useSubmitForm";
 import { useTranslation } from "react-i18next";
 import { UseFormReset, UseFormSetValue } from "react-hook-form";
@@ -21,10 +21,11 @@ type ConfirmOrderDialogProps = {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   formValue: Order;
-  setFormValue: UseFormSetValue<Order>;
-  defaultFormValue: Order;
+  setFormValue: UseFormSetValue<Order> | UseFormSetValue<OtherOrders>;
+  defaultFormValue: Order | OtherOrders;
   formBtnCtrls: FormButtonControls;
-  reset: UseFormReset<Order>;
+  reset: UseFormReset<Order> | UseFormReset<OtherOrders>;
+  setService: null | React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ConfirmOrderDialog = ({
@@ -35,6 +36,7 @@ const ConfirmOrderDialog = ({
   defaultFormValue,
   formBtnCtrls,
   reset,
+  setService,
 }: ConfirmOrderDialogProps) => {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
@@ -72,8 +74,23 @@ const ConfirmOrderDialog = ({
 
   const submission = useSubmitForm();
 
+  const resetForm = useCallback(
+    () => {
+      reset(defaultFormValue);
+      setPc("1");
+      setRemarks("");
+      height1.value = 120;
+      height2.value = 80;
+      height3.value = 80;
+      setIsOpen1(false);
+      setIsOpen2(false);
+      setIsOpen3(false);
+      setDialogOpen(false);
+    },[defaultFormValue])
+  
+
   const handleSubmit = useCallback(() => {
-    const fetchFormValue: FetchOrder = {
+    const fetchFormValue: Order = {
       orderType: formValue.orderType,
       tel: formValue.tel,
       building: formValue.building,
@@ -86,22 +103,13 @@ const ConfirmOrderDialog = ({
     };
     submission.mutate(fetchFormValue, {
       onSuccess: () => {
-        console.log("Form submitted successfully");
-        reset(defaultFormValue);
-        setPc("1");
-        setRemarks("");
-        height1.value = 120;
-        setIsOpen1(false);
-        height2.value = 80;
-        setIsOpen2(false);
-        height3.value = 80;
-        setIsOpen3(false);
-        setDialogOpen(false);
-        Alert.alert('成功落單👌')
+        resetForm();
+        if (setService) setService("");
+        Alert.alert(t("orderDialog.success"))
       },
       onError: (error) => {
         console.error("Error submitting form:", error, fetchFormValue);
-        Alert.alert(`請稍後再試`);
+        Alert.alert(t("orderDialog.error"),t("orderDialog.errorText"));
       },
     });
   }, [formValue, pc, remarks, isOpen1, isOpen2, isOpen3]);
@@ -119,7 +127,6 @@ const ConfirmOrderDialog = ({
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
-          // style={{ flex: 1 }}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView scrollEnabled={scroll} contentContainerStyle={styles.scrollContent}>

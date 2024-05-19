@@ -84,14 +84,14 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
       formValue.deliveryDateTime !== "" &&
       formValue.deliveryDateTime !== undefined;
 
-    const hasStep123Completed =
+    const hasAllStepsCompleted =
       hasAddress && hasPickupDateTime && hasDeliveryDateTime;
 
     return {
       hasAddress,
       hasPickupDateTime,
       hasDeliveryDateTime,
-      hasStep123Completed,
+      hasAllStepsCompleted,
     };
   }, [
     formValue.building,
@@ -104,7 +104,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const handleDialogOpen = () => {
-    if (formInputFlags.hasStep123Completed) {
+    if (formInputFlags.hasAllStepsCompleted) {
       setDialogIsOpen(true);
     } else {
       console.warn("Form is not yet completed.");
@@ -136,7 +136,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
         mode="contained"
         style={styles.confirmBtn}
         buttonColor={
-          formInputFlags.hasStep123Completed
+          formInputFlags.hasAllStepsCompleted
             ? Colors[colorScheme ?? "light"].text
             : Colors[colorScheme ?? "light"].secondary
         }

@@ -10,7 +10,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import Animated, { withSpring } from "react-native-reanimated";
 import { useDebounce } from "@/utils/useDebounce";
-import { FormButtonControls, FormInputFlags, Order } from "@/models";
+import { FormButtonControls, FormInputFlags, Order, OtherOrders } from "@/models";
 import dayjs from "dayjs";
 import RNDateTimePicker, {
   DateTimePickerEvent,
@@ -23,8 +23,8 @@ import { UseFormSetValue } from "react-hook-form";
 type PickupButtonProps = {
   formBtnCtrls: FormButtonControls;
   formInputFlags: FormInputFlags;
-  formValue: Order;
-  setFormValue: UseFormSetValue<Order>;
+  formValue: Order | OtherOrders;
+  setFormValue: UseFormSetValue<Order> | UseFormSetValue<OtherOrders>
 };
 
 const PickupButton: React.FC<PickupButtonProps> = ({
@@ -189,6 +189,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
         <RNDateTimePicker
           mode="date"
           disabled={!isOpen2}
+          collapsable={false}
           value={pickupDate}
           onChange={setDate}
           minimumDate={tomorrow}
@@ -213,7 +214,9 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           mode="time"
           value={pickupTime}
           disabled={!isOpen2}
+          collapsable={false}
           onChange={setTime}
+          
           accentColor={Colors[colorScheme ?? "light"].tint}
           textColor={Colors[colorScheme ?? "light"].text}
           positiveButton={{

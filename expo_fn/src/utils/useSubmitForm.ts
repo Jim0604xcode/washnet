@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { FetchOrder } from "@/models";
+import { Order } from "@/models";
 import { useAuth } from "@/context/AuthContext";
 
 const useSubmitForm = () => {
     const { authState } = useAuth();
     const submission = useMutation({
-      mutationFn: async (formData: FetchOrder) => {
+      mutationFn: async (formData: Order) => {
         try {
           const token = authState?.token;
           const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/order/addOrder`, {
