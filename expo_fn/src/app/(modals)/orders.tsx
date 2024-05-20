@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   },
   type: {
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: "700",
   },
   text: {
     fontSize: 16,

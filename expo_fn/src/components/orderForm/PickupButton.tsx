@@ -189,7 +189,6 @@ const PickupButton: React.FC<PickupButtonProps> = ({
         <RNDateTimePicker
           mode="date"
           disabled={!isOpen2}
-          collapsable={false}
           value={pickupDate}
           onChange={setDate}
           minimumDate={tomorrow}
@@ -214,7 +213,6 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           mode="time"
           value={pickupTime}
           disabled={!isOpen2}
-          collapsable={false}
           onChange={setTime}
           
           accentColor={Colors[colorScheme ?? "light"].tint}

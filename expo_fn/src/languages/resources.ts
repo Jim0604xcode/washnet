@@ -388,7 +388,7 @@ export const resources = {
         pw: "Laundry",
         dc: "Dry Cleaning",
         cs: "Alteration",
-        fw: "Home Textile Cleaning",
+        fw: "Household Textile Cleaning",
         lw: "Bag Cleaning",
         ws: "Shoe Cleaning",
         number: "Invoice Number: ",
