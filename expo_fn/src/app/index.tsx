@@ -71,7 +71,7 @@ const index = () => {
         }
       >
         <Animated.Image
-          source={require("@/assets/images/logo-p99.png")}
+          source={require("@/assets/images/logo-cn-p99.png")}
           style={[styles.logo, animation]}
         />
       </Suspense>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 210,
-    height: 70,
+    height: 50,
     resizeMode: "contain",
     flex: 1,
     marginBottom: 25

@@ -29,7 +29,7 @@ const LoginScreen = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
-  const { setLanguage } = useUser();
+  const { userState, setLanguage } = useUser();
 
   const toggleLanguage = useCallback(async() => {
     setLanguage!(i18n.language === "cn" ? 'eng' : 'cn');
@@ -67,10 +67,16 @@ const LoginScreen = () => {
           />
         }
       >
-        <Image
-          source={require("@/assets/images/logo-p99.png")}
-          style={styles.logo}
-        />
+        {userState?.lng === "cn" ?
+          <Image
+            source={require("@/assets/images/logo-cn-p99.png")}
+            style={styles.cn}
+          />:
+          <Image
+            source={require("@/assets/images/logo-eng-p99.png")}
+            style={styles.eng}
+          />
+        }
       </Suspense>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.intro}>
@@ -221,8 +227,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     padding: 20,
   },
-  logo: {
-    width: 180,
+  cn: {
+    width: 210,
+    height: 50,
+    resizeMode: "contain",
+  },
+  eng: {
+    width: 240,
     height: 60,
     resizeMode: "contain",
   },
