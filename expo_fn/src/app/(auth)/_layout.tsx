@@ -1,4 +1,5 @@
 import Colors from "@/constants/Colors";
+import { useUser } from "@/context/UserContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { Stack, Link } from "expo-router";
 import React from "react";
@@ -9,6 +10,7 @@ import { IconButton } from "react-native-paper";
 export default function AuthLayout() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const { userState } = useUser();
 
   return (
     <Stack>
@@ -27,10 +29,19 @@ export default function AuthLayout() {
           headerTitleAlign: "center",
           headerShadowVisible: false,
           headerTitle: () => (
-            <Image
-              source={require("@/assets/images/logo-p99.png")}
-              style={{ width: 100, height: 28 }}
-            />
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+            {userState?.lng === "cn" ?
+              <Image
+                source={require("@/assets/images/logo-cn-p99.png")}
+                style={{width: 120, height: 26, marginTop: 0}}
+              />
+            :
+              <Image
+                source={require("@/assets/images/logo-eng-p99.png")}
+                style={{width: 120, height: 36, marginTop: 4}}
+              />
+            }
+          </View>
           ),
           headerLeft: () => (
             <Link href="/login" asChild>

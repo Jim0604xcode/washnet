@@ -98,10 +98,6 @@ export default function TabLayout() {
          name='editAddress'
          options={{href: null}}
         />
-        {/* <Tabs.Screen
-         name='editPassword'
-         options={{href: null}}
-        /> */}
         <Tabs.Screen
          name='deleteUser'
          options={{href: null}}

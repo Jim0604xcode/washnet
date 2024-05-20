@@ -58,10 +58,16 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
       scrollEnabled={false}
     >
       <View style={styles.topBox}>
-        <Image
-          source={require("@/assets/images/logo.png")}
-          style={styles.img}
-        />
+        {userState?.lng === "cn" ?
+          <Image
+            source={require("@/assets/images/logo-cn.png")}
+            style={styles.cn}
+          />:
+          <Image
+            source={require("@/assets/images/logo-eng.png")}
+            style={styles.eng}
+          />
+        }
         <View style={styles.infoBox}>
           <Text
             style={[styles.infoText, 
@@ -132,22 +138,6 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
               color={color} />
           )}
         />
-        {/* <DrawerItem
-          label="更改密碼"
-          onPress={() => router.push("/(app)/(drawer)/password")}
-          focused={segment[2] === "password"}
-          style={styles.drawerItem}
-          activeBackgroundColor={Colors[colorScheme ?? "light"].tint}
-          activeTintColor={Colors[colorScheme ?? "light"].background}
-          inactiveTintColor={Colors[colorScheme ?? "light"].text}
-          labelStyle={{
-            fontWeight: "bold",
-            fontSize: 18,
-          }}
-          icon={({ color }) => (
-            <MaterialCommunityIcons name="key" size={20} color={color} />
-          )}
-        /> */}
         <DrawerItem
           label={t('drawer.delete')}
           onPress={() => router.push("/deleteUser")}
@@ -205,6 +195,7 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
 
 export default function AppLayout() {
   const colorScheme = useColorScheme();
+  const { userState } = useUser();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
@@ -214,12 +205,25 @@ export default function AppLayout() {
               backgroundColor: Colors[colorScheme ?? "light"].background,
               shadowColor: "transparent",
             },
+            headerTitleContainerStyle: {
+              height: 40,
+            },
             headerTitle: () => (
-              <Image
-                source={require("@/assets/images/logo.png")}
-                style={{ width: 100, height: 28 }}
-              />
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                {userState?.lng === "cn" ?
+                  <Image
+                    source={require("@/assets/images/logo-cn.png")}
+                    style={{width: 120, height: 26, marginTop: 4}}
+                  />
+                :
+                  <Image
+                    source={require("@/assets/images/logo-eng.png")}
+                    style={{width: 120, height: 36, marginTop: 4}}
+                  />
+                }
+              </View>
             ),
+
             headerTintColor: Colors[colorScheme ?? "light"].text,
             drawerType: "slide",
             headerShown: useClientOnlyValue(false, true),
@@ -260,9 +264,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
   },
-  img: { 
-    width: 150,
-    height: 42,
+  cn: { 
+    width: 170,
+    height: 40,
+  },
+  eng: {
+    width: 170,
+    height: 40,
   },
   infoText: {
     fontSize: 16,
