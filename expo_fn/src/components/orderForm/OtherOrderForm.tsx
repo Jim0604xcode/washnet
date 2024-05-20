@@ -3,7 +3,7 @@ import { StyleSheet, View, useColorScheme } from "react-native";
 import { Button, SegmentedButtons } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { useForm } from "react-hook-form";
-import { Order, FormButtonControls, FormInputFlags, OrderType } from "@/models";
+import { Order, FormButtonControls, OrderType, OtherOrders, OtherFormInputFlags } from "@/models";
 import AddressButton from "@/components/orderForm/AddressButton";
 import PickupButton from "@/components/orderForm/PickupButton";
 import { useSharedValue } from "react-native-reanimated";
@@ -19,10 +19,10 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
   const colorScheme = useColorScheme();
   const { userState } = useUser();
   const { t } = useTranslation();
-  const [service, setService] = useState("lw");
+  const [service, setService] = useState("");
 
-  const defaultValues: Order = {
-    orderType: orderType[0],
+  const defaultValues: OtherOrders = {
+    orderType: undefined,
     pc: 1,
     pickupDateTime: "",
     deliveryDateTime: "",
@@ -70,7 +70,9 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
     [height1, height2, height3, isOpen1, isOpen2, isOpen3]
   );
 
-  const formInputFlags: FormInputFlags = useMemo(() => {
+  const formInputFlags: OtherFormInputFlags = useMemo(() => {
+    const hasOrderType = formValue.orderType !== undefined; 
+
     const hasAddress =
       formValue.building !== "" &&
       formValue.building !== undefined &&
@@ -86,16 +88,18 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
       formValue.deliveryDateTime !== "" &&
       formValue.deliveryDateTime !== undefined;
 
-    const hasStep123Completed =
+    const hasAllStepsCompleted = hasOrderType &&
       hasAddress && hasPickupDateTime && hasDeliveryDateTime;
 
     return {
+      hasOrderType,
       hasAddress,
       hasPickupDateTime,
       hasDeliveryDateTime,
-      hasStep123Completed,
+      hasAllStepsCompleted,
     };
   }, [
+    formValue.orderType,
     formValue.building,
     formValue.street,
     formValue.district,
@@ -106,10 +110,10 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const handleDialogOpen = () => {
-    if (formInputFlags.hasStep123Completed) {
+    if (formInputFlags.hasAllStepsCompleted) {
       setDialogIsOpen(true);
     } else {
-      console.warn("Form is not yet completed.");
+      console.log("Form is not yet completed.");
     }
   };
 
@@ -139,7 +143,6 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
             icon: "briefcase",
             onPress: () => {
               setValue("orderType", OrderType.BAGS);
-              // setService("lw");
             }        
           },
           { value: "fw",
@@ -147,7 +150,6 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
             icon: "bed",
             onPress: () => {
               setValue("orderType", OrderType.HOME_TEXTILES);
-              // setService("fw");
             }
           },
           { value: "ws",
@@ -155,7 +157,6 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
             icon: "shoe-sneaker",
             onPress: () => {
               setValue("orderType", OrderType.SHOES);
-              // setService("ws");
             }
           },
         ]}
@@ -183,7 +184,7 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
         mode="contained"
         style={styles.confirmBtn}
         buttonColor={
-          formInputFlags.hasStep123Completed
+          formInputFlags.hasAllStepsCompleted
             ? Colors[colorScheme ?? "light"].text
             : Colors[colorScheme ?? "light"].secondary
         }
@@ -191,7 +192,7 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
           color: Colors[colorScheme ?? "light"].background,
         }}
         onPress={handleDialogOpen}
-      >
+      > 
         {t("orderForm.confirmOrder")}
       </Button>
       <ConfirmOrderDialog
@@ -202,6 +203,7 @@ const OtherOrderForm: React.FC<OrderFormProps> = ({ orderType }) => {
         defaultFormValue={defaultValues}
         formBtnCtrls={formBtnCtrls}
         reset={reset}
+        setService={setService}
       />
     </View>
   );

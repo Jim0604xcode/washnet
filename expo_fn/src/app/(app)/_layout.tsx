@@ -12,6 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Divider } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@/context/UserContext";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function CustomDrawerContent(props:  DrawerContentComponentProps) {
   const colorScheme = useColorScheme();
@@ -21,6 +22,7 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
   const router = useRouter();
   const segment = useSegments();
   const [isCn, setIsCn] = React.useState(true);
+  const { top, bottom } = useSafeAreaInsets();
 
   const onToggleSwitch = useCallback(async() => {
     setIsCn(!isCn);
@@ -48,49 +50,53 @@ function CustomDrawerContent(props:  DrawerContentComponentProps) {
     <DrawerContentScrollView
       {...props}
       contentContainerStyle={[
-        styles.container,
-        { backgroundColor: Colors[colorScheme ?? "light"].surfaceContainerHL },
+        styles.container, {
+          paddingTop: (top>30)?(top+4):(top>20)?(top+10):(top+20),
+          paddingBottom: (bottom>0)?(bottom):(bottom+20),
+          backgroundColor: Colors[colorScheme ?? "light"].surfaceContainerHL }
       ]}
       scrollEnabled={false}
     >
-      <View style={styles.infoBox}>
+      <View style={styles.topBox}>
         <Image
           source={require("@/assets/images/logo.png")}
           style={styles.img}
         />
-        <Text
-          style={[styles.infoText, 
-            { color: Colors[colorScheme ?? "light"].tint },
-          ]}
-        >
-          {userState?.mobile}
-        </Text>
-        {(userState?.address) ? (
-          <View style={styles.address}>
-            <Text
-              style={[styles.infoText, 
-                { color: Colors[colorScheme ?? "light"].tint },
-              ]}
-            >
-              {userState?.address?.district}{", "}
-            </Text>
-            <Text
-              style={[styles.infoText, 
-                { color: Colors[colorScheme ?? "light"].tint },
-              ]}
-            >
-              {userState?.address?.street}{", "}
-            </Text>
-            <Text
-              style={[styles.infoText, 
-                { color: Colors[colorScheme ?? "light"].tint },
-              ]}
-            >
-              {userState?.address?.building}
-            </Text>
-          </View>
-          ) : ( <Text>👋</Text>)
-          }
+        <View style={styles.infoBox}>
+          <Text
+            style={[styles.infoText, 
+              { color: Colors[colorScheme ?? "light"].tint },
+            ]}
+          >
+            {userState?.mobile}
+          </Text>
+          {(userState?.address) ? (
+            <View style={styles.address}>
+              <Text
+                style={[styles.infoText, 
+                  { color: Colors[colorScheme ?? "light"].tint },
+                ]}
+              >
+                {userState?.address?.district}{", "}
+              </Text>
+              <Text
+                style={[styles.infoText, 
+                  { color: Colors[colorScheme ?? "light"].tint },
+                ]}
+              >
+                {userState?.address?.street}{", "}
+              </Text>
+              <Text
+                style={[styles.infoText, 
+                  { color: Colors[colorScheme ?? "light"].tint },
+                ]}
+              >
+                {userState?.address?.building}
+              </Text>
+            </View>
+            ) : ( <Text>👋</Text>)
+            }
+        </View>
       </View>
       <Divider style={[styles.divider, {backgroundColor: Colors[colorScheme ?? "light"].outline}]} />
       <View style={styles.itemBox}>
@@ -217,7 +223,6 @@ export default function AppLayout() {
             headerTintColor: Colors[colorScheme ?? "light"].text,
             drawerType: "slide",
             headerShown: useClientOnlyValue(false, true),
-            drawerHideStatusBarOnOpen: true,
             headerRight: () => (
               <Link href="/orders" asChild>
                 <Pressable>
@@ -244,17 +249,16 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 10,
   },
-  bottomBox: {
-    justifyContent: "space-between",
-    paddingBottom: 60,
-    flex: 0.5,
-  },
-  infoBox: {
+  topBox: {
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 20,
     paddingHorizontal: 20,
-    flex: 0.5
+    flex: 1
+  },
+  infoBox: {
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   img: { 
     width: 150,
@@ -271,8 +275,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: '100%',
   },
+  divider: {
+    marginHorizontal: 20,
+    marginTop: 20,
+  },
   itemBox: {
-    flex: 1,
+    flex: 2,
   },
   drawerItem: {
     paddingLeft: 20,
@@ -281,15 +289,16 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
-  divider: {
-    marginHorizontal: 20,
-    marginTop: 20,
+  bottomBox: {
+    justifyContent: "space-between",
+    flex: 1,
   },
   switchBox: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 10
+    gap: 10,
+    paddingBottom: 20
   },
   switch: {
     alignSelf: 'center',

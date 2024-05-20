@@ -4,10 +4,12 @@ import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const { bottom } = useSafeAreaInsets();
   
   const tabData = useMemo(() => [
     { name: 'laundry',
@@ -15,7 +17,6 @@ export default function TabLayout() {
       icon: (color: string) => (
         <MaterialCommunityIcons
           name="scale"
-          style={{ marginBottom: -8 }}
           size={26} 
           color={color}
         />
@@ -26,7 +27,6 @@ export default function TabLayout() {
       icon: (color: string) => (
         <MaterialIcons
           name="dry-cleaning"
-          style={{ marginBottom: -8 }}
           size={26}
           color={color}
         />
@@ -37,7 +37,6 @@ export default function TabLayout() {
       icon: (color: string) => (
         <MaterialCommunityIcons
           name="scissors-cutting"
-          style={{ marginBottom: -8 }}
           size={26}
           color={color}
         />
@@ -48,7 +47,6 @@ export default function TabLayout() {
       icon: (color: string) => (
         <Entypo
           name="water"
-          style={{ marginBottom: -8 }}
           size={22}
           color={color}
         />
@@ -69,17 +67,16 @@ export default function TabLayout() {
           backgroundColor: Colors[colorScheme ?? 'light'].primary,
           borderTopWidth: 0,
           marginHorizontal: 15,
-          marginBottom: 22,
-          borderTopLeftRadius: 14,
-          borderTopRightRadius: 14,
-          borderBottomStartRadius: 14,
-          borderBottomEndRadius: 14,
+          marginBottom: (bottom>20)?(bottom-13):
+            (bottom>0)?(bottom):(bottom+4),
+          borderRadius: 14,
           paddingHorizontal: 10,
           height: 66
         },
         tabBarItemStyle: {
           padding: 0,
-          marginBottom: -16,
+          gap: -8,
+          marginBottom: (bottom>0)?(-bottom+16):(-bottom+12),
         }
       }}
     >

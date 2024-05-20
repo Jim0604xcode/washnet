@@ -21,7 +21,7 @@ export type Order = {
   remarks: string;
 };
 
-export type FetchOrder = Omit<Order, 'fullAddress'>;
+export type OtherOrders = Omit<Order, 'orderType'> & Partial<Pick<Order, 'orderType'>>;
 
 export type FormButtonControls = {
   height1: SharedValue<number>;
@@ -39,8 +39,10 @@ export type FormInputFlags = {
   hasAddress: boolean;
   hasPickupDateTime: boolean;
   hasDeliveryDateTime: boolean;
-  hasStep123Completed: boolean;
+  hasAllStepsCompleted: boolean;
 };
+
+export type OtherFormInputFlags = FormInputFlags & { hasOrderType: boolean }
 
 export interface LoginResponse {
   data: {
