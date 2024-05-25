@@ -5,6 +5,8 @@ import { IOrderController } from "../routes/routes";
 
 import { orderService } from "../service/orderService";
 import { JWT } from "../../jwt";
+import { Twilio } from "twilio";
+import { env_config } from "../../env";
 type Status = "w_pickup" | "w_delivery" | "complete"
 type OrderType = "pw"|"dc"|"ws"|"lw"|"cs"|"fw"
 
@@ -49,17 +51,27 @@ export class OrderController implements IOrderController{
                 customer_id:jwt.usersId,
                 // customer_id:'dKZ7MVCGhCc9kJ1JYeob6qXlYcF3',
             })
-                res.json({
-                    data:null,
-                    isErr:false,
-                    errMess:null
-                })
+            const accountSid = env_config.TWILIO_SID;
+            const authToken = env_config.TWILIO_TOKEN;
+            const client = new Twilio(accountSid, authToken);
+            client.messages
+            .create({
+            from: '+12182824605',
+            to: '+85259178802',
+            body: `New Order from mobile: ${orderData.tel}!`,
+            }).catch((err:any) => {
+                // You can implement your fallback code here
+                throw new Error(err.messages)
+            });
+            res.json({
+                data:null,
+                isErr:false,
+                errMess:null
+            })
         }catch(err){
             errorHandler(err,req,res)
         }
     }
-
-    
     async getUserAllOrder(req:express.Request,res:express.Response){
         try {
             let jwt = res.locals.jwt as JWT

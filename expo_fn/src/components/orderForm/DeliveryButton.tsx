@@ -41,6 +41,8 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
   } = formBtnCtrls;
 
   const { hasAddress, hasPickupDateTime, hasDeliveryDateTime } = formInputFlags;
+  const [dateIsOpen,setDateIsOpen] = useState(false)
+  const [TimeIsOpen,setTimeIsOpen] = useState(false)
   
  const cbHandlePress3 = useCallback(() => {
   if (!isOpen3) {
@@ -151,7 +153,13 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           </Text>
         </TouchableOpacity>
 
+      
+      
+      
+      
+      
       <View style={[styles.dateTimeInput, {opacity: isOpen3 ? 1 : 0}]}>
+      {dateIsOpen && 
         <RNDateTimePicker
           mode="date"
           disabled={!isOpen3}
@@ -165,6 +173,8 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           negativeButton={{label: t('orderForm.cancel'), textColor: Colors[colorScheme?? 'light'].outline}}
           locale={t('orderForm.locale')}
         />
+      }
+       {TimeIsOpen && 
         <RNDateTimePicker
           mode="time"
           value={deliveryTime}
@@ -177,6 +187,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           negativeButton={{label: t('orderForm.cancel'), textColor: Colors[colorScheme?? 'light'].outline}}
           minuteInterval={30}
         />
+       }
         <IconButton 
           icon={'close'} 
           iconColor={Colors[colorScheme?? 'light'].outline}

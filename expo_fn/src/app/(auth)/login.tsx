@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -49,7 +50,9 @@ const LoginScreen = () => {
   };
 
   return (
+    
     <SafeAreaView
+
       style={[
         styles.container,
         { backgroundColor: Colors[colorScheme ?? "light"].primary,
@@ -57,6 +60,9 @@ const LoginScreen = () => {
          },
       ]}
     >
+      <ScrollView contentContainerStyle={{flexGrow: 1}}
+  keyboardShouldPersistTaps='handled'
+>
       <StatusBar style="dark" />
       <Suspense
         fallback={
@@ -216,7 +222,9 @@ const LoginScreen = () => {
       >
         {t("login.login")}
       </Button>
+      </ScrollView>
     </SafeAreaView>
+ 
   );
 };
 

@@ -389,3 +389,8 @@ ion-item.active{
 ion-toolbar#adminMenu{
   --background: var(--xltblue-el-color);
 }
+
+ion-menu.collapse{
+  min-width: 150px;
+  max-width: 150px;
+}

@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   View,
   useColorScheme,
+  Platform,
 } from "react-native";
+import { Button } from "react-native-paper";
 import { Text } from "@/components/Themed";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
@@ -48,7 +50,8 @@ const PickupButton: React.FC<PickupButtonProps> = ({
   } = formBtnCtrls;
   
   const { hasAddress, hasPickupDateTime, hasDeliveryDateTime } = formInputFlags;
-
+  const [dateIsOpen,setDateIsOpen] = useState(false)
+  const [TimeIsOpen,setTimeIsOpen] = useState(false)
   const cbHandlePress2 = useCallback(() => {
     if (isOpen2 === false) {
       height2.value = withSpring(175, { damping: 15 });
@@ -106,6 +109,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           .format("YYYY-MM-DD ddd h:mm A");
         setFormValue('pickupDateTime', combinedDateTime );
       }
+      setDateIsOpen(false)
     },
     [pickupDate, pickupTime, setFormValue]
   );
@@ -183,9 +187,27 @@ const PickupButton: React.FC<PickupButtonProps> = ({
         </Text>
       </TouchableOpacity>
 
+
+            
       <View
         style={[styles.dateTimeInput, { opacity: isOpen2 ? 1 : 0 }]}
       >
+        
+        {!dateIsOpen || Platform.OS === "android" &&
+        <Button
+        icon="cancel"
+        // style={styles.button}
+        mode="contained"
+        buttonColor={Colors[colorScheme ?? "light"].text}
+        labelStyle={{
+          color: Colors[colorScheme ?? "light"].background,
+        }}
+        onPress={()=>setDateIsOpen(true)}
+      >
+        {t("deleteUser.delete")}
+      </Button>
+        }
+        {dateIsOpen &&  
         <RNDateTimePicker
           mode="date"
           disabled={!isOpen2}
@@ -210,29 +232,34 @@ const PickupButton: React.FC<PickupButtonProps> = ({
           }}
           locale={t('orderForm.locale')}
         />
+        }
+
+        {TimeIsOpen && 
         <RNDateTimePicker
-          mode="time"
-          value={pickupTime}
-          disabled={!isOpen2}
-          collapsable={false}
-          onChange={setTime}
-          
-          accentColor={Colors[colorScheme ?? "light"].tint}
-          textColor={Colors[colorScheme ?? "light"].text}
-          positiveButton={{
-            label: t('orderForm.confirm'),
-            textColor: Colors[colorScheme ?? "light"].tint,
-          }}
-          neutralButton={{
-            label: t('orderForm.reset'),
-            textColor: Colors[colorScheme ?? "light"].outline,
-          }}
-          negativeButton={{
-            label: t('orderForm.cancel'),
-            textColor: Colors[colorScheme ?? "light"].outline,
-          }}
-          minuteInterval={30}
+        mode="time"
+        value={pickupTime}
+        disabled={!isOpen2}
+        collapsable={false}
+        onChange={setTime}
+        
+        accentColor={Colors[colorScheme ?? "light"].tint}
+        textColor={Colors[colorScheme ?? "light"].text}
+        positiveButton={{
+          label: t('orderForm.confirm'),
+          textColor: Colors[colorScheme ?? "light"].tint,
+        }}
+        neutralButton={{
+          label: t('orderForm.reset'),
+          textColor: Colors[colorScheme ?? "light"].outline,
+        }}
+        negativeButton={{
+          label: t('orderForm.cancel'),
+          textColor: Colors[colorScheme ?? "light"].outline,
+        }}
+        minuteInterval={30}
         />
+        }
+        
         <IconButton
           icon={"close"}
           iconColor={Colors[colorScheme ?? "light"].outline}

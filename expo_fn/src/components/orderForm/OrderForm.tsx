@@ -155,6 +155,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
         defaultFormValue={defaultValues}
         formBtnCtrls={formBtnCtrls}
         reset={reset}
+        setService={null}
       />
     </View>
   );
