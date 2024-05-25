@@ -44,7 +44,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
   
  const cbHandlePress3 = useCallback(() => {
   if (!isOpen3) {
-    height3.value = withSpring(175, { damping: 17 });
+    height3.value = withSpring(250, { damping: 17 });
   } else if (isOpen3) {
     hasDeliveryDateTime ? 
       (height3.value = withSpring(110, { damping: 15 }))
@@ -152,9 +152,10 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
         </TouchableOpacity>
 
       <View style={[styles.dateTimeInput, {opacity: isOpen3 ? 1 : 0}]}>
+        {/* { isOpen3 && (<>
         <RNDateTimePicker
           mode="date"
-          disabled={!isOpen3}
+          // disabled={!isOpen3}
           value={deliveryDate}
           onChange={setDate}
           minimumDate={dayAfterPickup ?? dayAfterTomorrow}
@@ -168,7 +169,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
         <RNDateTimePicker
           mode="time"
           value={deliveryTime}
-          disabled={!isOpen3}
+          // disabled={!isOpen3}
           onChange={setTime}
           accentColor={Colors[colorScheme?? 'light'].tint}
           textColor={Colors[colorScheme?? 'light'].text}
@@ -176,7 +177,9 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
           neutralButton={{label: t('orderForm.reset'), textColor: Colors[colorScheme?? 'light'].outline}}
           negativeButton={{label: t('orderForm.cancel'), textColor: Colors[colorScheme?? 'light'].outline}}
           minuteInterval={30}
-        />
+          />
+          </>)
+        } */}
         <IconButton 
           icon={'close'} 
           iconColor={Colors[colorScheme?? 'light'].outline}
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
   surface: {
     flex: 1,
     minHeight: 80,
-    maxHeight: 175,
+    maxHeight: 250,
     borderRadius: 14,
     paddingVertical: 20,
     paddingLeft: 20,

@@ -132,6 +132,9 @@ export const resources = {
         cancel: "取消",
         locale: "zh",
         delivery: "送回衣服時間",
+        am: "上午",
+        pm: "下午",
+        ev: "傍晚"
       },
       orderDialog: {
         confirmOrder: "請確認訂單",
@@ -366,6 +369,9 @@ export const resources = {
         cancel: "Cancel",
         locale: "en",
         delivery: "Clothes Delivery",
+        am: "AM",
+        pm: "PM",
+        ev: "Evening"
       },
       orderDialog: {
         confirmOrder: "Confirm Your Order",

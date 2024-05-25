@@ -37,6 +37,7 @@
     "react-hook-form": "^7.51.3",
     "react-i18next": "^14.1.1",
     "react-native": "0.73.6",
+    "react-native-bouncy-checkbox": "^4.0.1",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-paper": "^5.12.3",
     "react-native-reanimated": "~3.6.2",
