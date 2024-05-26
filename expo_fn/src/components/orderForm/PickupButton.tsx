@@ -53,7 +53,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
 
   const cbHandlePress2 = useCallback(() => {
     if (isOpen2 === false) {
-      height2.value = withSpring(220, { damping: 15 });
+      height2.value = withSpring(Platform.OS === "ios" ? 250 : 220, { damping: 15 });
     } else if (isOpen2 === true) {
       hasPickupDateTime
         ? (height2.value = withSpring(110, { damping: 15 }))
@@ -235,7 +235,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
             textColor={Colors[colorScheme ?? "light"].text}
             display="spinner"
             locale={t('orderForm.locale')}
-            style={{height: 50, width: 'auto'}}
+            style={{height: 90, width: 'auto'}}
           />) 
           : (null)
         }
@@ -261,7 +261,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
            }}
           disabled={!isOpen2}
         >
-            選擇日期
+            {t('orderForm.date')}
         </Button>
         ) : (null)
       }
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
   surface: {
     flex: 1,
     minHeight: 80,
-    maxHeight: 220,
+    maxHeight: 250,
     borderRadius: 14,
     paddingHorizontal: 24,
     paddingVertical: 20,

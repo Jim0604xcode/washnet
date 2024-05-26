@@ -4,6 +4,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -95,6 +96,9 @@ const RegisterScreen = () => {
   }, [segment]);
 
   return (
+    <ScrollView contentContainerStyle={{flexGrow: 1}}
+  keyboardShouldPersistTaps='handled'
+>
     <View
       style={[
         styles.container,
@@ -546,6 +550,7 @@ const RegisterScreen = () => {
           : t('register.register')}
       </Button>
     </View>
+    </ScrollView>
   );
 };
 

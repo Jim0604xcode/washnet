@@ -17,7 +17,9 @@ export const env_config = {
   POSTGRES_USER_TEST: '',
   POSTGRES_PASSWORD_TEST: '',
   PORTAL_HOST:'',
-  EMAIL_KEY:''
+  EMAIL_KEY:'',
+  TWILIO_SID:'',
+  TWILIO_TOKEN:''
 };
 
 populateEnv(env_config, { mode: 'halt' });

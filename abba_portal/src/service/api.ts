@@ -255,6 +255,9 @@ export async function login(data: LoginFormState,setRoleState:SetterOrUpdater<{
       let json = await res.json()
       console.log(json)
       if(!json.isErr){
+        if(json.data.role==="customer"){
+          throw new Error("Your role have no rigth to access")
+        }
         sweetAlert.fire({
         icon: 'success',
         title: 'Message',
@@ -312,7 +315,12 @@ export async function getCurrentUser(cbRoleFunc:(currentRole:string)=>void){
         let json = await res.json()
         
         if(!json.isErr){
-          cbRoleFunc(json.data.role)
+          if(json.data.role==="customer"){
+            cbRoleFunc("guest")
+          }else{
+            cbRoleFunc(json.data.role)
+          }
+          
           
         }else{
             

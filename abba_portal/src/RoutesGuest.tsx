@@ -66,11 +66,11 @@ const RoutesGuest: React.FC = () => {
         </IonRouterOutlet>
 
         <IonTabBar className="footer" slot="bottom">
-          <IonTabButton onClick={()=>setActive(0)} tab="G-laundryService" href="/G-laundryService">
+          {/* <IonTabButton onClick={()=>setActive(0)} tab="G-laundryService" href="/G-laundryService"> */}
             {/* <IonIcon aria-hidden="true" icon={square} /> */}
-            <IonImg className="img" src={active===0 ? "assets/icon/fthome_active.png" : "assets/icon/fthome.png"}></IonImg>
+            {/* <IonImg className="img" src={active===0 ? "assets/icon/fthome_active.png" : "assets/icon/fthome.png"}></IonImg> */}
             {/* <IonLabel>{getLanguage.language.guestFooterBtn1}</IonLabel> */}
-          </IonTabButton>
+          {/* </IonTabButton> */}
           <IonTabButton onClick={()=>setActive(1)} tab="G-setting" href="/G-setting">
             {/* <IonIcon aria-hidden="true" icon={square} /> */}
             <IonImg className="img" src={active===1 ? "assets/icon/ftcustomer_active.png" : "assets/icon/ftcustomer.png"}></IonImg>

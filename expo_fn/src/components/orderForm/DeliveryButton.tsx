@@ -45,10 +45,12 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
   } = formBtnCtrls;
 
   const { hasAddress, hasPickupDateTime, hasDeliveryDateTime } = formInputFlags;
+  const [dateIsOpen,setDateIsOpen] = useState(false)
+  const [TimeIsOpen,setTimeIsOpen] = useState(false)
   
  const cbHandlePress3 = useCallback(() => {
   if (!isOpen3) {
-    height3.value = withSpring(250, { damping: 17 });
+    height3.value = withSpring(Platform.OS === "ios" ? 250 : 220, { damping: 17 });
   } else if (isOpen3) {
     hasDeliveryDateTime ? 
       (height3.value = withSpring(110, { damping: 15 }))
@@ -201,7 +203,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
             textColor={Colors[colorScheme ?? "light"].text}
             display="spinner"
             locale={t('orderForm.locale')}
-            style={{height: 50, width: 'auto'}}
+            style={{height: 90, width: 'auto'}}
           />) 
           : (null)
         }
@@ -227,7 +229,7 @@ const DeliveryButton: React.FC<DeliveryButtoProps> = ({
            }}
           disabled={!isOpen3}
         >
-            選擇日期
+          {t('orderForm.date')}
         </Button>
         ) : (null)
       }
@@ -319,7 +321,7 @@ const styles = StyleSheet.create({
   surface: {
     flex: 1,
     minHeight: 80,
-    maxHeight: 220,
+    maxHeight: 250,
     borderRadius: 14,
     paddingVertical: 20,
     paddingLeft: 20,

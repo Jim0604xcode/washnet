@@ -134,7 +134,8 @@ export const resources = {
         delivery: "送回衣服時間",
         am: "上午",
         pm: "下午",
-        ev: "傍晚"
+        ev: "傍晚",
+        date: "請選擇日期"
       },
       orderDialog: {
         confirmOrder: "請確認訂單",
@@ -142,7 +143,7 @@ export const resources = {
         address: "地址：",
         pickup: "收衫時間：",
         delivery: "送衫時間：",
-        pc: "衣服袋數",
+        pc: "數量",
         pcPlaceholder: "需要清洗幾袋衣服？",
         remarks: "備註（選填）",
         remarksPlaceholder: "有其他事項需要本店注意嗎？",
@@ -371,7 +372,8 @@ export const resources = {
         delivery: "Clothes Delivery",
         am: "AM",
         pm: "PM",
-        ev: "Evening"
+        ev: "Evening",
+        date: "Choose the date"
       },
       orderDialog: {
         confirmOrder: "Confirm Your Order",
@@ -379,7 +381,7 @@ export const resources = {
         address: "Address: ",
         pickup: "Pickup: ",
         delivery: "Delivery: ",
-        pc: "Quantity (in bags)",
+        pc: "Quantity",
         pcPlaceholder: "How many bags of clothes to wash?",
         remarks: "Remarks (Optional)",
         remarksPlaceholder: "Anything else to take notice?",

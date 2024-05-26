@@ -73,14 +73,16 @@ const RoutesCustomer: React.FC = () => {
         </IonRouterOutlet>
 
         <IonTabBar className="footer" slot="bottom">
-          <IonTabButton className={active===0 ? "active" : ""} onClick={()=>setActive(0)} tab="A-orderSystem" href="/A-orderSystem">
-            {/* <IonIcon aria-hidden="true" icon={square} /> */}
-            <IonLabel>{getLanguage.language.aos.header}</IonLabel>
-          </IonTabButton>
           <IonTabButton className={active===1 ? "active" : ""} onClick={()=>setActive(1)} tab="A-themeSystem" href="/A-themeSystem">
             {/* <IonIcon aria-hidden="true" icon={square} /> */}
             <IonLabel>{getLanguage.language.as.header}</IonLabel>
           </IonTabButton>
+          
+          <IonTabButton className={active===0 ? "active" : ""} onClick={()=>setActive(0)} tab="A-orderSystem" href="/A-orderSystem">
+            {/* <IonIcon aria-hidden="true" icon={square} /> */}
+            <IonLabel>{getLanguage.language.aos.header}</IonLabel>
+          </IonTabButton>
+          
           <IonTabButton className={active===2 ? "active" : ""} onClick={()=>setActive(2)} tab="A-staffSystem" href="/A-staffSystem">
             {/* <IonIcon aria-hidden="true" icon={square} /> */}
             <IonLabel>{getLanguage.language.ass.header}</IonLabel>

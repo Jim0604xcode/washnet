@@ -1,5 +1,11 @@
 import {atom, SetterOrUpdater} from 'recoil';
 
+export type Collapse = boolean
+
+export const collapseState = atom<Collapse>({
+  key: 'collapseState',
+  default: false
+});
 
 export const roleState = atom<{role:string|null}>({
   key: 'roleState',
@@ -52,7 +58,6 @@ export const languageState = atom<Language>({
     require:"cn",   
   },
 });
-
 
 
 
