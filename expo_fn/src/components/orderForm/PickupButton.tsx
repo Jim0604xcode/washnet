@@ -92,7 +92,6 @@ const PickupButton: React.FC<PickupButtonProps> = ({
 
   const handlePress2 = useDebounce(() => {
     cbHandlePress2();
-    setShowDatePicker(!showDatePicker)
   }, 100);
 
   const tomorrow = dayjs().add(1, "days").toDate();
@@ -100,7 +99,6 @@ const PickupButton: React.FC<PickupButtonProps> = ({
 
   const [pickupDate, setPickupDate] = useState<Date>(tomorrow);
   // const [pickupTime, setPickupTime] = useState<Date>(tomorrow);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [pickupTime, setPickupTime] = useState({
     AM: false,
     PM: false,
@@ -122,14 +120,14 @@ const PickupButton: React.FC<PickupButtonProps> = ({
   const setDate = useCallback(
     (event: DateTimePickerEvent, selectedDate?: Date) => {
       const currentDate = selectedDate || pickupDate;
-      
       setPickupDate(currentDate); // Update the date state
       const truePickupTime = getTruePickupKey(pickupTime);
       if (event.type === "set") {
         if (truePickupTime) {
-        const combinedDateTime = `${dayjs(currentDate).format("YYYY-MM-DD ddd")} ${truePickupTime}`;
-        setFormValue('pickupDateTime', combinedDateTime)
-         }
+          const combinedDateTime =
+           `${dayjs(currentDate).format("YYYY-MM-DD ddd")} ${truePickupTime}`;
+          setFormValue('pickupDateTime', combinedDateTime)
+        }
       };
     }, [pickupDate, pickupTime.AM, pickupTime.PM, pickupTime.EV, setFormValue]
   );
@@ -166,9 +164,9 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       value: pickupDate,
       onChange: setDate,
       mode: "date",
+      display: "spinner",
       minimumDate: tomorrow,
       maximumDate: dayBeforeDelivery ? dayBeforeDelivery : twoWeeksFromNow,
-
       positiveButton: {
         label: t('orderForm.confirm'),
         textColor: Colors[colorScheme ?? "light"].tint,
@@ -176,7 +174,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
       negativeButton: {
         label: t('orderForm.cancel'),
         textColor: Colors[colorScheme ?? "light"].outline,
-      }
+      },
   
   })}, [pickupDate, setDate, tomorrow, dayBeforeDelivery, twoWeeksFromNow]);
 
