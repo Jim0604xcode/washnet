@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View, useColorScheme } from "react-native";
-import { Button, SegmentedButtons, Surface, shadow } from "react-native-paper";
+import { Button } from "react-native-paper";
 import Colors from "@/constants/Colors";
 import { useForm } from "react-hook-form";
 import { Order, FormButtonControls, FormInputFlags, OrderType } from "@/models";
@@ -32,18 +32,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
     district: userState?.address?.district || "",
     remarks: "",
   };
-
   const { control, handleSubmit, watch, reset, setValue } = useForm<Order>({defaultValues});
-
-  useEffect(() => {
-    if (userState?.mobile && userState?.address) {
-      setValue("tel", userState.mobile);
-      setValue("building", userState.address.building);
-      setValue("street", userState.address.street);
-      setValue("district", userState.address.district);
-    }
-  }, [userState?.mobile, userState?.address, setValue]);
-
   const formValue = watch();
 
   const height1 = useSharedValue(120);
@@ -52,6 +41,7 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
+  const [initMaxHeight, setInitMaxHeight ] = useState(80);
 
   const formBtnCtrls: FormButtonControls = useMemo(
     () => ({
@@ -103,13 +93,24 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
-  const handleDialogOpen = () => {
+  const handleDialogOpen = useCallback(() => {
     if (formInputFlags.hasAllStepsCompleted) {
       setDialogIsOpen(true);
     } else {
       console.warn("Form is not yet completed.");
     }
-  };
+  },[formInputFlags.hasAllStepsCompleted]);
+
+  useEffect(() => {
+    if (userState?.mobile && userState?.address) {
+      setValue("tel", userState.mobile);
+      setValue("building", userState.address.building);
+      setValue("street", userState.address.street);
+      setValue("district", userState.address.district);
+    }
+  }, [userState?.mobile, userState?.address, setValue]);
+
+  useEffect(()=>setInitMaxHeight(250),[]);
 
   return (
     <View style={styles.formBox}>
@@ -124,12 +125,14 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
         formInputFlags={formInputFlags}
         formValue={formValue}
         setFormValue={setValue}
+        initMaxHeight={initMaxHeight}
       />
       <DeliveryButton
         formBtnCtrls={formBtnCtrls}
         formInputFlags={formInputFlags}
         formValue={formValue}
         setFormValue={setValue}
+        initMaxHeight={initMaxHeight}
       />
       <Button
         icon="playlist-check"

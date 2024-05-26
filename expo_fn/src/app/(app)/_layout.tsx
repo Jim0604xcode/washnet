@@ -207,23 +207,24 @@ export default function AppLayout() {
             },
             headerTitleContainerStyle: {
               height: 40,
+              alignSelf: 'center'
             },
+            headerTitleAlign: 'center',
             headerTitle: () => (
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <View style={{ alignItems: "center", justifyContent: "center", alignSelf: 'center'}}>
                 {userState?.lng === "cn" ?
                   <Image
                     source={require("@/assets/images/logo-cn.png")}
-                    style={{width: 120, height: 26, marginTop: 4}}
+                    style={{width: 120, height: 26}}
                   />
                 :
                   <Image
                     source={require("@/assets/images/logo-eng.png")}
-                    style={{width: 120, height: 36, marginTop: 4}}
+                    style={{width: 120, height: 36}}
                   />
                 }
               </View>
             ),
-
             headerTintColor: Colors[colorScheme ?? "light"].text,
             drawerType: "slide",
             headerShown: useClientOnlyValue(false, true),

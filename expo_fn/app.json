@@ -32,7 +32,8 @@
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#F5F5F5"
       },
-      "package": "com.parklane.app"
+      "package": "com.parklane.app",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "bundler": "metro",

@@ -165,7 +165,6 @@ export default function LaundryTab() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
