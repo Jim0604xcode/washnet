@@ -25,7 +25,7 @@ type ConfirmOrderDialogProps = {
   defaultFormValue: Order | OtherOrders;
   formBtnCtrls: FormButtonControls;
   reset: UseFormReset<Order> | UseFormReset<OtherOrders>;
-  setService: null | React.Dispatch<React.SetStateAction<string>>;
+  setService?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ConfirmOrderDialog = ({

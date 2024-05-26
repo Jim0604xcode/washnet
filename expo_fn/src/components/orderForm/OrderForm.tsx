@@ -137,8 +137,8 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
         style={styles.confirmBtn}
         buttonColor={
           formInputFlags.hasAllStepsCompleted
-            ? Colors[colorScheme ?? "light"].text
-            : Colors[colorScheme ?? "light"].secondary
+            ? Colors[colorScheme ?? "light"].secondary
+            : Colors[colorScheme ?? "light"].text
         }
         labelStyle={{
           color: Colors[colorScheme ?? "light"].background,
@@ -155,7 +155,6 @@ const OrderForm: React.FC<OrderFormProps> = ({orderType}) => {
         defaultFormValue={defaultValues}
         formBtnCtrls={formBtnCtrls}
         reset={reset}
-        setService={null}
       />
     </View>
   );
