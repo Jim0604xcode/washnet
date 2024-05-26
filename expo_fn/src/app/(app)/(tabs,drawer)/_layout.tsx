@@ -5,6 +5,7 @@ import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -57,6 +58,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarHideOnKeyboard: Platform.OS === "ios" ? false : true,
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
         tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         headerShown: false,
@@ -68,8 +70,9 @@ export default function TabLayout() {
           borderTopWidth: 0,
           marginHorizontal: 15,
           marginBottom: (bottom>20)?(bottom-13):
-            (bottom>0)?(bottom):(bottom+4),
+            (bottom>0)?(bottom):Platform.OS==="android"?(bottom+20):(bottom+4),
           borderRadius: 14,
+          elevation: 2,
           paddingHorizontal: 10,
           height: 66
         },

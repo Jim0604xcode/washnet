@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useReducer, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Platform,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
 import { Text } from "@/components/Themed";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import Animated, { withSpring } from "react-native-reanimated";
+import Animated, { withSpring, FadeInUp } from "react-native-reanimated";
 import { useDebounce } from "@/utils/useDebounce";
 import { FormButtonControls, FormInputFlags, Order, OtherOrders } from "@/models";
 import dayjs from "dayjs";
@@ -18,25 +18,28 @@ import { Button } from "react-native-paper";
 import { parseAndAddDays } from "@/utils/parseAndAddDays";
 import { useTranslation } from "react-i18next";
 import { UseFormSetValue } from "react-hook-form";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useUser } from "@/context/UserContext";
+import Timeslots from "@/components/orderForm/Timeslots";
 
 type PickupButtonProps = {
   formBtnCtrls: FormButtonControls;
   formInputFlags: FormInputFlags;
   formValue: Order | OtherOrders;
-  setFormValue: UseFormSetValue<Order> | UseFormSetValue<OtherOrders>
+  setFormValue: UseFormSetValue<Order> | UseFormSetValue<OtherOrders>;
+  initMaxHeight: number;
 };
+
+const tomorrow = dayjs().add(1, "days").toDate();
+const twoWeeksFromNow = dayjs().add(14, "days").toDate();
 
 const PickupButton: React.FC<PickupButtonProps> = ({
   formBtnCtrls,
   formInputFlags,
   formValue,
   setFormValue,
+  initMaxHeight
 }) => {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
-  const { userState } = useUser();
   const {
     height1,
     height2,
@@ -94,11 +97,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
     cbHandlePress2();
   }, 100);
 
-  const tomorrow = dayjs().add(1, "days").toDate();
-  const twoWeeksFromNow = dayjs().add(14, "days").toDate();
-
   const [pickupDate, setPickupDate] = useState<Date>(tomorrow);
-  // const [pickupTime, setPickupTime] = useState<Date>(tomorrow);
   const [pickupTime, setPickupTime] = useState({
     AM: false,
     PM: false,
@@ -184,6 +183,7 @@ const PickupButton: React.FC<PickupButtonProps> = ({
         styles.surface,
         {
           height: height2,
+          maxHeight: initMaxHeight,
           backgroundColor: hasPickupDateTime
             ? Colors[colorScheme ?? "light"].tertiary
             : Colors[colorScheme ?? "light"].surfaceContainer,
@@ -211,22 +211,24 @@ const PickupButton: React.FC<PickupButtonProps> = ({
             color={Colors[colorScheme ?? "light"].text}
           />
         </View>
-        <Text
-          style={styles.info}
-          lightColor={Colors.light.outline}
-          darkColor={Colors.dark.outline}
-        >
-          { hasPickupDateTime ? formValue.pickupDateTime : null }
-        </Text>
+        { hasPickupDateTime ?
+          <Text
+            style={styles.info}
+            lightColor={Colors.light.outline}
+            darkColor={Colors.dark.outline}
+          >
+          {formValue.pickupDateTime}
+          </Text>
+        : null }
       </TouchableOpacity>
-
-      <View
-        style={[styles.dateTimeInput, { opacity: isOpen2 ? 1 : 0 }]}
+    {isOpen2 ?
+      <Animated.View
+        style={[styles.dateTimeInput]}
+        entering={FadeInUp.duration(400)}
       >
-        { Platform.OS === "ios" ? (
+        {(Platform.OS === "ios") ? (
           <RNDateTimePicker
             mode="date"
-            disabled={!isOpen2}
             value={pickupDate}
             onChange={setDate}
             minimumDate={tomorrow}
@@ -236,113 +238,39 @@ const PickupButton: React.FC<PickupButtonProps> = ({
             display="spinner"
             locale={t('orderForm.locale')}
             style={{height: 90, width: 'auto'}}
-          />) 
-          : (null)
-        }
-
-      { Platform.OS === 'android' ? (
-        <Button
-          mode="outlined"
-          textColor={hasPickupDateTime ? 
-            Colors[colorScheme??'light'].tert 
-          : Colors[colorScheme ?? 'light'].tint}
-          onPress={openAndriodDatePicker}
-          labelStyle={{
-            fontSize: 16,
-            color: hasPickupDateTime ? 
+          />
+          ) : (Platform.OS === 'android') ? (
+          <Button
+            mode="outlined"
+            textColor={hasPickupDateTime ? 
               Colors[colorScheme??'light'].tert 
-            : Colors[colorScheme ?? 'light'].tint
-          }}
-          style={{ opacity: isOpen2 ? 1 : 0,
-            borderColor: hasPickupDateTime ? 
-              Colors[colorScheme??'light'].tert 
-            : Colors[colorScheme ?? 'light'].tint,
-            width: '100%'
-           }}
-          disabled={!isOpen2}
-        >
+            : Colors[colorScheme ?? 'light'].tint}
+            onPress={openAndriodDatePicker}
+            labelStyle={{
+              fontSize: 16,
+              color: hasPickupDateTime ? 
+                Colors[colorScheme??'light'].tert 
+              : Colors[colorScheme ?? 'light'].tint
+            }}
+            style={{
+              borderColor: hasPickupDateTime ? 
+                Colors[colorScheme??'light'].tert 
+              : Colors[colorScheme ?? 'light'].tint,
+              width: '100%',
+              height: 40,
+            }}
+          >
             {t('orderForm.date')}
-        </Button>
-        ) : (null)
-      }
-      <View style={{
-          flexDirection: 'row',
-          gap:  userState?.lng === "cn" ? 40 : 0,
-          width: '100%',
-          justifyContent: "space-between",
-          alignItems: "center",
-          flex: 1,
-          opacity: isOpen2 ? 1 : 0
-          }}>
-        <BouncyCheckbox
-          isChecked={pickupTime.AM}
-          disabled={!isOpen2}
-          onPress={()=>setTime("AM")}
-          size={20}
-          fillColor={hasPickupDateTime ? 
-            Colors[colorScheme??'light'].tert 
-          : Colors[colorScheme ?? 'light'].tint}
-          unFillColor={Colors[colorScheme??'light'].surfaceContainer}
-          text={t('orderForm.am')}
-          iconStyle={{ borderColor: "green" }}
-          innerIconStyle={{ borderWidth: 2 }}
-          textStyle={{
-            fontSize: 16,
-            marginLeft: -6,
-            textDecorationLine: "none",
-            color: pickupTime.AM ? 
-              Colors[colorScheme??'light'].text 
-            : Colors[colorScheme ?? 'light'].outline
-          }}
-          style={{flex: 1}}
+          </Button>
+          ) : (null)
+        }
+        <Timeslots
+          time={pickupTime}
+          onSetTime={setTime}
+          hasDateTimeSet={hasPickupDateTime}
         />
-        <BouncyCheckbox
-          isChecked={pickupTime.PM}
-          disabled={!isOpen2}
-          onPress={()=>{setTime("PM")}}
-          size={20}
-          fillColor={hasPickupDateTime ? 
-            Colors[colorScheme??'light'].tert 
-          : Colors[colorScheme ?? 'light'].tint}
-          unFillColor={Colors[colorScheme??'light'].surfaceContainer}
-          text={t('orderForm.pm')}
-          iconStyle={{ borderColor: "green" }}
-          innerIconStyle={{ borderWidth: 2 }}
-          textStyle={{
-            fontSize: 16,
-            marginLeft: -6,
-            textDecorationLine: "none",
-            color: pickupTime.PM ? 
-              Colors[colorScheme??'light'].text 
-            : Colors[colorScheme ?? 'light'].outline
-          }}
-          style={{flex: 1}}
-        />
-        <BouncyCheckbox
-          isChecked={pickupTime.EV}
-          disabled={!isOpen2}
-          onPress={()=>{setTime("EV")}}
-          size={20}
-          fillColor={hasPickupDateTime ? 
-            Colors[colorScheme??'light'].tert 
-          : Colors[colorScheme ?? 'light'].tint}
-          unFillColor={Colors[colorScheme??'light'].surfaceContainer}
-          text={t('orderForm.ev')}
-          iconStyle={{ borderColor: "green" }}
-          innerIconStyle={{ borderWidth: 2 }}
-          textStyle={{
-            fontSize: 16,
-            marginLeft: -6,
-            textDecorationLine: "none",
-            color: pickupTime.EV ? 
-              Colors[colorScheme??'light'].text 
-            : Colors[colorScheme ?? 'light'].outline
-            
-          }}
-          style={{flex: 1}}
-        />
-        </View>
-      </View>
+      </Animated.View>
+      : null}
     </Animated.View>
   );
 };
@@ -353,7 +281,6 @@ const styles = StyleSheet.create({
   surface: {
     flex: 1,
     minHeight: 80,
-    maxHeight: 250,
     borderRadius: 14,
     paddingHorizontal: 24,
     paddingVertical: 20,
@@ -386,6 +313,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 10
-    // backgroundColor: 'red'
   },
 });

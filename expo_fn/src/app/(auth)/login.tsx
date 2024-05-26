@@ -50,9 +50,7 @@ const LoginScreen = () => {
   };
 
   return (
-    
     <SafeAreaView
-
       style={[
         styles.container,
         { backgroundColor: Colors[colorScheme ?? "light"].primary,
@@ -60,9 +58,14 @@ const LoginScreen = () => {
          },
       ]}
     >
-      <ScrollView contentContainerStyle={{flexGrow: 1}}
-  keyboardShouldPersistTaps='handled'
->
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.loginBox}
+      >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView contentContainerStyle={{flexGrow: 1, alignItems: 'center'}}
+        keyboardShouldPersistTaps='handled'
+      >
       <StatusBar style="dark" />
       <Suspense
         fallback={
@@ -84,18 +87,12 @@ const LoginScreen = () => {
           />
         }
       </Suspense>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.intro}>
           <Text style={styles.text}>{t("login.title1")}</Text>
           <Text style={styles.text}>{t("login.title2")}</Text>
           <Text style={styles.subText}>{t("login.subtitle")}</Text>
         </View>
-      </TouchableWithoutFeedback>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.loginBox}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
           <View style={styles.inner}>
             <TextInput
               mode="flat"
@@ -203,8 +200,6 @@ const LoginScreen = () => {
               </Pressable>
             </View>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
       <Button
         style={styles.button}
         mode="contained"
@@ -223,6 +218,9 @@ const LoginScreen = () => {
         {t("login.login")}
       </Button>
       </ScrollView>
+      </TouchableWithoutFeedback>
+
+      </KeyboardAvoidingView>
     </SafeAreaView>
  
   );
